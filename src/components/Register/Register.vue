@@ -1,7 +1,7 @@
 <!-- 注册组件 -->
 <template>
 	<div id="Register">
-		<move-slider :oLeft = " 194 "></move-slider>
+		<move-slider :oLeft = " 194 " :silderShow = " silderShow "></move-slider>
 		<agreement-book :bookShow=" bookShow " @hide=" showBook(false) "></agreement-book>
 		<!-- 顶部banner图 -->
 		<header>
@@ -63,7 +63,7 @@
 				sended: false, // 是否已经发送验证码
 				endTime: 60, 	 // 倒计时
 				bookShow: false, // 是否显示用户协议
-				silderShow
+				silderShow: true
 			}
 		},
 		methods: {

@@ -8,7 +8,8 @@ import Router from 'vue-router';
 
 Vue.use(Router);
 
-const register = r => require.ensure([], () => r(require('@/components/Register/Register.vue')), 'Register');
+const index = r => require.ensure([],() => r(require('@/components/Index/index')),'Index');
+const register = r => require.ensure([], () => r(require('@/components/Register/Register')), 'Register');
 
 export default new Router({
 	mode: 'history',
@@ -16,6 +17,11 @@ export default new Router({
     y: 0
   },
   routes: [
+    {
+      path: '/',
+      name: 'index',
+      component: index
+    },
     {
       path: '/register',
       name: 'register',

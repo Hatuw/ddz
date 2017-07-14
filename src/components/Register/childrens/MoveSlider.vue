@@ -43,6 +43,23 @@
 				required: true
 			}
 		},
+		watch: {
+			silderShow(nVal, oVal) {
+				if(nVal) {
+					this.$nextTick(() => {
+						let bar = document.querySelector('.silder-box'); // 把手
+						let target = document.querySelector('.puzzle-wrap'); // 拼图
+
+						// 先记录一下要移动的栏目的初始位置
+						this.barStartLeft = this.getCss(bar,'left');
+						this.targetStartLeft = this.getCss(target,'left');
+
+						// 初始化事件
+						this.drag(bar,target);
+					});
+				}
+			}
+		},
 		methods: {
 			// 获取相关CSS属性
 			getCss(o, key) {
@@ -70,7 +87,7 @@
 					// 如果正确就发送获取验证码请求
 					let finalL = parseInt(target.style.left); 
 					if(finalL + 1 == _self.oLeft || _self.oLeft == finalL - 1 || _self.oLeft == finalL) {
-						console.log('验证成功');
+						this.$emit('getCode');
 						return;
 					}
 
@@ -108,15 +125,7 @@
 			}
 		},
 		mounted() {
-			let bar = document.querySelector('.silder-box'); // 把手
-			let target = document.querySelector('.puzzle-wrap'); // 拼图
 
-			// 先记录一下要移动的栏目的初始位置
-			this.barStartLeft = this.getCss(bar,'left');
-			this.targetStartLeft = this.getCss(target,'left');
-
-			// 初始化事件
-			this.drag(bar,target);
 		}
 	}
 </script>

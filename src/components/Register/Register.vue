@@ -1,7 +1,7 @@
 <!-- 注册组件 -->
 <template>
 	<div id="Register">
-		<move-slider :oLeft = " 194 " :silderShow = " silderShow "></move-slider>
+		<move-slider :oLeft = " 194 " :silderShow = " silderShow " @getCode=" getCode "></move-slider>
 		<agreement-book :bookShow=" bookShow " @hide=" showBook(false) "></agreement-book>
 		<!-- 顶部banner图 -->
 		<header>
@@ -14,7 +14,7 @@
 				<div class="form-group">
 					<div class="phoneBtn-wrap">
 						<i class="fa fa-mobile" aria-hidden="true"></i>
-						<input type="text" class="inp phoneBtn" placeholder="请输入手机号" v-model=" phoneVal " @focus=" clearError ">
+						<input type="text" class="inp phoneBtn" placeholder="请输入手机号" v-model=" phoneVal " @focus=" clearError " :disabled=" sended ">
 					</div>
 				</div>
 				<p class="error-text" v-text=" phone_error "></p>
@@ -25,7 +25,7 @@
 						<input type="text" class="inp codeBtn" placeholder="请输入验证码" v-model=" codeVal " @focus=" clearError ">
 					</div>
 					<div class="sendCodeBtn-wrap">
-						<button class="btn sendCodeBtn" :class=" { disabled: sended } " @click=" getCode " :disabled=" sended ">
+						<button class="btn sendCodeBtn" :class=" { disabled: sended } " @click=" checkCode " :disabled=" sended ">
 							<span v-if=" !sended ">发送验证码</span>
 							<span v-else> 已发送({{ endTime}} s) </span>
 						</button>
@@ -45,7 +45,7 @@
 			</form>
 		</article>
 		<!-- 遮罩层 -->
-		<div class="mask"></div>
+		<div class="mask" v-if=" silderShow "></div>
 	</div>
 </template>
 
@@ -63,28 +63,35 @@
 				sended: false, // 是否已经发送验证码
 				endTime: 60, 	 // 倒计时
 				bookShow: false, // 是否显示用户协议
-				silderShow: true
+				silderShow: false // 是否显示移动滑动库
 			}
 		},
 		methods: {
-			// 向服务器发起获取验证码请求
-			getCode() {
+			// 检查和手机格式以及控制移动滑块的显示
+			checkCode() {
 				// 先判断手机格式是否正确
 				if(!(/^(1[34578]\d{9})$/ig.test(this.phoneVal))) {
 					this.phone_error = '请检查手机格式';
 					return false;
 				}
+				// 显示移动滑块
+				this.silderShow = true;
+			},
+
+			// 向服务器发起获取验证码请求
+			getCode() {
+				this.silderShow = false;
 				// 获取验证码请求: /api/get_code
 				this.axios.post('/api/get_code',{
 					phone: this.phoneVal
 				}).then((respone) => {
-					console.log('已经成功发送验证码');
 					this.countDown();
 					this.sended = true;
 				}).catch((error) => {
 					throw error;
 				})
 			},
+
 			// 倒计时
 			countDown() {
 				// 获取验证码之后，倒计时60s，60s之后可以重新发送
@@ -101,11 +108,15 @@
 			},
 			// 向服务器发起验证验证码请求
 			sendCode() {
-				// 先判断验证码是否填写
-				if (this.codeVal == '') {
+				// 先检查是否能执行请求
+				if(!this.sended) {
+					this.phone_error = '请先填写手机号码';
+					return;
+				}	else if (this.codeVal == '') {
 					this.code_error = '请检查验证码是否输入';
-					return false;
+					return
 				}
+
 				// 验证验证码请求：/api/check_code 
 				this.axios.post('/api/check_code',{
 					code: this.codeVal
@@ -115,7 +126,7 @@
 					if (state) {
 						// 如果返回的状态码是true的话，就进行页面的跳转
 						// 如果返回的状态码是false的话，就提示错误文字
-						console.log('true');
+						console.log('do something');
 					} else {
 						this.code_error = '验证码错误,请重新填写验证码';
 					}
@@ -176,6 +187,7 @@
 			height: 42px;
 			outline: none;
 			border: none;
+			background-color: #fff;
 			color: $gray_color;
 		}
 		// 按钮

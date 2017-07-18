@@ -10,6 +10,7 @@ Vue.use(Router);
 
 const index = r => require.ensure([],() => r(require('@/components/Index/index')),'Index');
 const register = r => require.ensure([], () => r(require('@/components/Register/Register')), 'Register');
+const time = r => require.ensure([],() => r(require('@/components/Time/Time')),'Time');
 
 export default new Router({
 	mode: 'history',
@@ -26,6 +27,10 @@ export default new Router({
       path: '/register',
       name: 'register',
      	component: register
+    },{
+      path: '/time',
+      name: 'time',
+      component: time
     }
   ]
 });

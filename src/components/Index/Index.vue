@@ -38,10 +38,10 @@
     <!-- 底部功能按键 -->
     <footer>
       <div class="btn-wrap">
-        <button>预定器材</button>
+        <button style="background-color:rgb(7, 136, 238);border: 1px solid rgb(230,240,249);color: #fff">预定器材</button>
       </div>
       <div class="btn-wrap">
-        <button>立即运动</button>
+        <button style="background-color:rgb(7, 136, 238);border: 1px solid rgb(131,194,244);color: #fff">立即运动</button>
       </div>
     </footer>
 	</div>
@@ -57,7 +57,7 @@
           en_name: 'football',
           cn_name: '足球'
         },{
-          en_name: 'backetball',
+          en_name: 'basketball',
           cn_name: '篮球'
         },{
           en_name: 'volleyball',
@@ -87,7 +87,7 @@
         noncestr: 'duodongzhen',
         timestamp: +new Date(),
         url: window.location.href.split('#')[0],
-        jsApiList: ['getLocation']
+        jsApiList: ['getLocation','openLocation']
       }
       this.axios.post('/api/getTicket',data)
       .then((res) => {
@@ -99,6 +99,24 @@
           signature: res.data.signature, // 必填，签名，见附录1
           jsApiList: data.jsApiList // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
         });
+        js_sdk.ready(()=> {
+          js_sdk.getLocation({
+            type: 'wgs84', // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
+            success: function (res) {
+              var latitude = res.latitude; // 纬度，浮点数，范围为90 ~ -90
+              var longitude = res.longitude; // 经度，浮点数，范围为180 ~ -180。
+              var speed = res.speed; // 速度，以米/每秒计
+              var accuracy = res.accuracy; // 位置精度
+              js_sdk.openLocation({  
+                latitude : res.latitude, // 纬度，浮点数，范围为90 ~ -90  
+                longitude : res.longitude, // 经度，浮点数，范围为180 ~ -180。  
+                name : '', // 位置名  
+                address : '', // 地址详情说明  
+                scale : 28 
+              }); 
+            }
+          });
+        })
       })
       .catch((error) => {
         console.log(error);
@@ -108,6 +126,8 @@
 </script>
 
 <style scoped lang="scss">
+  $skyBlue: rgb(131,194,244);
+  $Blue: rgb(230,240,249);
 	header {
 		padding: 10px 20px;
     border-bottom: 1px solid #000;
@@ -137,14 +157,13 @@
       flex: 33.33%;
       .sport-img-wrap {
         text-align: center;
-        background-color: #0788ee;
         border-radius: 50%;
         width: 75px;
         height: 75px;
         margin: 0 auto;
         position: relative;
         img {
-          width: 50%;
+          width: 85%;
           position: absolute;
           top: 50%;
           left: 50%;
@@ -162,7 +181,7 @@
     position: fixed;
     bottom: 0;
     display: flex;
-    margin-bottom: 5px;
+    margin-bottom: 20px;
     .btn-wrap {
       flex: 1;
       button {
@@ -173,7 +192,6 @@
         border: none;
         border-radius: 10px;
         border: 1px solid black;
-        background-color: #a2d6f3;
       }
     }
   }

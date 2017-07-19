@@ -8,9 +8,10 @@ import Router from 'vue-router';
 
 Vue.use(Router);
 
-const index = r => require.ensure([],() => r(require('@/components/Index/index')),'Index');
+const index = r => require.ensure([],() => r(require('@/components/Index/Index')),'Index');
 const register = r => require.ensure([], () => r(require('@/components/Register/Register')), 'Register');
 const time = r => require.ensure([],() => r(require('@/components/Time/Time')),'Time');
+const cash = r => require.ensure([],() => r(require('@/components/Cash/Cash')),'Cash');
 
 export default new Router({
 	mode: 'history',
@@ -31,6 +32,10 @@ export default new Router({
       path: '/time',
       name: 'time',
       component: time
+    },{
+      path: '/cash',
+      name: 'cash',
+      component: cash
     }
   ]
 });

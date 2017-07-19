@@ -3,11 +3,11 @@
 	<div id="Time">
 		<!-- 圆圈包裹 -->
 		<div class="big-cir">
-			<img src="../../../static/img/cir.png" alt="圈">
+			<img src="../../../static/img/cir.png" alt="圈" :style=" { transform: `translate(-50%,-50%) rotate(${rotate}deg)` } ">
 			<div class="samll-cir">
 			<div class="text-wrap">
 				<p class="tip-text"><strong>已用时</strong></p>
-				<p class="countDown">{{ clockTime.h }}:{{ clockTime.m }}:{{ clockTime.s }}</p>
+				<p class="countDown">{{ clockTime.h | format }}:{{ clockTime.m | format}}:{{ clockTime.s | format}}</p>
 			</div>
 			</div>
 		</div>
@@ -50,12 +50,44 @@
 					s: 0	// 秒
 				},
 				money: '00.00', // 费用
-				showList: false
+				showList: false,
+				runFlag: true,
+				rotate: 0
+			}
+		},
+		filters: {
+			format(val) {
+				return val <= 9? '0' + val: val;	
 			}
 		},
 		methods: {
 			changeShowList() {
 				this.showList = !this.showList;
+			},
+			timeStart () {
+				let timer = null;
+				timer = window.setInterval(() => {
+					if(!this.runFlag) {
+						window.clearInterval(timer);
+					}	else {
+						if(this.clockTime.s >= 60) {
+							this.rotate++;
+							this.clockTime.m++;
+							this.clockTime.s = 0;
+						}
+						if(this.clockTime.m >= 60) {
+							this.rotate++;
+							this.clockTime.h++;
+							this.clockTime.m = 0;
+						}
+						this.clockTime.s++;
+					}
+				},1000);
+			}
+		},
+		mounted() {
+			if(this.runFlag) {
+				this.timeStart();
 			}
 		}
 	}

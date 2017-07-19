@@ -4,7 +4,8 @@
     <!-- 顶部地理位置 -->
 		<header>
 			<i class="fa fa-map-marker" aria-hidden="true"></i>
-			<span class="pos" v-text=" posVal "></span>
+			<span class="pos" v-if=" openPos ">{{pos.province}}{{pos.city}}{{pos.district}}{{pos.addr}}</span>
+      <span class="pos" v-else>正在定位...</span>
 		</header>
     <!-- 轮播图包裹层 -->
     <div class="swiper-wrap">
@@ -48,7 +49,7 @@
 </template>
 
 <script>
-  import js_sdk from 'weixin-js-sdk';
+  import wx from 'weixin-js-sdk';
 	export default {
 		name: 'index',
 		data() {
@@ -72,7 +73,13 @@
           en_name: 'tennis',
           cn_name: '网球'
         }],
-				posVal: '广东轻工职业技术学院(广州校区)',
+				pos: {
+          province: '',
+          city: '',
+          district: '',
+          addr: ''
+        },
+        openPos: false,
         swiperOption: {
           pagination: '.swiper-pagination', // 索引圆       
           autoplay: 3500, // 自动博fag
@@ -82,45 +89,55 @@
         }
 			}
 		},
-    created() {
-      let data = {
-        noncestr: 'duodongzhen',
-        timestamp: +new Date(),
-        url: window.location.href.split('#')[0],
-        jsApiList: ['getLocation','openLocation']
+    methods: {
+      // 获取位置数据
+      getPos(pos) {
+        this.openPos = true;
+        this.pos.province = pos.province;
+        this.pos.city = pos.city;
+        this.pos.district = pos.district;
+        this.pos.addr = pos.addr;
+      },
+      err() {
+        this.openPos = false;
       }
-      this.axios.post('/api/getTicket',data)
-      .then((res) => {
-        js_sdk.config({
-          debug: true,
-          appId: res.data.appId,
-          timestamp: data.timestamp, // 必填，生成签名的时间戳
-          nonceStr: data.noncestr, // 必填，生成签名的随机串
-          signature: res.data.signature, // 必填，签名，见附录1
-          jsApiList: data.jsApiList // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
-        });
-        js_sdk.ready(()=> {
-          js_sdk.getLocation({
-            type: 'wgs84', // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
-            success: function (res) {
-              var latitude = res.latitude; // 纬度，浮点数，范围为90 ~ -90
-              var longitude = res.longitude; // 经度，浮点数，范围为180 ~ -180。
-              var speed = res.speed; // 速度，以米/每秒计
-              var accuracy = res.accuracy; // 位置精度
-              js_sdk.openLocation({  
-                latitude : res.latitude, // 纬度，浮点数，范围为90 ~ -90  
-                longitude : res.longitude, // 经度，浮点数，范围为180 ~ -180。  
-                name : '', // 位置名  
-                address : '', // 地址详情说明  
-                scale : 28 
-              }); 
-            }
-          });
-        })
-      })
-      .catch((error) => {
-        console.log(error);
-      })
+    },
+    created() {
+      let _self = this;
+      let options = { timeout: 100000 };
+
+      // 调用腾讯前端定位组件
+      let geolocation = new qq.maps.Geolocation("PP5BZ-E6AWP-44ODH-VKN5I-JUVK6-2BFPK", "myapp");      
+      geolocation.getLocation(_self.getPos,_self.err,options);
+
+      /**
+       * 因为js-sdk获取的经纬度不准确，所以决定用腾讯地图
+       */
+
+      // let _self = this;
+      // let data = {
+      //   noncestr: 'duodongzhen',
+      //   timestamp: +new Date(),
+      //   url: window.location.href.split('#')[0],
+      //   jsApiList: ['checkJsApi','getLocation','openLocation']
+      // }
+      // this.axios.post('/api/getTicket',data)
+      // .then((res) => {
+      //   wx.config({
+      //     debug: true,
+      //     appId: res.data.appId,
+      //     timestamp: data.timestamp, // 必填，生成签名的时间戳
+      //     nonceStr: data.noncestr, // 必填，生成签名的随机串
+      //     signature: res.data.signature, // 必填，签名，见附录1
+      //     jsApiList: data.jsApiList // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+      //   });
+      //   wx.ready(()=> {
+
+      //   })
+      // })
+      // .catch((error) => {
+      //   console.log(error);
+      // })
     }
 	}
 </script>
@@ -132,11 +149,14 @@
 		padding: 10px 20px;
     border-bottom: 1px solid #000;
 		.fa {
-			color: #a6b2da;
+			color: #0788ee;
 		}
 		.pos {
-      color: #ccc;
+      color: #797777;
       margin-left: 5px;
+      display: inline-block;
+      width: 90%;
+      vertical-align: middle;
 		}
 	}
   .img {

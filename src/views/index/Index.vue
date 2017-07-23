@@ -4,7 +4,7 @@
     <!-- 顶部地理位置 -->
     <header>
       <i class="fa fa-map-marker" aria-hidden="true"></i>
-      <span class="pos" v-if=" openPos ">{{ pos.province }}{{ pos.city }}{{ pos.district }}{{ pos.addr }}</span>
+      <span class="pos" v-if=" pos.province ">{{ pos.city }}{{ pos.district }}{{ pos.addr }}</span>
       <span class="pos" v-else>正在定位...</span>
     </header>
     <!-- 轮播图包裹层 -->
@@ -28,7 +28,7 @@
     <!-- 体育器材 -->
     <article>
       <ul class="sport-wrap">
-        <li v-for=" (item,index) in sports ">
+        <li v-for=" (item,index) in sports " :key=" index ">
           <div class="sport-img-wrap">
             <img :src=" '../../../static/img/' + item.en_name + '.png'" :alt=" item.cn_name ">
           </div>
@@ -48,7 +48,6 @@
   </div>
 </template>
 <script>
-import wx from 'weixin-js-sdk';
 export default {
   name: 'index',
   data() {
@@ -72,13 +71,6 @@ export default {
         en_name: 'tennis',
         cn_name: '网球'
       }],
-      pos: {
-        province: '',
-        city: '',
-        district: '',
-        addr: ''
-      },
-      openPos: false,
       swiperOption: {
         pagination: '.swiper-pagination', // 索引圆       
         autoplay: 3500, // 自动博fag
@@ -88,55 +80,17 @@ export default {
       }
     }
   },
-  methods: {
-    // 获取位置数据
-    getPos(pos) {
-      this.openPos = true;
-      this.pos.province = pos.province;
-      this.pos.city = pos.city;
-      this.pos.district = pos.district;
-      this.pos.addr = pos.addr;
-    },
-    err() {
-      this.openPos = false;
+  computed: {
+    pos() {
+      return this.$store.state.pos;
     }
   },
+  methods: {
+
+  },
   created() {
-    let _self = this;
-    let options = { timeout: 100000 };
-
-    // 调用腾讯前端定位组件
-    let geolocation = new qq.maps.Geolocation("PP5BZ-E6AWP-44ODH-VKN5I-JUVK6-2BFPK", "myapp");
-    geolocation.getLocation(_self.getPos, _self.err, options);
-
-    /**
-     * 因为js-sdk获取的经纬度不准确，所以决定用腾讯地图
-     */
-
-    // let _self = this;
-    // let data = {
-    //   noncestr: 'duodongzhen',
-    //   timestamp: +new Date(),
-    //   url: window.location.href.split('#')[0],
-    //   jsApiList: ['checkJsApi','getLocation','openLocation']
-    // }
-    // this.axios.post('/api/getTicket',data)
-    // .then((res) => {
-    //   wx.config({
-    //     debug: true,
-    //     appId: res.data.appId,
-    //     timestamp: data.timestamp, // 必填，生成签名的时间戳
-    //     nonceStr: data.noncestr, // 必填，生成签名的随机串
-    //     signature: res.data.signature, // 必填，签名，见附录1
-    //     jsApiList: data.jsApiList // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
-    //   });
-    //   wx.ready(()=> {
-
-    //   })
-    // })
-    // .catch((error) => {
-    //   console.log(error);
-    // })
+    // 先获取当前位置
+    this.$store.dispatch('GET_ADDR');
   }
 }
 
@@ -156,7 +110,7 @@ header {
     margin-left: 5px;
     display: inline-block;
     width: 90%;
-    vertical-align: middle;
+    vertical-align: top;
   }
 }
 

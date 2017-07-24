@@ -17,7 +17,7 @@ body, h1, h2, h3, h4, h5, h6, hr, p, blockquote, dl, dt, dd, ul, ol, li, pre, fi
 
 /* 设置默认字体,用 ascii 字符表示，使得在任何编码下都无问题 */
 body, button, input, select, textarea {
-  font: 12px/1 Tahoma, Helvetica, Arial, "\5b8b\4f53", sans-serif;
+  font: 12px/1 Microsoft YaHei, Helvetica, Arial, "\5b8b\4f53", sans-serif;
 }
 
 address, cite, dfn, em, var {
@@ -43,6 +43,7 @@ ul, ol {
 /* 重置文本格式元素 */
 a {
   text-decoration: none;
+  color: #000;
 }
 
 /* 注：1.ie6 不支持 abbr; 2.这里用了属性选择符，ie6 下无效果 */

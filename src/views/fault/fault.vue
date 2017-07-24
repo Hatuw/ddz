@@ -3,24 +3,28 @@
   <div id="Fault">
     <ul>
       <li class="item">
-        <div class="img-wrap"><img src="../../../static/img/machine.png" alt="机器故障"></div>
-        <div class="content-wrap">
-          <div class="content">
-            <p><strong style="font-size:16px">机器故障</strong></p>
-            <p style="margin-top: 5px;color:rgb(167,170,172)">显示不了验证码、nfc开不了门...</p>
+        <router-link :to=" 'machine' ">
+          <div class="img-wrap"><img src="../../../static/img/machine.png" alt="机器故障"></div>
+          <div class="content-wrap">
+            <div class="content">
+              <p><strong style="font-size:16px">机器故障</strong></p>
+              <p style="margin-top: 5px;color:rgb(167,170,172)">显示不了验证码、nfc开不了门...</p>
+            </div>
+            <i class="fa fa-angle-right fr" aria-hidden="true"></i>
           </div>
-          <i class="fa fa-angle-right fr" aria-hidden="true"></i>
-        </div>
+        </router-link>
       </li>
       <li class="item">
-        <div class="img-wrap"><img src="../../../static/img/material.png" alt="器材故障"></div>
-        <div class="content-wrap">
-          <div class="content">
-            <p><strong style="font-size:16px">器材故障</strong></p>
-            <p style="margin-top: 5px;color:rgb(167,170,172)">球类故障、拍类故障</p>
+        <router-link :to=" 'equipment' ">
+          <div class="img-wrap"><img src="../../../static/img/material.png" alt="器材故障"></div>
+          <div class="content-wrap">
+            <div class="content">
+              <p><strong style="font-size:16px">器材故障</strong></p>
+              <p style="margin-top: 5px;color:rgb(167,170,172)">球类故障、拍类故障</p>
+            </div>
+            <i class="fa fa-angle-right fr" aria-hidden="true"></i>
           </div>
-          <i class="fa fa-angle-right fr" aria-hidden="true"></i>
-        </div>
+        </router-link>
       </li>
       <li class="item">
         <div class="img-wrap"><img src="../../../static/img/other.png" alt="其他故障"></div>

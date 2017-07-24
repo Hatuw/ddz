@@ -9,12 +9,13 @@ import getters from './getters';
 Vue.use(Vuex);
 
 const state = {
-  pos: {
+  pos: {  // 定位
     province: '',
     city: '',
     district: '',
     addr: ''
-  }
+  },
+  sport: {}
 };
 
 const mutations = {
@@ -25,6 +26,10 @@ const mutations = {
     state.pos.city = posObj.city;
     state.pos.district = posObj.district;
     state.pos.addr = posObj.addr;
+  },
+  // 设置当前运动类型
+  SET_SPORT(state,sport) {
+    state.sport = sport;
   }
 };
 

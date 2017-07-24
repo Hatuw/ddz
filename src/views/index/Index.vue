@@ -29,7 +29,7 @@
     <article>
       <ul class="sport-wrap">
         <li v-for=" (item,index) in sports " :key=" index ">
-          <div class="sport-img-wrap">
+          <div class="sport-img-wrap" @click.stop=" chooseSport(item) ">
             <img :src=" '../../../static/img/' + item.en_name + '.png'" :alt=" item.cn_name ">
           </div>
           <p v-text=" item.cn_name  "></p>
@@ -39,10 +39,10 @@
     <!-- 底部功能按键 -->
     <footer>
       <div class="btn-wrap">
-        <button style="background-color:rgb(7, 136, 238);border: 1px solid rgb(230,240,249);color: #fff">预定器材</button>
+        <button style="color: #fff">预定器材</button>
       </div>
       <div class="btn-wrap">
-        <button style="background-color:rgb(7, 136, 238);border: 1px solid rgb(131,194,244);color: #fff">立即运动</button>
+        <button style="color: #fff">立即运动</button>
       </div>
     </footer>
   </div>
@@ -54,22 +54,28 @@ export default {
     return {
       sports: [{
         en_name: 'football',
-        cn_name: '足球'
+        cn_name: '足球',
+        show_name: 'football_c'
       }, {
         en_name: 'basketball',
-        cn_name: '篮球'
+        cn_name: '篮球',
+        show_name: 'basketball_c'
       }, {
         en_name: 'volleyball',
-        cn_name: '排球'
+        cn_name: '排球',
+        show_name: 'volleyball_c'
       }, {
         en_name: 'pingpong',
-        cn_name: '乒乓球'
+        cn_name: '乒乓球',
+        show_name: 'pingpong_c'
       }, {
         en_name: 'badminton',
-        cn_name: '羽毛球'
+        cn_name: '羽毛球',
+        show_name: 'badminton_c'
       }, {
         en_name: 'tennis',
-        cn_name: '网球'
+        cn_name: '网球',
+        show_name: 'tennis_c'
       }],
       swiperOption: {
         pagination: '.swiper-pagination', // 索引圆       
@@ -86,7 +92,22 @@ export default {
     }
   },
   methods: {
-
+    // 将选择的运动器材item放到仓库中
+    chooseSport(item) {
+      if(item.en_name.indexOf('_o') == -1 || !(item.en_name.indexOf('_o'))) {
+        this.clear();
+        this.$store.commit('SET_SPORT',item);
+        item.en_name = item.en_name + "_o";
+      } else {
+        item.en_name = item.en_name.replace(/_o/,'');
+      }
+    },
+    // 清除所有选择图片
+    clear() {
+      for (var item in this.sports) {
+        this.sports[item].en_name = this.sports[item].en_name.replace(/_o/,'');
+      }
+    }
   },
   created() {
     // 先获取当前位置
@@ -164,13 +185,16 @@ footer {
   .btn-wrap {
     flex: 1;
     button {
+      background-color: rgb(131, 194, 244);
+      outline: none;
       display: block;
       width: 80%;
       height: 35px;
+      line-height: 35px;
       margin: 0 auto;
       border: none;
       border-radius: 10px;
-      border: 1px solid black;
+      border: 1px solid rgb(131, 194, 244);
     }
   }
 }

@@ -8,20 +8,20 @@ import Router from 'vue-router';
 
 Vue.use(Router);
 
-const index = r => require.ensure([],() => r(require('@/views/index/index')),'index');
+const index = r => require.ensure([], () => r(require('@/views/index/index')), 'index');
 const register = r => require.ensure([], () => r(require('@/views/register/register')), 'register');
-const time = r => require.ensure([],() => r(require('@/views/time/time')),'time');
-const cash = r => require.ensure([],() => r(require('@/views/cash/cash')),'cash');
-const fault = r => require.ensure([],() => r(require('@/views/fault/fault')),'fault');
-const machine = r => require.ensure([],() => r(require('@/views/fault/machine')),'fault');
+const time = r => require.ensure([], () => r(require('@/views/time/time')), 'time');
+const cash = r => require.ensure([], () => r(require('@/views/cash/cash')), 'cash');
+const fault = r => require.ensure([], () => r(require('@/views/fault/fault')), 'fault');
+const machine = r => require.ensure([], () => r(require('@/views/fault/machine')), 'fault');
+const equipment = r => require.ensure([], () => r(require('@/views/fault/equipment')), 'fault');
 
-const router =  new Router({
-	mode: 'history',
+const router = new Router({
+  mode: 'history',
   scrollBehavior: () => {
     y: 0
   },
-  routes: [
-    {
+  routes: [{
       path: '/',
       name: 'index',
       component: index,
@@ -32,7 +32,7 @@ const router =  new Router({
     {
       path: '/register',
       name: 'register',
-     	component: register
+      component: register
     },
     {
       path: '/time',
@@ -62,6 +62,14 @@ const router =  new Router({
       path: '/machine',
       name: 'machine',
       component: machine,
+      meta: {
+        requireAuth: true
+      }
+    },
+    {
+      path: '/equipment',
+      name: 'equipment',
+      component: equipment,
       meta: {
         requireAuth: true
       }

@@ -94,18 +94,18 @@ export default {
   methods: {
     // 将选择的运动器材item放到仓库中
     chooseSport(item) {
-      if(item.en_name.indexOf('_o') == -1 || !(item.en_name.indexOf('_o'))) {
+      if (item.en_name.indexOf('_o') == -1 || !(item.en_name.indexOf('_o'))) {
         this.clear();
-        this.$store.commit('SET_SPORT',item);
+        this.$store.commit('SET_SPORT', item);
         item.en_name = item.en_name + "_o";
       } else {
-        item.en_name = item.en_name.replace(/_o/,'');
+        item.en_name = item.en_name.replace(/_o/, '');
       }
     },
     // 清除所有选择图片
     clear() {
       for (var item in this.sports) {
-        this.sports[item].en_name = this.sports[item].en_name.replace(/_o/,'');
+        this.sports[item].en_name = this.sports[item].en_name.replace(/_o/, '');
       }
     }
   },

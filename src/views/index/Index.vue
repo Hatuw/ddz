@@ -89,6 +89,9 @@ export default {
   computed: {
     pos() {
       return this.$store.state.pos;
+    },
+    sport() {
+      return this.$store.state.sport;
     }
   },
   methods: {
@@ -100,6 +103,7 @@ export default {
         item.en_name = item.en_name + "_o";
       } else {
         item.en_name = item.en_name.replace(/_o/, '');
+        this.$store.commit('SET_SPORT', {});
       }
     },
     // 清除所有选择图片

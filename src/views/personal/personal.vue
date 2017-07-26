@@ -1,7 +1,7 @@
 <!-- 个人中心组件 -->
 <template>
   <div id="personal">
-  	<returnUrl :title=" '个人中心' " :reUrl=" '/' "></returnUrl>
+    <returnUrl :title=" '个人中心' " :reUrl=" '/' "></returnUrl>
     <!-- 头部个人信息 -->
     <header>
       <div class="img-wrap">
@@ -18,7 +18,15 @@
     </header>
     <!-- 选项栏 -->
     <article>
-      <div class="order"></div>
+      <div class="order">
+        <p class="clearfix"><i class="fa fa-shopping-cart"></i><span style="margin-left: 5px;">我的订单</span><i class="fa fa-angle-right fr" style="
+    font-size: 22px; margin-top: -5px"></i></p>
+        <div class="order-box">
+          <div class="order-img"><img src="../../../static/img/return.png" alt="归还"><span>待归还</span></div>
+          <div class="order-img"><img src="../../../static/img/clock.png" alt="领取"><span>待领取</span></div>
+          <div class="order-img"><img src="../../../static/img/estimate.png" alt="评价"><span>待评价</span></div>
+        </div>
+      </div>
       <ul class="list">
         <router-link :to=" 'fault' ">
           <li class="item">
@@ -100,6 +108,27 @@ header {
     .fa-angle-right {
       margin-top: -5px;
       font-size: 22px;
+    }
+  }
+}
+
+.order {
+  padding: 10px 20px;
+  i {
+    color: $blue;
+  }
+  .order-box {
+    margin-top: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    .order-img {
+      margin: 0 25px;
+      flex-basis: 36px;
+      text-align: center;
+      img {
+        width: 100%;
+      }
     }
   }
 }

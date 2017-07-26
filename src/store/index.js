@@ -5,6 +5,7 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import getters from './getters';
+import { merge } from '@/utils/merge.js';
 
 Vue.use(Vuex);
 
@@ -21,15 +22,11 @@ const state = {
 const mutations = {
   // 设置仓库的地址位置
   SET_ADDR(state, posObj) {
-    // 获取地址成功后的回调函数,参数是地址的详细信息
-    state.pos.province = posObj.province;
-    state.pos.city = posObj.city;
-    state.pos.district = posObj.district;
-    state.pos.addr = posObj.addr;
+    merge(state.pos,posObj);
   },
   // 设置当前运动类型
   SET_SPORT(state,sport) {
-    state.sport = sport;
+    merge(state.sport,sport);
   }
 };
 

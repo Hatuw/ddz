@@ -102,7 +102,7 @@ export default {
 
 </script>
 <style scoped lang="scss">
-$main_color: #4d66b6; // 模板包裹层
+$main_color: #0788ee; // 模板包裹层
 #AgreementBook {
   position: absolute;
   top: 0;
@@ -123,7 +123,7 @@ $main_color: #4d66b6; // 模板包裹层
   padding: 10px 15px;
   height: 30px;
   line-height: 30px;
-  background-color: #314962;
+  background-color: $main_color;
   position: relative;
   .title {
     color: #fff;
@@ -168,7 +168,7 @@ $main_color: #4d66b6; // 模板包裹层
     width: 100%;
     height: 35px;
     line-height: 35px;
-    border-radius: 10px;
+    border-radius: 20px;
   }
 }
 

@@ -39,7 +39,7 @@
     <!-- 底部功能按键 -->
     <footer>
       <div class="btn-wrap">
-        <button style="color: #fff">预定器材</button>
+        <button style="color: #83c2f4;background-color:#fff">预定器材</button>
       </div>
       <div class="btn-wrap">
         <button style="color: #fff">立即运动</button>
@@ -197,7 +197,7 @@ footer {
       line-height: 35px;
       margin: 0 auto;
       border: none;
-      border-radius: 10px;
+      border-radius: 20px;
       border: 1px solid rgb(131, 194, 244);
     }
   }

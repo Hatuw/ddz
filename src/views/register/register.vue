@@ -152,7 +152,7 @@ export default {
 
 </script>
 <style scoped lang="scss">
-$main_color: #4d66b6;
+$main_color: #0788ee;
 $error_color: #dc4949;
 $gray_color: #a6a6a6;
 

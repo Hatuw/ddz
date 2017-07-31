@@ -2,6 +2,7 @@
  * 暴露出merge函数,方便仓库状态合并
  */
 
+// 判断是否清空对象
 let isEmpty = (obj) => {
   for (let i in obj) {
     return true;
@@ -9,18 +10,29 @@ let isEmpty = (obj) => {
   return false;
 }
 
+// 合并算法
 export const merge = (obj, opt) => {
+  // 如果参数不是对象就无法合并
   if (typeof obj !== 'object' || typeof opt !== 'object') {
     return;
   }
+  // 清空对象
   if (!isEmpty(opt)) {
     for (let a in obj) {
       delete obj[a];
     }
   } else {
-    for (let a in opt) {
-      obj[a] = opt[a];
+    // 数组深复制
+    if (obj instanceof Array) {
+      for (var i = 0; i < obj.length; ++i) {
+        obj[i] = opt[i];
+      }
+    }
+    // 对象深复制
+    else {
+      for (let a in opt) {
+        obj[a] = opt[a];
+      }
     }
   }
-
 }

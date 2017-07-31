@@ -1,11 +1,11 @@
-<!-- 缴纳组件 -->
+<!-- 我的押金组件 -->
 <template>
   <div id="cash">
-  	<return-url :title=" '缴纳押金' " :reUrl=" '/' "></return-url>
+  	<return-url :title=" '我的押金' " :reUrl=" '/' "></return-url>
     <!-- 押金金额 -->
     <div class="tip-text">
-      缴纳押金
-      <span>(可退)</span>
+      押金金额
+      <span>(元)</span>
     </div>
     <!-- 价钱 -->
     <div class="m-text">
@@ -13,20 +13,19 @@
     </div>
     <!-- 押金须知 -->
     <div class="note-text">
-      <p class="line" style="margin-right: 10px"></p>
-      <p class="title">押金须知</p>
-      <p class="line" style="margin-left: 10px"></p>
+      <i class="fa fa-clock-o" style="color: #0788ee"></i>
+      押金退还时间为一天
     </div>
-    <!-- 协议书 -->
+    <!-- 体现按钮 -->
     <div class="pay-btn">
-      <button>确认支付</button>
+      <button>我要提现</button>
     </div>
   </div>
 </template>
 <script>
 import returnUrl from '@/components/returnUrl';
 export default {
-  name: 'cash',
+  name: 'myCash',
   title: '押金',
   data() {
     return {
@@ -63,18 +62,8 @@ $main_color: #0788ee;
 }
 
 .note-text {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  margin-top: 20px;
   padding: 0 20px;
-  .line {
-    flex-grow: 1;
-    height: 1px;
-    background-color: #ccc;
-  }
-  .title {
-    color: $main_color;
-  }
 }
 
 .pay-btn {

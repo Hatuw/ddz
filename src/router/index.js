@@ -12,6 +12,8 @@ const index = r => require.ensure([], () => r(require('@/views/index/index')), '
 const register = r => require.ensure([], () => r(require('@/views/register/register')), 'register');
 const time = r => require.ensure([], () => r(require('@/views/time/time')), 'time');
 const cash = r => require.ensure([], () => r(require('@/views/cash/cash')), 'cash');
+const myCash = r => require.ensure([], () => r(require('@/views/cash/myCash')), 'cash');
+const reCash = r => require.ensure([], () => r(require('@/views/cash/reCash')), 'cash');
 const fault = r => require.ensure([], () => r(require('@/views/fault/fault')), 'fault');
 const machine = r => require.ensure([], () => r(require('@/views/fault/machine')), 'fault');
 const equipment = r => require.ensure([], () => r(require('@/views/fault/equipment')), 'fault');
@@ -47,6 +49,22 @@ const router = new Router({
       path: '/cash',
       name: 'cash',
       component: cash,
+      meta: {
+        requireAuth: true
+      }
+    },
+    {
+      path: '/reCash',
+      name: 'reCash',
+      component: reCash,
+      meta: {
+        requireAuth: true
+      }
+    },
+    {
+      path: '/myCash',
+      name: 'myCash',
+      component: myCash,
       meta: {
         requireAuth: true
       }

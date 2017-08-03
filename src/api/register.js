@@ -3,7 +3,8 @@ import fetch from 'utils/fetch';
 // 获取验证码请求
 export function getCode (val) {
 	const data = {
-		phone: val
+		phone: val,
+		type: 'send'
 	}
 	return fetch({
 		url: '/api/get_code',
@@ -13,9 +14,11 @@ export function getCode (val) {
 }
 
 // 检查验证码请求
-export function checkCode(val) {
+export function checkCode(vcode,phone) {
 	const data = {
-		code: val
+		vcode,
+		type:'verification',
+		phone
 	}
 	return fetch({
 		url: '/api/check_code',

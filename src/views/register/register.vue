@@ -116,15 +116,15 @@ export default {
         return
       }
 
-      checkCode(this.codeVal)
+      checkCode(this.codeVal,this.phoneVal)
       .then((res) =>{
         // 根据返回的状态码，来判断验证码是否正确
-        let state = res.data.state; // 返回的状态码
+        let status = res.data.status; // 返回的状态码
         // 如果返回的状态码是true的话，就进行页面的跳转
         // 如果返回的状态码是false的话，就提示错误文字
-        if (state) {
+        if (status) {
           console.log('验证码正确，本地存储openId');
-          localStorage.setItem('openId',res.data.openId);
+          // localStorage.setItem('openId',res.data.openId);
           this.$router.push('/');
         } else {
           this.code_error = '验证码错误,请重新填写验证码';

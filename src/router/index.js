@@ -19,6 +19,7 @@ const machine = r => require.ensure([], () => r(require('@/views/fault/machine')
 const equipment = r => require.ensure([], () => r(require('@/views/fault/equipment')), 'fault');
 const personal = r => require.ensure([], () => r(require('@/views/personal/personal')), 'personal');
 const pay = r => require.ensure([], () => r(require('@/views/pay/pay')), 'pay');
+const introduce = r => require.ensure([], () => r(require('@/views/introduce/introduce')), 'introduce');
 
 const router = new Router({
   mode: 'history',
@@ -106,6 +107,14 @@ const router = new Router({
       path: '/pay',
       name: 'pay',
       component: pay,
+      meta: {
+        requireAuth: true
+      }
+    },
+    {
+      path: '/introduce',
+      name: 'introduce',
+      component: introduce,
       meta: {
         requireAuth: true
       }

@@ -18,33 +18,43 @@
     </div>
     <!-- 按钮组 -->
     <div class="pay-btn">
-      <button>暂时不退</button>
-      <button @click=" getCash ">退押金</button>
+      <router-link :to=" '/myCash' ">
+        <button>暂时不退</button>        
+      </router-link>
+      <button @click=" showCfm ">退押金</button>
     </div>
-    <alertBox :title=" '申请退款成功!' " :subTitle=" '将在1-2个工作日原路退回支付账户' " :alert=" alert " @close=" close "></alertBox>
+    <alertBox :title=" '申请退款成功!' " :subTitle=" '将在1-2个工作日原路退回支付账户' " :alert=" alert " @close=" close('alert') "></alertBox>
+    <confirmBox :title=" '你确定要退款吗' " :confirm=" confirm " @close=" close('confirm') " @isTrue=" getCash "></confirmBox>
   </div>
 </template>
 <script>
 import returnUrl from '@/components/returnUrl';
 import alertBox from '@/components/alertBox';
+import confirmBox from '@/components/confirmBox';
 export default {
   name: 'cash',
   title: '押金',
   data() {
     return {
       alert: false,
+      confirm: false,
       money: '50.00',
       reasons: ['想运动，但经常租不到器材', '习惯在需要运动时，再充值押金', '放假或毕业离开学校', '机器操作流程复杂，等待时间太长', '运动器材的体验感不够好', '其他']
     }
   },
   methods: {
-    // 发起退押金请求
-    getCash() {
-      this.alert = true;
+    // 显示对话框
+    showCfm() {
+      this.confirm = true;
     },
     // 关闭弹框
-    close() {
-      this.alert = false;
+    close(a) {
+      this[a] = false;
+    },
+    // 发起退换押金请求
+    getCash() {
+      this.confirm = false;
+      this.alert = true;
     },
     // 选择退款原因
     chooseReason(rea, e) {
@@ -60,7 +70,8 @@ export default {
   },
   components: {
     returnUrl,
-    alertBox
+    alertBox,
+    confirmBox
   }
 }
 

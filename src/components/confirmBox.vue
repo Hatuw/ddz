@@ -1,13 +1,13 @@
-<!-- 弹窗组件 -->
+<!-- 确认对话框组件 -->
 <template>
-  <div id="alertBox" v-show=" alert ">
+  <div id="confirmBox" v-show=" confirm ">
     <!-- 正文盒子 -->
     <div class="box">
-      <p class="img-wrap"><img src="../../static/img/tick.png" alt="完成"></p>
-      <p style="text-align: center; font-size: 22px; margin-top: 5px;" v-text=" title "></p>
-      <p style="text-align: center; color: rgb(160,159,159);margin: 30px 0 5px 0px;" v-text=" subTitle "></p>
+      <i class="fa fa-times fr" aria-hidden="true" style="font-size:16px;color: rgb(152, 152, 152)" @click=" close "></i>
+      <p style="text-align: center; font-size: 22px; margin: 40px 0;" v-text=" title "></p>
       <p>
-        <button @click=" close ">确定</button>
+        <button @click=" close " style="background-color: #0788ee;">取消</button>
+        <button @click=" isTrue " style="background-color: rgb(152,152,152); color: #fff">确定</button>
       </p>
     </div>
     <!-- 遮罩层 -->
@@ -16,7 +16,7 @@
 </template>
 <script>
 export default {
-  name: 'alertBox',
+  name: 'confirmBox',
   data() {
     return {
 
@@ -26,9 +26,13 @@ export default {
     // 关闭弹框
     close() {
       this.$emit('close');
+    },
+    // 触发确定事件
+    isTrue() {
+      this.$emit('isTrue');
     }
   },
-  props: ['title', 'subTitle', 'alert']
+  props: ['title','confirm']
 }
 
 </script>
@@ -45,21 +49,14 @@ $main_color: #0788ee;
   background-color: #fff;
   width: 75%;
   max-width: 320px;
-  .img-wrap {
-    width: 50px;
-    margin: 0 auto;
-    img {
-      width: 100%;
-    }
-  }
   button {
     height: 30px;
     line-height: 30px;
-    width: 100%;
+    width: 49%;
     border: none;
-    background-color: $main_color;
+    border-radius: 20px;
     color: #fff;
-    border-radius: 10px;
+    outline: none;
   }
 }
 

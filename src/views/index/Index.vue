@@ -4,7 +4,7 @@
     <!-- 顶部地理位置 -->
     <header>
       <i class="fa fa-map-marker" aria-hidden="true"></i>
-      <span class="pos" v-if=" pos.province ">{{ pos.city }}{{ pos.district }}{{ pos.addr }}</span>
+      <span class="pos" v-if="curAddr ">{{ curAddr }}</span>
       <span class="pos" v-else>正在定位...</span>
     </header>
     <!-- 轮播图包裹层 -->
@@ -42,12 +42,24 @@
         <button style="color: #83c2f4;background-color:#fff">预定器材</button>
       </div>
       <div class="btn-wrap">
-        <button style="color: #fff">立即运动</button>
+        <button style="color: #fff" @click=" checkSchool ">立即运动</button>
       </div>
     </footer>
+    <!-- picker组件 -->
+    <div class="picker-wrap" v-show=" showPicker ">
+      <p class="clearfix title" style="text-align:center;margin-bottom: 5px;">
+        <span>请选择你当前所在的学校</span><i class="fa fa-times fr" aria-hidden="true" @click.stop=" changeShowPicker(false) "></i></p>
+      <picker :slots="slots" @change="onValuesChange" :itemHeight="26"></picker>
+      <button @click.stop=" changeShowPicker(false) ">确认</button>
+    </div>
+    <!-- 遮罩层 -->
+    <div class="mask" v-show=" showPicker "></div>
   </div>
 </template>
 <script>
+import { swiper, swiperSlide } from 'vue-awesome-swiper';
+import { picker } from 'mint-ui';
+import schoolList from '../../../static/file/schoolList.js';
 export default {
   name: 'index',
   data() {
@@ -83,18 +95,47 @@ export default {
         effect: 'slider', // cube: 正方体, fade: 渐隐
         resistanceRatio: 0, // 值越小抵抗越大越难将slide拖离边缘，0时完全无法拖离。
         lazyLoading: true // 懒加载
-      }
+      },
+      slots: [{
+        values: schoolList,
+        textAlign: 'center'
+      }],
+      showPicker: false
     }
   },
   computed: {
-    pos() {
-      return this.$store.state.pos;
-    },
-    sport() {
-      return this.$store.state.sport;
+    // 返回当前位置
+    curAddr() {
+      return this.$store.state.curAddr;
     }
   },
+  components: {
+    swiper,
+    swiperSlide,
+    picker
+  },
   methods: {
+    // 判断所有被投放的学校中是否包含当前地址
+    matchSchool() {
+      let curAddr = this.curAddr;
+      let school = null;
+      schoolList.forEach((item, index) => {
+        let city = item.split(',')[0];
+        let sName = item.split(',')[1];
+        if (curAddr.includes(city) && curAddr.includes(sName)) {
+          school = item;
+        }
+      });
+    },
+    // 检查当前位置是否属于学校范围
+    checkSchool() {
+      // 先判断用户是否开启了浏览器自动定位
+      if (!this.curAddr) {
+        this.showPicker = true;
+      } else {
+        this.matchSchool();
+      }
+    },
     // 将选择的运动器材item放到仓库中
     chooseSport(item) {
       if (item.en_name.indexOf('_o') == -1 || !(item.en_name.indexOf('_o'))) {
@@ -111,18 +152,95 @@ export default {
       for (var item in this.sports) {
         this.sports[item].en_name = this.sports[item].en_name.replace(/_o/, '');
       }
+    },
+    // 改变滑动的值
+    onValuesChange(picker, values) {
+      if (values[0] > values[1]) {
+        picker.setSlotValue(1, values[0]);
+      }
+      if (values[0]) {
+        this.$store.commit('SET_ADDR', values[0]);
+      }
+    },
+    // 改变选择框显示
+    changeShowPicker(flag) {
+      this.showPicker = flag;
     }
   },
   created() {
-    // 先获取当前位置
-    this.$store.dispatch('GET_ADDR');
+    // 先设置当前位置
+    this.$store.dispatch('SET_ADDR');
   }
 }
 
 </script>
-<style scoped lang="scss">
+<style lang="scss">
 $skyBlue: rgb(131, 194, 244);
 $Blue: rgb(230, 240, 249);
+
+.picker-wrap {
+  padding: 10px;
+  border-radius: 20px;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #fff;
+  z-index: 100;
+  .picker-item {
+    font-size: 16px;
+  }
+  .picker-selected {}
+  .title {
+    position: relative;
+    span {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      display: inline-block;
+      width: 100%;
+    }
+    i {
+      color: rgb(17, 136, 233);
+      font-size: 22px;
+    }
+  }
+  button {
+    width: 100%;
+    border: none;
+    background-color: rgb(17, 136, 233);
+    color: #fff;
+    border-radius: 20px;
+    margin-top: 5px;
+    box-shadow: 0px 10px 18px -7px #ccc;
+    height: 35px;
+    line-height: 35px;
+    font-size: 16px;
+    outline: none;
+  }
+}
+
+.picker-center-highlight {
+  &:after {
+    background-color: $skyBlue;
+  }
+  &:before {
+    background-color: $skyBlue;
+  }
+}
+
+.mask {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, .3);
+  z-index: 10;
+}
 
 header {
   padding: 10px 20px;

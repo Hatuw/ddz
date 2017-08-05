@@ -1,6 +1,7 @@
 <!-- 故障报修组件 -->
 <template>
   <div id="Fault">
+    <returnUrl :title=" '我的保障' " :reUrl=" '/personal' "></returnUrl>
     <ul>
       <li class="item">
         <router-link :to=" 'machine' ">
@@ -50,6 +51,7 @@
   </div>
 </template>
 <script>
+import returnUrl from '@/components/returnUrl';
 export default {
   name: 'Fault',
   title: '故障报修',
@@ -57,6 +59,9 @@ export default {
     return {
 
     }
+  },
+  components: {
+    returnUrl
   }
 }
 

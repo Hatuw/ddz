@@ -10,10 +10,15 @@ let isEmpty = (obj) => {
   return false;
 }
 
-// 合并算法
-export const merge = (obj, opt) => {
+// 合并算法: 对象
+export const merge = (obj,opt,attr) => {
   // 如果参数不是对象就无法合并
-  if (typeof obj !== 'object' || typeof opt !== 'object') {
+  if (typeof obj !== 'object' || typeof attr !== 'string') {
+    return;
+  }
+  // 如果需要合并的对象是字符串
+  if(typeof opt == 'string') {
+    obj[attr] = opt;
     return;
   }
   // 清空对象
@@ -35,4 +40,5 @@ export const merge = (obj, opt) => {
       }
     }
   }
-}
+};
+

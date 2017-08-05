@@ -89,6 +89,7 @@ $main_color: #0788ee;
     margin-top: 5px;
     box-shadow: 0px 10px 18px -7px #ccc;
     height: 35px;
+    line-height: 35px;
     font-size: 16px;
     &:focus {
       outline: none

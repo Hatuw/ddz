@@ -10,19 +10,19 @@ import { merge } from '@/utils/merge.js';
 Vue.use(Vuex);
 
 const state = {
-  pos: {  // 定位
-    province: '',
-    city: '',
-    district: '',
-    addr: ''
-  },
-  sport: {}
+  curAddr: '',  // 当前用户的位置
+  sport: {}     // 用户选择的运动类型
 };
 
 const mutations = {
-  // 设置仓库的地址位置
-  SET_ADDR(state, posObj) {
-    merge(state.pos,posObj);
+  // 设置当前用户的位置位置
+  SET_ADDR(state, addrObj) {
+    if(typeof addrObj == 'string') {
+      merge(state,addrObj,'curAddr');
+    } else {
+      let addr = `${addrObj.province}${addrObj.city}${addrObj.district}${addrObj.addr}`;
+      merge(state,addr,'curAddr');
+    }
   },
   // 设置当前运动类型
   SET_SPORT(state,sport) {
@@ -31,10 +31,10 @@ const mutations = {
 };
 
 const actions = {
-  GET_ADDR({ commit, state }) {
+  SET_ADDR({ commit, state }) {
   	// 成功时触发commit
-  	let success = function(posObj) {
-  		commit('SET_ADDR',posObj);
+  	let success = function(addr) {
+  		commit('SET_ADDR',addr);
   	}
     // 失败的回调函数
     let error = function(err) {

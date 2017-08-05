@@ -91,7 +91,7 @@ export default {
       }],
       swiperOption: {
         pagination: '.swiper-pagination', // 索引圆       
-        autoplay: 3500, // 自动博fag
+        autoplay: 3500, // 自动播放
         effect: 'slider', // cube: 正方体, fade: 渐隐
         resistanceRatio: 0, // 值越小抵抗越大越难将slide拖离边缘，0时完全无法拖离。
         lazyLoading: true // 懒加载

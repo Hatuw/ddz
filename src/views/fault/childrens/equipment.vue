@@ -1,18 +1,21 @@
-<!-- 机器故障组件 -->
+<!-- 器材故障组件 -->
+<!-- 当点击租借器材的时候,先存储租借器材名字 -->
 <template>
-  <div id="machine">
+  <div id="equipment">
     <returnUrl :title=" '机器故障' " :reUrl=" 'fault' "></returnUrl>
     <form @submit.prevent>
       <!-- 机器位置id信息 -->
       <div class="form-group">
-        <h4>机器故障</h4>
+        <h4>我的器材</h4>
         <div class="info">
-          <p>
-            <i class="fa fa-map-marker" aria-hidden="true"></i>
-            <span class="pos" v-if=" pos.province ">{{ pos.city }}{{ pos.district }}{{ pos.addr }}</span>
-            <span class="pos" v-else>正在定位...</span>
-          </p>
-          <p style="margin-top: 5px">机器id:KSDFF213</p>
+          <div class="info-img">
+            <img src="../../../../static/img/basketball.png" alt="我的运动">
+          </div>
+          <div class="info-text">
+            <p>篮球</p>
+            <p style="margin-top: 5px">已用时: 01:28:15</p>
+            <p style="margin-top: 5px">需缴费用: 1.5元</p>
+          </div>
         </div>
       </div>
       <!-- 机器故障4个基本原因 -->
@@ -46,7 +49,7 @@
             </li>
           </ul>
           <div id="addBtn" class="fl" v-show=" showBtn ">
-            <img src="../../../static/img/add.png" alt="添加图片">
+            <img src="../../../../static/img/add.png" alt="添加图片">
           </div>
         </div>
       </div>
@@ -63,8 +66,7 @@
 import faultMixin from '@/mixin/faultMixin.js';
 import returnUrl from '@/components/returnUrl';
 export default {
-  name: 'machine',
-  title: '机器故障',
+  name: 'equipment',
   mixins: [faultMixin],
   components: {
     returnUrl
@@ -86,19 +88,23 @@ $blue: #0788ee;
     padding: 0 20px;
   }
   .info {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     border-top: 1px solid $line;
     border-bottom: 1px solid $line;
     margin-top: 5px;
     padding: 10px 20px;
     background-color: #fff;
-    .fa {
-      color: $blue;
+    .info-img {
+      flex-basis: 75px;
+      img {
+        width: 100%;
+      }
     }
-    .pos {
-      margin-left: 5px;
-      display: inline-block;
-      width: 90%;
-      vertical-align: top;
+    .info-text {
+      flex-grow: 2;
+      margin-left: 15px;
     }
   }
   .reason {

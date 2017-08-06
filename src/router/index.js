@@ -15,8 +15,9 @@ const cash = r => require.ensure([], () => r(require('@/views/cash/cash')), 'cas
 const myCash = r => require.ensure([], () => r(require('@/views/cash/myCash')), 'cash');
 const reCash = r => require.ensure([], () => r(require('@/views/cash/reCash')), 'cash');
 const fault = r => require.ensure([], () => r(require('@/views/fault/fault')), 'fault');
-const machine = r => require.ensure([], () => r(require('@/views/fault/machine')), 'fault');
-const equipment = r => require.ensure([], () => r(require('@/views/fault/equipment')), 'fault');
+const myFault = r => require.ensure([], () => r(require('@/views/fault/childrens/myFault')), 'fault');
+const machine = r => require.ensure([], () => r(require('@/views/fault/childrens/machine')), 'fault');
+const equipment = r => require.ensure([], () => r(require('@/views/fault/childrens/equipment')), 'fault');
 const personal = r => require.ensure([], () => r(require('@/views/personal/personal')), 'personal');
 const pay = r => require.ensure([], () => r(require('@/views/pay/pay')), 'pay');
 const introduce = r => require.ensure([], () => r(require('@/views/introduce/introduce')), 'introduce');
@@ -75,6 +76,14 @@ const router = new Router({
       path: '/fault',
       name: 'fault',
       component: fault,
+      meta: {
+        requireAuth: true
+      }
+    },
+    {
+      path: '/myFault',
+      name: 'myFault',
+      component: myFault,
       meta: {
         requireAuth: true
       }

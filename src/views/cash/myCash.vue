@@ -1,7 +1,7 @@
 <!-- 我的押金组件 -->
 <template>
   <div id="cash">
-    <return-url :title=" '我的押金' " :reUrl=" '/' "></return-url>
+    <return-url :title=" '我的押金' " :reUrl=" '/personal' "></return-url>
     <div v-if=" flag ">
       <!-- 押金金额 -->
       <div class="tip-text">

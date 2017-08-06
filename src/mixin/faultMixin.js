@@ -28,14 +28,14 @@ export default {
     }
   },
   computed: {
-    pos() {
-      return this.$store.state.pos;
+    curAddr() {
+      return this.$store.state.curAddr;
     }
   },
   created() {
     // 如果仓库地址失效了,就从新获取一遍
-    if (!this.$store.state.pos.province) {
-      this.$store.dispatch('GET_ADDR');
+    if (!this.$store.state.curAddr) {
+      this.$store.dispatch('SET_ADDR');
     };
   },
   mounted() {

@@ -11,7 +11,7 @@
         <h3 style="font-size: 22px">Choo</h3>
         <p>
           <i class="fa fa-map-marker" aria-hidden="true" style="color: #0788ee"></i>
-          <span class="pos" v-if=" pos.province ">{{ pos.city }}{{ pos.district }}{{ pos.addr }}</span>
+          <span class="pos" v-if=" curAddr " v-text=" curAddr "></span>
           <span class="pos" v-else>正在定位...</span>
         </p>
       </div>
@@ -28,12 +28,14 @@
         </div>
       </div>
       <ul class="list">
-        <router-link :to=" 'fault' ">
+        <router-link :to=" '/fault' ">
           <li class="item">
             <i class="fa fa-wrench"></i><span style="margin-left:5px">故障报修</span><i class="fa fa-angle-right fr"></i>
           </li>
         </router-link>
-        <li class="item"><i class="fa fa-jpy"></i><span style="margin-left:5px">我的押金</span><i class="fa fa-angle-right fr"></i></li>
+        <router-link :to=" '/myCash' ">
+          <li class="item"><i class="fa fa-jpy"></i><span style="margin-left:5px">我的押金</span><i class="fa fa-angle-right fr"></i></li>
+        </router-link>
         <li class="item"><i class="fa fa-pencil-square-o"></i><span style="margin-left:5px">意见反馈</span><i class="fa fa-angle-right fr"></i></li>
         <li class="item"><i class="fa fa-hand-o-right"></i><span style="margin-left:5px">用户指南</span><i class="fa fa-angle-right fr"></i></li>
         <li class="item"><i class="fa fa-map-marker"></i><span style="margin-left:5px">关于多动朕</span><i class="fa fa-angle-right fr"></i></li>
@@ -54,14 +56,14 @@ export default {
     returnUrl
   },
   computed: {
-    pos() {
-      return this.$store.state.pos;
+    curAddr() {
+      return this.$store.state.curAddr;
     }
   },
   created() {
     // 如果仓库地址失效了,就从新获取一遍
-    if (!this.$store.state.pos.province) {
-      this.$store.dispatch('GET_ADDR');
+    if (!this.$store.state.curAddr) {
+      this.$store.dispatch('SET_ADDR');
     };
   }
 }

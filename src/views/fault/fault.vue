@@ -37,16 +37,18 @@
           <i class="fa fa-angle-right fr" aria-hidden="true"></i>
         </div>
       </li>
-      <li class="item">
-        <div class="img-wrap"><img src="../../../static/img/repairs.png" alt="我的报修"></div>
-        <div class="content-wrap">
-          <div class="content">
-            <p><strong style="font-size:16px">我的报修</strong></p>
-            <p style="margin-top: 5px;color:rgb(167,170,172)">查看我的报修状况</p>
+      <router-link :to=" '/myFault' ">
+        <li class="item">
+          <div class="img-wrap"><img src="../../../static/img/repairs.png" alt="我的报修"></div>
+          <div class="content-wrap">
+            <div class="content">
+              <p><strong style="font-size:16px">我的报修</strong></p>
+              <p style="margin-top: 5px;color:rgb(167,170,172)">查看我的报修状况</p>
+            </div>
+            <i class="fa fa-angle-right fr" aria-hidden="true"></i>
           </div>
-          <i class="fa fa-angle-right fr" aria-hidden="true"></i>
-        </div>
-      </li>
+        </li>
+      </router-link>
     </ul>
   </div>
 </template>

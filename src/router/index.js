@@ -18,6 +18,7 @@ const fault = r => require.ensure([], () => r(require('@/views/fault/fault')), '
 const myFault = r => require.ensure([], () => r(require('@/views/fault/childrens/myFault')), 'fault');
 const machine = r => require.ensure([], () => r(require('@/views/fault/childrens/machine')), 'fault');
 const equipment = r => require.ensure([], () => r(require('@/views/fault/childrens/equipment')), 'fault');
+const otherFault = r => require.ensure([], () => r(require('@/views/fault/childrens/otherFault')), 'fault');
 const personal = r => require.ensure([], () => r(require('@/views/personal/personal')), 'personal');
 const pay = r => require.ensure([], () => r(require('@/views/pay/pay')), 'pay');
 const introduce = r => require.ensure([], () => r(require('@/views/introduce/introduce')), 'introduce');
@@ -100,6 +101,14 @@ const router = new Router({
       path: '/equipment',
       name: 'equipment',
       component: equipment,
+      meta: {
+        requireAuth: true
+      }
+    },
+    {
+      path: '/otherFault',
+      name: 'otherFault',
+      component: otherFault,
       meta: {
         requireAuth: true
       }

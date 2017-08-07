@@ -3,7 +3,7 @@
   <div id="alertBox" v-show=" alert ">
     <!-- 正文盒子 -->
     <div class="box">
-      <p class="img-wrap"><img src="../../static/img/tick.png" alt="完成"></p>
+      <p class="img-wrap" v-if=" iShow "><img src="../../static/img/tick.png" alt="完成"></p>
       <p style="text-align: center; font-size: 22px; margin-top: 5px;" v-text=" title "></p>
       <p style="text-align: center; color: rgb(160,159,159);margin: 30px 0 5px 0px;" v-text=" subTitle "></p>
       <p>
@@ -28,7 +28,7 @@ export default {
       this.$emit('close');
     }
   },
-  props: ['title', 'subTitle', 'alert']
+  props: ['title', 'subTitle', 'alert','iShow']
 }
 
 </script>

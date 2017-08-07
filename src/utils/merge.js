@@ -13,7 +13,7 @@ let isEmpty = (obj) => {
 // 合并算法: 对象
 export const merge = (obj,opt,attr) => {
   // 如果参数不是对象就无法合并
-  if (typeof obj !== 'object' || typeof attr !== 'string') {
+  if (typeof obj !== 'object') {
     return;
   }
   // 如果需要合并的对象是字符串

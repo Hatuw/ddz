@@ -19,7 +19,7 @@
     <!-- 按钮组 -->
     <div class="pay-btn">
       <router-link :to=" '/myCash' ">
-        <button>暂时不退</button>        
+        <button>暂时不退</button>
       </router-link>
       <button @click=" showCfm ">退押金</button>
     </div>

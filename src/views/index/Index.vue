@@ -38,6 +38,7 @@
     </article>
     <!-- 底部功能按键 -->
     <footer>
+      <router-link to="personal">personal</router-link>
       <div class="btn-wrap">
         <button style="color: #83c2f4;background-color:#fff">预定器材</button>
       </div>
@@ -54,12 +55,18 @@
     </div>
     <!-- 遮罩层 -->
     <div class="mask" v-show=" showPicker "></div>
+    <!-- 弹框组件 -->
+    <alertBox :title=" alertMsg.title " :subTitle=" alertMsg.subTitle " :alert=" alert " @close=" close(false) "></alertBox>
+    <!-- 输入验证码组件 -->
+    <codeBox :show=" showCode "></codeBox>
   </div>
 </template>
 <script>
 import { swiper, swiperSlide } from 'vue-awesome-swiper';
 import { picker } from 'mint-ui';
 import schoolList from '../../../static/file/schoolList.js';
+import alertBox from '@/components/alertBox';
+import codeBox from './childrens/codeBox';
 export default {
   name: 'index',
   data() {
@@ -67,30 +74,36 @@ export default {
       sports: [{
         en_name: 'football',
         cn_name: '足球',
-        show_name: 'football_c'
+        show_name: 'football_c',
+        sCode: 0,
       }, {
         en_name: 'basketball',
         cn_name: '篮球',
-        show_name: 'basketball_c'
+        show_name: 'basketball_c',
+        sCode: 1,
       }, {
         en_name: 'volleyball',
         cn_name: '排球',
-        show_name: 'volleyball_c'
+        show_name: 'volleyball_c',
+        sCode: 2,
       }, {
         en_name: 'pingpong',
         cn_name: '乒乓球',
-        show_name: 'pingpong_c'
+        show_name: 'pingpong_c',
+        sCode: 3,
       }, {
         en_name: 'badminton',
         cn_name: '羽毛球',
-        show_name: 'badminton_c'
+        show_name: 'badminton_c',
+        sCode: 4,
       }, {
         en_name: 'tennis',
         cn_name: '网球',
-        show_name: 'tennis_c'
+        show_name: 'tennis_c',
+        sCode: 5,
       }],
       swiperOption: {
-        pagination: '.swiper-pagination', // 索引圆       
+        pagination: '.swiper-pagination', // 索引圆
         autoplay: 3500, // 自动播放
         effect: 'slider', // cube: 正方体, fade: 渐隐
         resistanceRatio: 0, // 值越小抵抗越大越难将slide拖离边缘，0时完全无法拖离。
@@ -100,22 +113,34 @@ export default {
         values: schoolList,
         textAlign: 'center'
       }],
-      showPicker: false
+      showPicker: false,
+      alert: false,
+      alertMsg: {
+        title: '',
+        subTitle: ''
+      },
+      showCode: false
     }
   },
   computed: {
     // 返回当前位置
     curAddr() {
       return this.$store.state.curAddr;
+    },
+    // 返回当前的选择运动器材
+    sport() {
+      return this.$store.state.sport;
     }
   },
   components: {
     swiper,
     swiperSlide,
-    picker
+    picker,
+    alertBox,
+    codeBox
   },
   methods: {
-    // 判断所有被投放的学校中是否包含当前地址
+    // 返回当前学校地址的所投放学校列表中的匹配
     matchSchool() {
       let curAddr = this.curAddr;
       let school = null;
@@ -126,14 +151,26 @@ export default {
           school = item;
         }
       });
+      return school;
     },
     // 检查当前位置是否属于学校范围
     checkSchool() {
-      // 先判断用户是否开启了浏览器自动定位
-      if (!this.curAddr) {
+      // 判断用户当前位置是否正确获取和是否选择运动器材
+      if (!this.sport.sCode) {
+        this.alertMsg.title = '您还未选择运动球类';
+        this.alertMsg.subTitle = '请选择运动球类';
+        this.alert = true;
+      } else if (!this.curAddr) {
         this.showPicker = true;
       } else {
-        this.matchSchool();
+        let school = this.matchSchool();
+        if (!school) {
+          this.alertMsg.title = '您所在的位置没有机器';
+          this.alertMsg.subTitle = '多动朕目前只在学校范围投放';
+          this.alert = true;
+          return;
+        }
+        // 向服务器发送运动订单
       }
     },
     // 将选择的运动器材item放到仓库中
@@ -165,6 +202,10 @@ export default {
     // 改变选择框显示
     changeShowPicker(flag) {
       this.showPicker = flag;
+    },
+    // 关闭弹框
+    close(flag) {
+      this.alert = flag;
     }
   },
   created() {

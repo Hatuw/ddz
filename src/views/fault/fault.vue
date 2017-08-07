@@ -28,14 +28,16 @@
         </router-link>
       </li>
       <li class="item">
-        <div class="img-wrap"><img src="../../../static/img/other.png" alt="其他故障"></div>
-        <div class="content-wrap">
-          <div class="content">
-            <p><strong style="font-size:16px">其他故障</strong></p>
-            <p style="margin-top: 5px;color:rgb(167,170,172)">计费故障、恶意破坏举报</p>
+        <router-link :to=" 'otherFault' ">
+          <div class="img-wrap"><img src="../../../static/img/other.png" alt="其他故障"></div>
+          <div class="content-wrap">
+            <div class="content">
+              <p><strong style="font-size:16px">其他故障</strong></p>
+              <p style="margin-top: 5px;color:rgb(167,170,172)">计费故障、恶意破坏举报</p>
+            </div>
+            <i class="fa fa-angle-right fr" aria-hidden="true"></i>
           </div>
-          <i class="fa fa-angle-right fr" aria-hidden="true"></i>
-        </div>
+        </router-link>
       </li>
       <router-link :to=" '/myFault' ">
         <li class="item">

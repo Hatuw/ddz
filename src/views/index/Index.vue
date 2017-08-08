@@ -11,15 +11,15 @@
     <div class="swiper-wrap">
       <swiper :options="swiperOption">
         <swiper-slide>
-          <img data-src="../../static/img/twentyheart2.0.jpg" alt="" class="img swiper-lazy">
+          <img data-src="../../static/img/banner1.jpg" alt="" class="img swiper-lazy">
           <div class="swiper-lazy-preloader"></div>
         </swiper-slide>
         <swiper-slide>
-          <img data-src="../../static/img/twentyheart.jpg" alt="" class="img swiper-lazy">
+          <img data-src="../../static/img/banner2.jpg" alt="" class="img swiper-lazy">
           <div class="swiper-lazy-preloader"></div>
         </swiper-slide>
         <swiper-slide>
-          <img data-src="../../static/img/twentyheart2.0.jpg" alt="" class="img swiper-lazy">
+          <img data-src="../../static/img/banner1.jpg" alt="" class="img swiper-lazy">
           <div class="swiper-lazy-preloader"></div>
         </swiper-slide>
         <div class="swiper-pagination" slot="pagination"></div>
@@ -38,11 +38,15 @@
     </article>
     <!-- 底部功能按键 -->
     <footer>
-      <router-link to="personal">personal</router-link>
-      <div class="btn-wrap">
-        <button style="color: #83c2f4;background-color:#fff">预定器材</button>
+      <div class="btn-wrap btn-wrap-grow-1">
+        <router-link to="personal">
+          <i class="fa fa-user-circle-o" aria-hidden="true"></i>
+        </router-link>
       </div>
-      <div class="btn-wrap">
+      <div class="btn-wrap btn-wrap-grow-2">
+        <button style="color: #0788ee;background-color:#fff">预定器材</button>
+      </div>
+      <div class="btn-wrap btn-wrap-grow-2">
         <button style="color: #fff" @click=" checkSchool ">立即运动</button>
       </div>
     </footer>
@@ -240,11 +244,12 @@ $Blue: rgb(230, 240, 249);
       left: 50%;
       transform: translate(-50%, -50%);
       display: inline-block;
-      width: 100%;
+      width: 70%;
     }
     i {
       color: rgb(17, 136, 233);
       font-size: 22px;
+      z-index: 100;
     }
   }
   button {
@@ -344,20 +349,31 @@ footer {
   position: fixed;
   bottom: 0;
   display: flex;
-  margin-bottom: 20px;
+  align-items: center;
+  background-color: #fff;
+  padding-bottom: 20px;
   .btn-wrap {
-    flex: 1;
     button {
-      background-color: rgb(131, 194, 244);
+      background-color: #0788ee;
       outline: none;
       display: block;
-      width: 80%;
+      width: 90%;
       height: 35px;
       line-height: 35px;
-      margin: 0 auto;
       border: none;
       border-radius: 20px;
-      border: 1px solid rgb(131, 194, 244);
+      border: 1px solid #0788ee;
+    }
+  }
+  .btn-wrap-grow-2 {
+    flex-grow: 2;
+  }
+  .btn-wrap-grow-1 {
+    flex-grow: 1;
+    text-align: center;
+    .fa {
+      color: #0788ee;
+      font-size: 28px;
     }
   }
 }

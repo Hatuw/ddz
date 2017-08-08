@@ -4,10 +4,10 @@
     <returnUrl :title=" '器材介绍' " :reUrl=" '/' "></returnUrl>
     <!-- banner -->
     <div id="banner">
-      <img src="../../../static/img/twentyheart.jpg" alt="banner">
+      <img src="../../../static/img/banner2.jpg" alt="banner">
       <p class="title">李宁7号通用篮球</p>
       <div class="line-wrap clearfix">
-        <p class="line-b fl"></p>
+        <p class="line-b fl"></p> 
         <p class="line-b fr"></p>
       </div>
       <div class="line-wrap clearfix">

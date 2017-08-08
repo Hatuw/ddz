@@ -84,8 +84,8 @@ header {
     padding: 5px;
     border: 1px solid $blue;
     .avatar {
-      height: 95px;
-      width: 95px;
+      height: 50px;
+      width: 50px;
       border-radius: 50%;
       background-position: 50%;
       background-size: cover;
@@ -93,7 +93,7 @@ header {
     }
   }
   .info {
-    flex-group: 2;
+    flex-grow: 2;
     margin-left: 15px;
   }
 }

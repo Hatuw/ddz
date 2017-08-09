@@ -106,6 +106,7 @@ header {
     border-top: 1px solid $gray;
     i {
       color: $blue;
+      font-size: 16px;
     }
     .fa-angle-right {
       margin-top: -5px;

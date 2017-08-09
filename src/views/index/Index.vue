@@ -29,8 +29,9 @@
     <article>
       <ul class="sport-wrap">
         <li v-for=" (item,index) in sports " :key=" index ">
-          <div class="sport-img-wrap" @click.stop=" chooseSport(item) ">
+          <div class="sport-img-wrap" @click.stop=" chooseSport(item,$event) ">
             <img :src=" '../../../static/img/' + item.en_name + '.png'" :alt=" item.cn_name ">
+            <div class="num-tip none">09</div>
           </div>
           <p v-text=" item.cn_name  "></p>
         </li>
@@ -152,8 +153,11 @@ export default {
     },
     // 将选择的运动器材item放到仓库中
     // 发送当前器材剩余数量请求
-    chooseSport(item) {
-      if (item.en_name.indexOf('_o') == -1 || !(item.en_name.indexOf('_o'))) {
+    chooseSport(item, e) {
+      // 检查当前地址地址是否在学校范围内
+      if (!this.curAddr) {
+        this.showPicker = true;
+      } else if (item.en_name.indexOf('_o') == -1 || !(item.en_name.indexOf('_o'))) {
         this.clear();
         this.$store.commit('SET_SPORT', item);
         item.en_name = item.en_name + "_o";
@@ -163,7 +167,17 @@ export default {
         if (school) {
           getSportNum(item.sCode, school.place)
             .then((res) => {
-              console.log(res);
+              let num = res.data.data[0].count;
+
+              // 移除所有数量显示
+              let dom = document.querySelectorAll('.num-tip');
+              for (let i = 0; i < dom.length; i++) {
+                dom[i].classList.add('none');
+              }
+              // 显示当前运动球类的数量
+              let t = e.target.parentElement.querySelector('.num-tip');
+              t.innerText = num;
+              t.classList.remove('none');
             })
             .catch((err) => {
               throw new Error(err);
@@ -172,6 +186,9 @@ export default {
       } else {
         item.en_name = item.en_name.replace(/_o/, '');
         this.$store.commit('SET_SPORT', {});
+
+        let t = e.target.nextSibling.nextSibling;
+        t.classList.add('none');
       }
     },
     // 清除所有选择图片
@@ -323,6 +340,7 @@ header {
   margin-top: 25px;
   li {
     flex: 33.33%;
+    position: relative;
     .sport-img-wrap {
       text-align: center;
       border-radius: 50%;
@@ -330,6 +348,20 @@ header {
       height: 75px;
       margin: 0 auto;
       position: relative;
+      .num-tip {
+        text-align: center;
+        top: -8%;
+        right: -1%;
+        position: absolute;
+        height: 30px;
+        line-height: 30px;
+        color: #fff;
+        width: 30px;
+        background-position: 50%;
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-image: url('../../../static/img/show.png');
+      }
       img {
         width: 85%;
         position: absolute;

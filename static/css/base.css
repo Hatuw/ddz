@@ -95,6 +95,11 @@ html {
   overflow-y: scroll;
 }
 
+html,body {
+  height: 100%;
+  width: 100%;
+}
+
 /**
  * base.css
  * 给项目提供原始类

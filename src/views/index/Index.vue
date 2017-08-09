@@ -68,44 +68,15 @@
 <script>
 import { swiper, swiperSlide } from 'vue-awesome-swiper';
 import { picker } from 'mint-ui';
-import schoolList from '../../../static/file/schoolList.js';
 import alertBox from '@/components/alertBox';
 import codeBox from './childrens/codeBox';
+import { getPlace, getSportNum } from 'api/index';
+import sportData from 'utils/sport';
 export default {
   name: 'index',
   data() {
     return {
-      sports: [{
-        en_name: 'football',
-        cn_name: '足球',
-        show_name: 'football_c',
-        sCode: 0,
-      }, {
-        en_name: 'basketball',
-        cn_name: '篮球',
-        show_name: 'basketball_c',
-        sCode: 1,
-      }, {
-        en_name: 'volleyball',
-        cn_name: '排球',
-        show_name: 'volleyball_c',
-        sCode: 2,
-      }, {
-        en_name: 'pingpong',
-        cn_name: '乒乓球',
-        show_name: 'pingpong_c',
-        sCode: 3,
-      }, {
-        en_name: 'badminton',
-        cn_name: '羽毛球',
-        show_name: 'badminton_c',
-        sCode: 4,
-      }, {
-        en_name: 'tennis',
-        cn_name: '网球',
-        show_name: 'tennis_c',
-        sCode: 5,
-      }],
+      sports: sportData,
       swiperOption: {
         pagination: '.swiper-pagination', // 索引圆
         autoplay: 3500, // 自动播放
@@ -114,7 +85,7 @@ export default {
         lazyLoading: true // 懒加载
       },
       slots: [{
-        values: schoolList,
+        values: null,
         textAlign: 'center'
       }],
       showPicker: false,
@@ -123,7 +94,9 @@ export default {
         title: '',
         subTitle: ''
       },
-      showCode: false
+      canGet: false,
+      showCode: false,
+      schoolList: []
     }
   },
   computed: {
@@ -148,9 +121,9 @@ export default {
     matchSchool() {
       let curAddr = this.curAddr;
       let school = null;
-      schoolList.forEach((item, index) => {
-        let city = item.split(',')[0];
-        let sName = item.split(',')[1];
+      this.schoolList.forEach((item, index) => {
+        let city = item.name.split(',')[0];
+        let sName = item.name.split(',')[1];
         if (curAddr.includes(city) && curAddr.includes(sName)) {
           school = item;
         }
@@ -178,11 +151,24 @@ export default {
       }
     },
     // 将选择的运动器材item放到仓库中
+    // 发送当前器材剩余数量请求
     chooseSport(item) {
       if (item.en_name.indexOf('_o') == -1 || !(item.en_name.indexOf('_o'))) {
         this.clear();
         this.$store.commit('SET_SPORT', item);
         item.en_name = item.en_name + "_o";
+
+        // 检查当前地区是否在学校范围
+        let school = this.matchSchool();
+        if (school) {
+          getSportNum(item.sCode, school.place)
+            .then((res) => {
+              console.log(res);
+            })
+            .catch((err) => {
+              throw new Error(err);
+            })
+        }
       } else {
         item.en_name = item.en_name.replace(/_o/, '');
         this.$store.commit('SET_SPORT', {});
@@ -196,10 +182,7 @@ export default {
     },
     // 改变滑动的值
     onValuesChange(picker, values) {
-      if (values[0] > values[1]) {
-        picker.setSlotValue(1, values[0]);
-      }
-      if (values[0]) {
+      if (this.showPicker) {
         this.$store.commit('SET_ADDR', values[0]);
       }
     },
@@ -213,7 +196,20 @@ export default {
     }
   },
   created() {
-    // 先设置当前位置
+    // 获取所有被投放的学校
+    getPlace()
+      .then((res) => {
+        let arr = [];
+        res.data.forEach((item, index) => {
+          arr.push(item.name);
+        });
+        this.slots[0].values = arr;
+        this.schoolList = res.data;
+      })
+      .catch((err) => {
+        throw new Error(err);
+      });
+    // 自动获取 当前位置
     this.$store.dispatch('SET_ADDR');
   }
 }
@@ -222,6 +218,11 @@ export default {
 <style lang="scss">
 $skyBlue: rgb(131, 194, 244);
 $Blue: rgb(230, 240, 249);
+
+#index,
+#app {
+  height: 100%;
+}
 
 .picker-wrap {
   padding: 10px;
@@ -334,6 +335,7 @@ header {
         position: absolute;
         top: 50%;
         left: 50%;
+        -webkit-transform: translate(-50%, -50%);
         transform: translate(-50%, -50%);
       }
     }

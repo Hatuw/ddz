@@ -67,6 +67,7 @@
   </div>
 </template>
 <script>
+require('swiper/dist/css/swiper.css');
 import { swiper, swiperSlide } from 'vue-awesome-swiper';
 import { picker } from 'mint-ui';
 import alertBox from '@/components/alertBox';
@@ -161,14 +162,12 @@ export default {
         this.clear();
         this.$store.commit('SET_SPORT', item);
         item.en_name = item.en_name + "_o";
-
         // 检查当前地区是否在学校范围
         let school = this.matchSchool();
         if (school) {
           getSportNum(item.sCode, school.place)
             .then((res) => {
               let num = res.data.data[0].count;
-
               // 移除所有数量显示
               let dom = document.querySelectorAll('.num-tip');
               for (let i = 0; i < dom.length; i++) {
@@ -186,7 +185,6 @@ export default {
       } else {
         item.en_name = item.en_name.replace(/_o/, '');
         this.$store.commit('SET_SPORT', {});
-
         let t = e.target.nextSibling.nextSibling;
         t.classList.add('none');
       }
@@ -235,7 +233,6 @@ export default {
 <style lang="scss">
 $skyBlue: rgb(131, 194, 244);
 $Blue: rgb(230, 240, 249);
-
 #index,
 #app {
   height: 100%;

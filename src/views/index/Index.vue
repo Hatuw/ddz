@@ -185,7 +185,7 @@ export default {
       } else {
         item.en_name = item.en_name.replace(/_o/, '');
         this.$store.commit('SET_SPORT', {});
-        let t = e.target.nextSibling.nextSibling;
+        let t = e.target.parentElement.querySelector('.num-tip');
         t.classList.add('none');
       }
     },
@@ -225,7 +225,7 @@ export default {
         throw new Error(err);
       });
     // 自动获取 当前位置
-    this.$store.dispatch('SET_ADDR');
+    // this.$store.dispatch('SET_ADDR');
   }
 }
 

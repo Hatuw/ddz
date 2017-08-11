@@ -54,14 +54,14 @@
     <!-- picker组件 -->
     <div class="picker-wrap" v-show=" showPicker ">
       <p class="clearfix title" style="text-align:center;margin-bottom: 5px;">
-        <span>请选择你当前所在的学校</span><i class="fa fa-times fr" aria-hidden="true" @click.stop=" changeShowPicker(false) "></i></p>
+        <span>请选择你当前所在的学校</span><i class="fa fa-times fr" aria-hidden="true" @click.stop=" changeShow('showPicker',false) "></i></p>
       <picker :slots="slots" @change="onValuesChange" :itemHeight="26"></picker>
-      <button @click.stop=" changeShowPicker(false) ">确认</button>
+      <button @click.stop=" changeShow('showPicker',false) ">确认</button>
     </div>
     <!-- 遮罩层 -->
     <div class="mask" v-show=" showPicker "></div>
     <!-- 弹框组件 -->
-    <alertBox :title=" alertMsg.title " :subTitle=" alertMsg.subTitle " :alert=" alert " @close=" close(false) "></alertBox>
+    <alertBox :title=" alertMsg.title " :subTitle=" alertMsg.subTitle " :alert=" alert " @close=" changeShow('alert',false) "></alertBox>
     <!-- 输入验证码组件 -->
     <codeBox :show=" showCode "></codeBox>
   </div>
@@ -72,7 +72,7 @@ import { swiper, swiperSlide } from 'vue-awesome-swiper';
 import { picker } from 'mint-ui';
 import alertBox from '@/components/alertBox';
 import codeBox from './childrens/codeBox';
-import { getPlace, getSportNum } from 'api/index';
+import { getPlace, getSportNum, createOrder } from 'api/index';
 import sportData from 'utils/sport';
 export default {
   name: 'index',
@@ -87,8 +87,9 @@ export default {
         lazyLoading: true // 懒加载
       },
       slots: [{
-        values: null,
-        textAlign: 'center'
+        values: [],
+        textAlign: 'center',
+        defaultIndex: 0
       }],
       showPicker: false,
       alert: false,
@@ -97,8 +98,7 @@ export default {
         subTitle: ''
       },
       canGet: false,
-      showCode: false,
-      schoolList: []
+      showCode: false
     }
   },
   computed: {
@@ -109,6 +109,10 @@ export default {
     // 返回当前的选择运动器材
     sport() {
       return this.$store.state.sport;
+    },
+    // 返回所有投放的学校列表
+    schoolList() {
+      return this.$store.state.schoolList;
     }
   },
   components: {
@@ -119,6 +123,12 @@ export default {
     codeBox
   },
   methods: {
+    // 改变弹框文字
+    changeAlertText(title, subtitle) {
+      this.alertMsg.title = title;
+      this.alertMsg.subTitle = subtitle;
+      this.alert = true;
+    },
     // 返回当前学校地址的所投放学校列表中的匹配
     matchSchool() {
       let curAddr = this.curAddr;
@@ -135,48 +145,61 @@ export default {
     // 检查当前位置是否属于学校范围
     checkSchool() {
       // 判断用户当前位置是否正确获取和是否选择运动器材
-      if (!this.sport.sCode) {
-        this.alertMsg.title = '您还未选择运动球类';
-        this.alertMsg.subTitle = '请选择运动球类';
-        this.alert = true;
-      } else if (!this.curAddr) {
+      if (!this.curAddr) {
         this.showPicker = true;
+      } else if (!this.sport.en_name) {
+        this.changeAlertText('您还未选择运动球类', '请选择运动球类');
       } else {
         let school = this.matchSchool();
         if (!school) {
-          this.alertMsg.title = '您所在的位置没有机器';
-          this.alertMsg.subTitle = '多动朕目前只在学校范围投放';
-          this.alert = true;
-          return;
+          this.changeAlertText('您所在的位置没有机器', '多动朕目前只在学校范围投放');
+        } else if (!this.sport.count) {
+          this.changeAlertText('机器球类数量为0', '请有球的时候再来吧');
+        } else {
+          // 向服务器发送运动订单
+          createOrder('13068501435', this.sport.serial)
+            .then((res) => {
+              this.showCode = true;
+            })
+            .catch((err) => {
+              throw new Error(err)
+            })
         }
-        // 向服务器发送运动订单
       }
     },
-    // 将选择的运动器材item放到仓库中
+    // 检查是否有运动器材被选中
+    checkChoose(item) {
+      return item.en_name.indexOf('_o') == -1 || !(item.en_name.indexOf('_o'))
+    },
     // 发送当前器材剩余数量请求
     chooseSport(item, e) {
       // 检查当前地址地址是否在学校范围内
       if (!this.curAddr) {
         this.showPicker = true;
-      } else if (item.en_name.indexOf('_o') == -1 || !(item.en_name.indexOf('_o'))) {
-        this.clear();
-        this.$store.commit('SET_SPORT', item);
-        item.en_name = item.en_name + "_o";
+      } else if (this.checkChoose(item)) {
+        this.imgClear();
         // 检查当前地区是否在学校范围
         let school = this.matchSchool();
         if (school) {
           getSportNum(item.sCode, school.place)
             .then((res) => {
-              let num = res.data.data[0].count;
-              // 移除所有数量显示
-              let dom = document.querySelectorAll('.num-tip');
-              for (let i = 0; i < dom.length; i++) {
-                dom[i].classList.add('none');
+              console.log(res);
+              let status = res.data.status;
+              if (status) {
+                try {
+                  let num = res.data.data[0].count;
+                  item.en_name = item.en_name + "_o";
+                  this.$store.commit('SET_SPORT', item);
+                  this.$store.commit('SET_SPORT', res.data.data[0]);
+                  this.numClear();
+                  // 显示当前运动球类的数量
+                  let t = e.target.parentElement.querySelector('.num-tip');
+                  t.innerText = num;
+                  t.classList.remove('none');
+                } catch (e) {
+                  throw e;
+                }
               }
-              // 显示当前运动球类的数量
-              let t = e.target.parentElement.querySelector('.num-tip');
-              t.innerText = num;
-              t.classList.remove('none');
             })
             .catch((err) => {
               throw new Error(err);
@@ -190,9 +213,16 @@ export default {
       }
     },
     // 清除所有选择图片
-    clear() {
+    imgClear() {
       for (var item in this.sports) {
         this.sports[item].en_name = this.sports[item].en_name.replace(/_o/, '');
+      }
+    },
+    // 清除所有器材选择的数量
+    numClear() {
+      let dom = document.querySelectorAll('.num-tip');
+      for (let i = 0; i < dom.length; i++) {
+        dom[i].classList.add('none');
       }
     },
     // 改变滑动的值
@@ -202,30 +232,38 @@ export default {
       }
     },
     // 改变选择框显示
-    changeShowPicker(flag) {
-      this.showPicker = flag;
+    changeShow(attr, flag) {
+      this[attr] = flag;
     },
-    // 关闭弹框
-    close(flag) {
-      this.alert = flag;
+    // 添加学校选项
+    addSchool() {
+      this.schoolList.forEach((item, index) => {
+        this.slots[0].values.push(item.name);
+      });
     }
   },
   created() {
     // 获取所有被投放的学校
-    getPlace()
-      .then((res) => {
-        let arr = [];
-        res.data.forEach((item, index) => {
-          arr.push(item.name);
+    if (!this.schoolList.length) {
+      getPlace()
+        .then((res) => {
+          this.$store.commit('SET_SCHOOLLIST', res.data.data);
+        })
+        .then(() => {
+          // 添加学校选项
+          this.addSchool();
+        })
+        .catch((err) => {
+          throw new Error(err);
         });
-        this.slots[0].values = arr;
-        this.schoolList = res.data;
-      })
-      .catch((err) => {
-        throw new Error(err);
-      });
-    // 自动获取 当前位置
-    // this.$store.dispatch('SET_ADDR');
+    } else {
+      this.addSchool();
+    }
+
+    // 自动获取当前位置
+    if (!this.curAddr) {
+      this.$store.dispatch('SET_ADDR');
+    };
   }
 }
 
@@ -250,7 +288,6 @@ $Blue: rgb(230, 240, 249);
   .picker-item {
     font-size: 16px;
   }
-  .picker-selected {}
   .title {
     position: relative;
     span {
@@ -381,7 +418,6 @@ footer {
   bottom: 0;
   display: flex;
   align-items: center;
-  background-color: #fff;
   padding-bottom: 20px;
   .btn-wrap {
     button {
@@ -394,6 +430,7 @@ footer {
       border: none;
       border-radius: 20px;
       border: 1px solid #0788ee;
+      outline: none;
     }
   }
   .btn-wrap-grow-2 {

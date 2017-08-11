@@ -52,7 +52,7 @@ export default {
     get_jssdk(data)
       .then((res) => {
         wx.config({
-          debug: false,
+          debug: true,
           appId: res.data.appId,
           timestamp: data.timestamp, // 必填，生成签名的时间戳
           nonceStr: data.noncestr, // 必填，生成签名的随机串

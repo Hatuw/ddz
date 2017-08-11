@@ -10,8 +10,9 @@ import { merge } from '@/utils/merge.js';
 Vue.use(Vuex);
 
 const state = {
-  curAddr: '',  // 当前用户的位置
-  sport: {}     // 用户选择的运动类型
+  curAddr: '',    // 当前用户的位置
+  sport: {},      // 用户选择的运动类型
+  schoolList: []  // 所有被投放的学校
 };
 
 const mutations = {
@@ -27,6 +28,10 @@ const mutations = {
   // 设置当前运动类型
   SET_SPORT(state,sport) {
     merge(state.sport,sport);
+  },
+  // 设置所有被投放的学校
+  SET_SCHOOLLIST(state,schoolList) {
+    merge(state.schoolList,schoolList);
   }
 };
 

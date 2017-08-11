@@ -27,7 +27,7 @@
         <div class="text-info">
           <p>器材故障</p>
           <p>故障原因: xxxxxxxxxxxxxxxxxxxxx</p>
-          <p>图片:<img src="../../../../static/img/demo.jpg"></p>
+          <p>图片:</p>
         </div>
       </div>
       <!-- 处理中 -->

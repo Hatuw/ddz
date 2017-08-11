@@ -29,7 +29,7 @@ export const merge = (obj,opt,attr) => {
   } else {
     // 数组深复制
     if (obj instanceof Array) {
-      for (var i = 0; i < obj.length; ++i) {
+      for (var i = 0; i < opt.length; ++i) {
         obj[i] = opt[i];
       }
     }

@@ -67,7 +67,7 @@
   </div>
 </template>
 <script>
-require('swiper/dist/css/swiper.css');
+import 'swiper/dist/css/swiper.css';
 import { swiper, swiperSlide } from 'vue-awesome-swiper';
 import { picker } from 'mint-ui';
 import alertBox from '@/components/alertBox';
@@ -97,7 +97,6 @@ export default {
         title: '',
         subTitle: ''
       },
-      canGet: false,
       showCode: false
     }
   },
@@ -169,7 +168,7 @@ export default {
     },
     // 检查是否有运动器材被选中
     checkChoose(item) {
-      return item.en_name.indexOf('_o') == -1 || !(item.en_name.indexOf('_o'))
+      return item.en_name.indexOf('_o') == -1 || !(item.en_name.indexOf('_o'));
     },
     // 发送当前器材剩余数量请求
     chooseSport(item, e) {
@@ -183,7 +182,6 @@ export default {
         if (school) {
           getSportNum(item.sCode, school.place)
             .then((res) => {
-              console.log(res);
               let status = res.data.status;
               if (status) {
                 try {

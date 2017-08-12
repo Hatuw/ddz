@@ -51,7 +51,7 @@
 <script>
 import agreementBook from './childrens/agreementBook.vue';
 import moveSlider from './childrens/moveSlider.vue';
-import { getCode,checkCode } from '../../api/register.js';
+import { getCode, checkCode } from '../../api/register.js';
 export default {
   name: 'Register',
   data() {
@@ -82,13 +82,13 @@ export default {
     _getCode() {
       this.silderShow = false;
       getCode(this.phoneVal)
-      .then((res) => {
-        this.countDown();
-        this.sended = true;
-      })
-      .catch((err) => {
-        throw err;
-      })
+        .then((res) => {
+          this.countDown();
+          this.sended = true;
+        })
+        .catch((err) => {
+          throw err;
+        })
     },
 
     // 倒计时
@@ -108,31 +108,33 @@ export default {
     // 向服务器发起验证验证码请求
     sendCode() {
       // 先检查是否能执行请求
-      if (!this.sended) {
-        this.phone_error = '请先填写手机号码';
+      if (!(/^(1[34578]\d{9})$/ig.test(this.phoneVal))) {
+        this.phone_error = '请检查手机格式';
+        return false;
+      } else if (!this.sended) {
+        this.phone_error = '请获取验证码';
         return;
       } else if (this.codeVal == '') {
         this.code_error = '请检查验证码是否输入';
         return
       }
 
-      checkCode(this.codeVal,this.phoneVal)
-      .then((res) =>{
-        // 根据返回的状态码，来判断验证码是否正确
-        let status = res.data.status; // 返回的状态码
-        // 如果返回的状态码是true的话，就进行页面的跳转
-        // 如果返回的状态码是false的话，就提示错误文字
-        if (status) {
-          console.log('验证码正确，本地存储openId');
-          // localStorage.setItem('openId',res.data.openId);
-          this.$router.push('/');
-        } else {
-          this.code_error = '验证码错误,请重新填写验证码';
-        }
-      })
-      .catch((err) => {
-        throw err;
-      })
+      checkCode(this.codeVal, this.phoneVal)
+        .then((res) => {
+          // 根据返回的状态码，来判断验证码是否正确
+          let status = res.data.status; // 返回的状态码
+          // 如果返回的状态码是true的话，就进行页面的跳转
+          // 如果返回的状态码是false的话，就提示错误文字
+          if (status) {
+            document.cookie = `token=${ res.data.token }`;
+            this.$router.push('/');
+          } else {
+            this.code_error = '验证码错误,请重新填写验证码';
+          }
+        })
+        .catch((err) => {
+          throw err;
+        })
     },
     // 清除所有错误文字
     clearError() {

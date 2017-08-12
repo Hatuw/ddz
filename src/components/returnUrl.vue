@@ -3,7 +3,7 @@
   <div id="ReturnUrl">
     <router-link :to=" reUrl ">
       <i class="fa fa-angle-left" aria-hidden="true"></i>
-      <span style="vertical-align: top;margin-left:5px; color: #fff">返回</span>
+      <span style="margin-left:5px; color: #fff">返回</span>
     </router-link>
     <span class="title">{{ title }}</span>
   </div>
@@ -46,6 +46,8 @@ export default {
   i {
     font-size: 20px;
     color: #fff;
+    vertical-align: top;
+    margin-top: -1px;
   }
 }
 

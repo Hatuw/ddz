@@ -10,7 +10,7 @@
       <div class="info">
         <h3 style="font-size: 22px">Choo</h3>
         <p>
-          <i class="fa fa-map-marker" aria-hidden="true" style="color: #0788ee"></i>
+          <i class="fa fa-map-marker" aria-hidden="true"></i>
           <span class="pos" v-if=" curAddr " v-text=" curAddr "></span>
           <span class="pos" v-else>正在定位...</span>
         </p>
@@ -19,7 +19,7 @@
     <!-- 选项栏 -->
     <article>
       <div class="order">
-        <p class="clearfix"><i class="fa fa-shopping-cart"></i><span style="margin-left: 5px;">我的订单</span><i class="fa fa-angle-right fr" style="
+        <p class="clearfix"><i class="fa fa-shopping-cart icon"></i><span style="margin-left: 5px;">我的订单</span><i class="fa fa-angle-right fr" style="
     font-size: 22px; margin-top: -5px"></i></p>
         <div class="order-box">
           <div class="order-img"><img src="../../../static/img/return.png" alt="归还"><span>待归还</span></div>
@@ -30,15 +30,32 @@
       <ul class="list">
         <router-link :to=" '/fault' ">
           <li class="item">
-            <i class="fa fa-wrench"></i><span style="margin-left:5px">故障报修</span><i class="fa fa-angle-right fr"></i>
+            <i class="fa fa-wrench icon"></i>
+            <span>故障报修</span>
+            <i class="fa fa-angle-right fr"></i>
           </li>
         </router-link>
         <router-link :to=" '/myCash' ">
-          <li class="item"><i class="fa fa-jpy"></i><span style="margin-left:5px">我的押金</span><i class="fa fa-angle-right fr"></i></li>
+            <li class="item"><i class="fa fa-jpy icon" style="font-size: 15px;"></i>
+            <span>我的押金</span>
+            <i class="fa fa-angle-right fr"></i>
+          </li>
         </router-link>
-        <li class="item"><i class="fa fa-pencil-square-o"></i><span style="margin-left:5px">意见反馈</span><i class="fa fa-angle-right fr"></i></li>
-        <li class="item"><i class="fa fa-hand-o-right"></i><span style="margin-left:5px">用户指南</span><i class="fa fa-angle-right fr"></i></li>
-        <li class="item"><i class="fa fa-map-marker"></i><span style="margin-left:5px">关于多动朕</span><i class="fa fa-angle-right fr"></i></li>
+        <li class="item">
+          <i class="fa fa-pencil-square-o icon" style="font-size: 14px;"></i>
+          <span>意见反馈</span>
+          <i class="fa fa-angle-right fr"></i>
+        </li>
+        <li class="item">
+          <i class="fa fa-hand-o-right icon"></i>
+          <span>用户指南</span>
+          <i class="fa fa-angle-right fr"></i>
+        </li>
+        <li class="item">
+          <i class="fa fa-map-marker icon"></i>
+          <span>关于多动朕</span>
+          <i class="fa fa-angle-right fr"></i>
+        </li>
       </ul>
     </article>
   </div>
@@ -78,14 +95,12 @@ header {
   justify-content: center;
   align-items: center;
   padding: 10px 20px;
-  border-bottom: 1px solid $gray;
+  border-bottom: 1px solid $blue;
+  background-color: #0788ee;
   .img-wrap {
-    border-radius: 50%;
-    padding: 5px;
-    border: 1px solid $blue;
     .avatar {
-      height: 50px;
-      width: 50px;
+      height: 60px;
+      width: 60px;
       border-radius: 50%;
       background-position: 50%;
       background-size: cover;
@@ -95,24 +110,33 @@ header {
   .info {
     flex-grow: 2;
     margin-left: 15px;
+    h3,span,i {
+      color: #fff;
+    }
   }
 }
 
 .list {
   .item {
     margin-top: 5px;
-    padding: 10px 20px;
+    padding: 15px 20px;
     border-bottom: 1px solid $gray;
     border-top: 1px solid $gray;
     i {
       color: $blue;
       font-size: 16px;
+      vertical-align: text-bottom;
     }
     .fa-angle-right {
       margin-top: -5px;
       font-size: 22px;
     }
   }
+}
+
+.icon {
+  display: inline-block;
+  width: 20px;
 }
 
 .order {

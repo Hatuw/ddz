@@ -6,8 +6,8 @@
       <div style="font-size: 16px; margin-top: 5px;">输入机器屏幕中显示的验证码即可开箱领取器材</div>
       <div id="inp-wrap">
         <p class="clearfix">
-          <input type="number" class="inp" v-model.trim=" num.o " @input=" o_write " id="o">
-          <input type="number" class="inp" v-model.trim=" num.t " @input=" t_write " @click=" check " id="t">
+          <input type="number" class="inp" v-model.trim=" num.o " @input=" o_write " id="o" autocomplete="off">
+          <input type="number" class="inp" v-model.trim=" num.t " @input=" t_write " @click=" check " id="t" autocomplete="off">
         </p>
         <p style="text-align: center;margin-top: 5px;color: #878787">重新获取(60s)</p>
       </div>

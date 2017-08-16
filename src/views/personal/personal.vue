@@ -18,57 +18,82 @@
     </header>
     <!-- 选项栏 -->
     <article>
+      <!-- 订单选项 -->
       <div class="order">
         <div class="order-box">
-          <div class="order-img"><img src="../../../static/img/return.png" alt="归还"><span>待归还</span></div>
-          <div class="order-img"><img src="../../../static/img/clock.png" alt="领取"><span>待领取</span></div>
-          <div class="order-img"><img src="../../../static/img/estimate.png" alt="评价"><span>待评价</span></div>
+          <div class="order-img">
+            <img src="../../../static/img/clock.png" alt="归还">
+            <span>我的预约</span>
+          </div>
+          <div class="order-img" style="margin: 0 42px;">
+            <img src="../../../static/img/pay.png" alt="领取">
+            <span>待支付</span>
+          </div>
+          <div class="order-img">
+            <img src="../../../static/img/all.png" alt="评价">
+            <span>全部订单</span>
+          </div>
         </div>
       </div>
+      <!-- 功能连接 -->
       <ul class="list">
         <router-link :to=" '/fault' ">
-          <li class="item">
+          <li class="item" style=" border-bottom: 1px solid #eaeef1 ">
             <i class="fa fa-wrench icon"></i>
             <span>故障报修</span>
             <i class="fa fa-angle-right fr"></i>
           </li>
         </router-link>
         <router-link :to=" '/myCash' ">
-            <li class="item"><i class="fa fa-jpy icon" style="font-size: 15px;"></i>
+          <li class="item"><i class="fa fa-jpy icon" style="font-size: 15px;"></i>
             <span>我的押金</span>
             <i class="fa fa-angle-right fr"></i>
           </li>
         </router-link>
-        <li class="item">
-          <i class="fa fa-pencil-square-o icon" style="font-size: 14px;"></i>
-          <span>意见反馈</span>
-          <i class="fa fa-angle-right fr"></i>
-        </li>
-        <li class="item">
+        <router-link :to=" '/opinion' ">
+          <li class="item" style=" border-bottom: 1px solid #eaeef1;margin-top: 5px;">
+            <i class="fa fa-pencil-square-o icon" style="font-size: 14px;"></i>
+            <span>意见反馈</span>
+            <i class="fa fa-angle-right fr"></i>
+          </li>
+        </router-link>
+        <li class="item" style=" border-bottom: 1px solid #eaeef1 ">
           <i class="fa fa-hand-o-right icon"></i>
           <span>用户指南</span>
           <i class="fa fa-angle-right fr"></i>
         </li>
-        <li class="item">
-          <i class="fa fa-map-marker icon"></i>
-          <span>关于多动朕</span>
-          <i class="fa fa-angle-right fr"></i>
-        </li>
+        <router-link :to=" '/about' ">
+          <li class="item">
+            <i class="fa fa-map-marker icon"></i>
+            <span>关于多动朕</span>
+            <i class="fa fa-angle-right fr"></i>
+          </li>
+        </router-link>
       </ul>
     </article>
+    <!-- 去支付弹窗 -->
+    <goPay :title=" '您有一个订单需要支付' " :alert=" alert " @goPay=" goPay "></goPay>
   </div>
 </template>
 <script>
 import returnUrl from '@/components/returnUrl';
+import goPay from './childrens/goPay';
 export default {
   name: 'personal',
   data() {
     return {
-
+      alert: false
+    }
+  },
+  methods: {
+    goPay() {
+      this.alert = false;
+      this.$router.push('/pay');
     }
   },
   components: {
-    returnUrl
+    returnUrl,
+    goPay
   },
   computed: {
     curAddr() {
@@ -108,18 +133,19 @@ header {
   .info {
     flex-grow: 2;
     margin-left: 15px;
-    h3,span,i {
+    h3,
+    span,
+    i {
       color: #fff;
     }
   }
 }
 
 .list {
+  margin-top: 5px;
   .item {
-    margin-top: 5px;
+    background-color: #fff;
     padding: 15px 20px;
-    border-bottom: 1px solid $gray;
-    border-top: 1px solid $gray;
     i {
       color: $blue;
       font-size: 16px;
@@ -139,6 +165,7 @@ header {
 
 .order {
   padding: 10px 20px;
+  background-color: #fff;
   i {
     color: $blue;
   }
@@ -148,11 +175,14 @@ header {
     justify-content: center;
     align-items: center;
     .order-img {
-      margin: 0 25px;
-      flex-basis: 36px;
+      flex-basis: 50px;
       text-align: center;
       img {
-        width: 100%;
+        height: 30px;
+      }
+      span {
+        margin-top: 5px;
+        display: inline-block;
       }
     }
   }

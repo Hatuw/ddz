@@ -340,12 +340,11 @@ $Blue: rgb(230, 240, 249);
 
 header {
   padding: 10px 20px;
-  border-bottom: 1px solid #000;
   .fa {
     color: #0788ee;
   }
   .pos {
-    color: #797777;
+    color: #606060;
     margin-left: 5px;
     display: inline-block;
     width: 90%;

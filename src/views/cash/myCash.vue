@@ -74,7 +74,8 @@ $main_color: #0788ee;
 
 .note-text {
   margin-top: 20px;
-  padding: 0 20px;
+  padding: 10px 20px;
+  background-color: #fff;
 }
 
 .pay-btn {

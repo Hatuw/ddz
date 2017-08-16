@@ -20,6 +20,8 @@ const machine = r => require.ensure([], () => r(require('@/views/fault/childrens
 const equipment = r => require.ensure([], () => r(require('@/views/fault/childrens/equipment')), 'fault');
 const otherFault = r => require.ensure([], () => r(require('@/views/fault/childrens/otherFault')), 'fault');
 const personal = r => require.ensure([], () => r(require('@/views/personal/personal')), 'personal');
+const about = r => require.ensure([], () => r(require('@/views/personal/childrens/about')), 'personal');
+const opinion = r => require.ensure([], () => r(require('@/views/personal/childrens/opinion')), 'personal');
 const pay = r => require.ensure([], () => r(require('@/views/pay/pay')), 'pay');
 const introduce = r => require.ensure([], () => r(require('@/views/introduce/introduce')), 'introduce');
 
@@ -122,6 +124,22 @@ const router = new Router({
       }
     },
     {
+      path: '/about',
+      name: 'about',
+      component: about,
+      meta: {
+        requireAuth: true
+      }
+    },
+    {
+      path: '/opinion',
+      name: 'opinion',
+      component: opinion,
+      meta: {
+        requireAuth: true
+      }
+    },
+    {
       path: '/pay',
       name: 'pay',
       component: pay,
@@ -147,7 +165,7 @@ const router = new Router({
 //     let token = document.cookie.split('=')[1];
 //     // 如果token不存在的情况
 //     if(!token) {
-      
+
 //     } else {
 //       next();
 //     }

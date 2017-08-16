@@ -65,8 +65,6 @@ $blue: #0788ee;
     margin-top: 5px;
     padding: 5px 20px 15px;
     background-color: #fff;
-    border-top: 1px solid $line;
-    border-bottom: 1px solid $line;
     textarea {
       outline: none;
       width: 100%;

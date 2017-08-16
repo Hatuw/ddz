@@ -86,8 +86,6 @@ $blue: #0788ee;
     padding: 0 20px;
   }
   .info {
-    border-top: 1px solid $line;
-    border-bottom: 1px solid $line;
     margin-top: 5px;
     padding: 10px 20px;
     background-color: #fff;
@@ -121,8 +119,6 @@ $blue: #0788ee;
     margin-top: 5px;
     padding: 5px 20px 15px;
     background-color: #fff;
-    border-top: 1px solid $line;
-    border-bottom: 1px solid $line;
     textarea {
       outline: none;
       width: 100%;

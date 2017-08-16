@@ -21,7 +21,7 @@
       <router-link :to=" '/myCash' ">
         <button>暂时不退</button>
       </router-link>
-      <button @click=" showCfm ">退押金</button>
+      <button @click=" showCfm " style="background-color: rgb(120,187,239)">退押金</button>
     </div>
     <alertBox :title=" '申请退款成功!' " :subTitle=" '将在1-2个工作日原路退回支付账户' " :alert=" alert " @close=" close('alert') "></alertBox>
     <confirmBox :title=" '你确定要退款吗' " :confirm=" confirm " @close=" close('confirm') " @isTrue=" getCash "></confirmBox>
@@ -82,8 +82,7 @@ $main_color: #0788ee;
 .tip-text {
   padding: 10px 20px;
   margin-top: 10px;
-  border-bottom: 1px solid #ccc;
-  border-top: 1px solid #ccc;
+  background-color: #fff;
 }
 
 .m-text {

@@ -40,7 +40,7 @@ export default {
   },
   mounted() {
     let _self = this;
-    document.body.style.backgroundColor = '#f7f7f9';
+    document.querySelector('#app').style.backgroundColor = '#eaeef1';
 
     let data = {
       noncestr: 'duodongzhen',

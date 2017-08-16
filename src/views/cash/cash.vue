@@ -17,6 +17,14 @@
       <p class="title">押金须知</p>
       <p class="line" style="margin-left: 10px"></p>
     </div>
+    <!-- 列表 -->
+    <ul class="list">
+      <li><i class="fa fa-circle" aria-hidden="true"></i><span>押金退还时间为元一至三工作日内</span></li>
+      <li><i class="fa fa-circle" aria-hidden="true"></i><span>你拥有的永远都是最新的</span></li>
+      <li><i class="fa fa-circle" aria-hidden="true"></i><span>优质好球任你打</span></li>
+      <li><i class="fa fa-circle" aria-hidden="true"></i><span>妈妈再也不用担心我丢球了</span></li>
+      <li><i class="fa fa-circle" aria-hidden="true"></i><span>运动随时进行，立租立借走起</span></li>
+    </ul>
     <!-- 协议书 -->
     <div class="pay-btn">
       <button>确认支付</button>
@@ -30,7 +38,7 @@ export default {
   title: '押金',
   data() {
     return {
-      money: '50.00'
+      money: '39.00'
     }
   },
   components: {
@@ -45,6 +53,19 @@ $main_color: #0788ee;
 .m-text {
   margin: 10px 0;
   text-align: center;
+}
+
+.list {
+  margin-top: 10px;
+  li {
+    padding: 10px 20px;
+    i {
+      color: #0788ee;
+    }
+    span {
+      margin-left: 5px;
+    }
+  }
 }
 
 .tip-text {
@@ -78,7 +99,7 @@ $main_color: #0788ee;
 }
 
 .pay-btn {
-  margin-top: 20px;
+  margin-top: 10px;
   padding: 0 20px;
   button {
     width: 100%;

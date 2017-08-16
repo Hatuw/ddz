@@ -149,6 +149,9 @@ export default {
   components: {
     agreementBook,
     moveSlider
+  },
+  created() {
+    document.querySelector('#app').style.backgroundColor = '#fff';
   }
 }
 
@@ -210,7 +213,7 @@ header {
     // 手机包裹层
     flex: 1;
     position: relative;
-    border-bottom: 1px solid;
+    border-bottom: 1px solid #eaeef1;
     padding-left: 4em;
     .fa-mobile {
       position: absolute;
@@ -227,7 +230,7 @@ header {
     position: relative;
     padding-left: 4em;
     margin-right: 5px;
-    border-bottom: 1px solid;
+    border-bottom: 1px solid #eaeef1;
     .fa-lock {
       position: absolute;
       top: 12px;

@@ -74,7 +74,7 @@ export default {
 .item {
   margin-top: 35px;
   padding: 10px 10px 10px 95px;
-  background-color: #d2eafc;
+  background-color: #fff;
   position: relative;
   .img-wrap {
     width: 75px;
@@ -90,7 +90,7 @@ export default {
       display: inline-block;
     }
     i {
-      color: #45b3d6;
+      color: #0788ee;
       font-size: 22px;
       margin-top: 5px;
     }

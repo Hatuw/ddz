@@ -96,6 +96,7 @@ export default {
     }
   },
   created() {
+    document.querySelector('body').style.backgroundColor = '#eaeef1';
     // 获取当前订单报障状态，返回一个对象
     // status: 当前订单的状态,0代表无保障，1代表保障中 
     // flag: 待处理，处理中，处理完成
@@ -209,6 +210,7 @@ export default {
   border-bottom: 1px solid #ccc;
   margin-top: 35px;
   padding: 15px 20px;
+  background-color: #fff;
   p {
     margin-top: 5px;
     img {

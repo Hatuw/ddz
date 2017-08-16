@@ -140,14 +140,16 @@ const router = new Router({
   ]
 });
 
-// 当进行路由跳转前，先判断本地是否保存openid
-// 如果没有就跳转到注册页面
+// 当进行路由跳转前，先判断本地是否保存token
+// 如果没有就发起获取token请求
 // router.beforeEach((to, from, next) => {
 //   if(to.meta.requireAuth) {
-//     if(localStorage.getItem('openId')) {
-//       next();
+//     let token = document.cookie.split('=')[1];
+//     // 如果token不存在的情况
+//     if(!token) {
+      
 //     } else {
-//       next('/register');
+//       next();
 //     }
 //   } else {
 //     next();

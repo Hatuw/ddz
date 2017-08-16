@@ -34,9 +34,9 @@ export default {
   },
   created() {
     // 如果仓库地址失效了,就从新获取一遍
-    if (!this.$store.state.curAddr) {
-      this.$store.dispatch('SET_ADDR');
-    };
+    // if (!this.$store.state.curAddr) {
+    //   this.$store.dispatch('SET_ADDR');
+    // };
   },
   mounted() {
     let _self = this;
@@ -51,6 +51,7 @@ export default {
 
     get_jssdk(data)
       .then((res) => {
+        console.log(res.data);
         wx.config({
           debug: true,
           appId: res.data.appId,

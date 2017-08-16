@@ -19,8 +19,6 @@
     <!-- 选项栏 -->
     <article>
       <div class="order">
-        <p class="clearfix"><i class="fa fa-shopping-cart icon"></i><span style="margin-left: 5px;">我的订单</span><i class="fa fa-angle-right fr" style="
-    font-size: 22px; margin-top: -5px"></i></p>
         <div class="order-box">
           <div class="order-img"><img src="../../../static/img/return.png" alt="归还"><span>待归还</span></div>
           <div class="order-img"><img src="../../../static/img/clock.png" alt="领取"><span>待领取</span></div>

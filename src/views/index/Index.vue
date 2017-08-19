@@ -253,7 +253,7 @@ export default {
     }
   },
 
-  created() {
+  mounted() {
     // 获取所有被投放的学校
     if (!this.schoolList.length) {
       getPlace()

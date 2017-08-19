@@ -4,7 +4,7 @@
  */
 
 import wx from 'weixin-js-sdk';
-import { get_jssdk } from '../api/fault.js';
+import { get_jssdk } from 'api/fault.js';
 
 export default {
   data() {

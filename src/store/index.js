@@ -21,7 +21,7 @@ const mutations = {
     if(typeof addrObj == 'string') {
       merge(state,addrObj,'curAddr');
     } else {
-      let addr = `${addrObj.province}${addrObj.city}${addrObj.district}${addrObj.addr}`;
+      let addr = `${filter(addrObj.province)}${filter(addrObj.city)}${filter(addrObj.district)}${filter(addrObj.addr)}`
       merge(state,addr,'curAddr');
     }
   },
@@ -61,3 +61,9 @@ export default new Vuex.Store({
   actions,
   mutations,
 })
+
+// 过滤不是字符串的参数
+function filter (str) {
+  if(str && typeof str == 'string') return str;
+  return '';
+}

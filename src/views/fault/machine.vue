@@ -1,8 +1,32 @@
-<!-- 其他报障组件 -->
+<!-- 机器故障组件 -->
 <template>
-  <div id="otherFault">
-    <returnUrl :title=" '其他报障' " :reUrl=" '/fault' "></returnUrl>
+  <div id="machine">
+    <returnUrl :title=" '机器故障' " :reUrl=" 'fault' "></returnUrl>
     <form @submit.prevent>
+      <!-- 机器位置id信息 -->
+      <div class="form-group">
+        <h4>机器故障</h4>
+        <div class="info">
+          <p>
+            <i class="fa fa-map-marker" aria-hidden="true"></i>
+            <span class="pos" v-if=" curAddr " v-text=" curAddr "></span>
+            <span class="pos" v-else>正在定位...</span>
+          </p>
+          <p style="margin-top: 5px">机器id:KSDFF213</p>
+        </div>
+      </div>
+      <!-- 机器故障4个基本原因 -->
+      <div class="form-group">
+        <h4>故障原因</h4>
+        <div class="reason clearfix">
+          <ul class="fl">
+            <li v-for=" item in reasons " :key=" item " class="reason-item fl" @click=" chooseReason(item,$event) ">
+              <i class="fa fa-circle-thin icon" aria-hidden="true"></i>
+              <span v-text=" item "></span>
+            </li>
+          </ul>
+        </div>
+      </div>
       <!-- 机器其他故障原因 -->
       <div class="form-group">
         <h4>其他原因</h4>
@@ -22,7 +46,7 @@
             </li>
           </ul>
           <div id="addBtn" class="fl" v-show=" showBtn ">
-            <img src="../../../../static/img/add.png" alt="添加图片">
+            <img src="../../../static/img/add.png" alt="添加图片">
           </div>
         </div>
       </div>
@@ -39,15 +63,16 @@
 import faultMixin from '@/mixin/faultMixin.js';
 import returnUrl from '@/components/returnUrl';
 export default {
-  name: 'otherFault',
-  data() {
-    return {
-
-    }
-  },
+  name: 'machine',
+  title: '机器故障',
   mixins: [faultMixin],
   components: {
     returnUrl
+  },
+  data() {
+    return {
+      reasons: ['显示不了验证码', '没有语音提醒', 'nfc开不了门', '上不了锁']
+    }
   }
 }
 
@@ -59,6 +84,35 @@ $blue: #0788ee;
   margin-top: 10px;
   h4 {
     padding: 0 20px;
+  }
+  .info {
+    margin-top: 5px;
+    padding: 10px 20px;
+    background-color: #fff;
+    .fa {
+      color: $blue;
+    }
+    .pos {
+      margin-left: 5px;
+      display: inline-block;
+      width: 90%;
+      vertical-align: top;
+    }
+  }
+  .reason {
+    padding: 0 20px;
+    .reason-item {
+      margin-top: 10px;
+      width: 50%;
+      max-width: 250px;
+      .fa {
+        font-size: 16px;
+        vertical-align: text-bottom;
+      }
+      .fa-check-circle {
+        color: $blue;
+      }
+    }
   }
   .other-reason {
     position: relative;

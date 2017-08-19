@@ -21,18 +21,18 @@
       <!-- 订单选项 -->
       <div class="order">
         <div class="order-box">
-          <div class="order-img">
+          <router-link :to=" '/appoinment' " class="order-item">
             <img src="../../../static/img/clock.png" alt="归还">
             <span>我的预约</span>
-          </div>
-          <div class="order-img" style="margin: 0 42px;">
+          </router-link>
+          <router-link :to=" '/pay' " class="order-item" style="margin: 0 42px;">
             <img src="../../../static/img/pay.png" alt="领取">
             <span>待支付</span>
-          </div>
-          <div class="order-img">
+          </router-link>
+          <router-link :to=" '/allOrder' " class="order-item">
             <img src="../../../static/img/all.png" alt="评价">
             <span>全部订单</span>
-          </div>
+          </router-link>
         </div>
       </div>
       <!-- 功能连接 -->
@@ -174,7 +174,7 @@ header {
     display: flex;
     justify-content: center;
     align-items: center;
-    .order-img {
+    .order-item {
       flex-basis: 50px;
       text-align: center;
       img {

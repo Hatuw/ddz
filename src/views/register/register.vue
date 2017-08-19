@@ -5,7 +5,7 @@
     <agreement-book :bookShow=" bookShow " @hide=" showBook(false) "></agreement-book>
     <!-- 顶部banner图 -->
     <header>
-      <img src="../../assets/banner.png" alt="多动朕图标">
+      <img src="../../../static/img/banner.png" alt="多动朕图标">
     </header>
     <!-- 用户表单 -->
     <article>
@@ -51,7 +51,7 @@
 <script>
 import agreementBook from './childrens/agreementBook.vue';
 import moveSlider from './childrens/moveSlider.vue';
-import { getCode, checkCode } from '../../api/register.js';
+import { getCode, checkCode } from 'api/register.js';
 export default {
   name: 'Register',
   data() {

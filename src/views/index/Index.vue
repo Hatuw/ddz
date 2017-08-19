@@ -68,11 +68,11 @@
 </template>
 <script>
 import 'swiper/dist/css/swiper.css';
+import { getPlace, getSportNum, createOrder } from 'api/index';
 import { swiper, swiperSlide } from 'vue-awesome-swiper';
 import { picker } from 'mint-ui';
 import alertBox from '@/components/alertBox';
 import codeBox from './childrens/codeBox';
-import { getPlace, getSportNum, createOrder } from 'api/index';
 import sportData from 'utils/sport';
 export default {
   name: 'index',
@@ -93,11 +93,11 @@ export default {
       }],
       showPicker: false,
       alert: false,
+      showCode: false,
       alertMsg: {
         title: '',
         subTitle: ''
-      },
-      showCode: false
+      }
     }
   },
   computed: {
@@ -122,12 +122,14 @@ export default {
     codeBox
   },
   methods: {
+
     // 改变弹框文字
     changeAlertText(title, subtitle) {
       this.alertMsg.title = title;
       this.alertMsg.subTitle = subtitle;
       this.alert = true;
     },
+
     // 返回当前学校地址的所投放学校列表中的匹配
     matchSchool() {
       let curAddr = this.curAddr;
@@ -141,6 +143,7 @@ export default {
       });
       return school;
     },
+
     // 检查当前位置是否属于学校范围
     checkSchool() {
       // 判断用户当前位置是否正确获取和是否选择运动器材
@@ -166,10 +169,12 @@ export default {
         }
       }
     },
+
     // 检查是否有运动器材被选中
     checkChoose(item) {
       return item.en_name.indexOf('_o') == -1 || !(item.en_name.indexOf('_o'));
     },
+
     // 发送当前器材剩余数量请求
     chooseSport(item, e) {
       // 检查当前地址地址是否在学校范围内
@@ -202,6 +207,8 @@ export default {
             .catch((err) => {
               throw new Error(err);
             })
+        } else {
+          this.changeAlertText('您所在的位置没有机器', '多动朕目前只在学校范围投放');
         }
       } else {
         item.en_name = item.en_name.replace(/_o/, '');
@@ -210,12 +217,14 @@ export default {
         t.classList.add('none');
       }
     },
+
     // 清除所有选择图片
     imgClear() {
       for (var item in this.sports) {
         this.sports[item].en_name = this.sports[item].en_name.replace(/_o/, '');
       }
     },
+
     // 清除所有器材选择的数量
     numClear() {
       let dom = document.querySelectorAll('.num-tip');
@@ -223,16 +232,19 @@ export default {
         dom[i].classList.add('none');
       }
     },
-    // 改变滑动的值
+
+    // picker组件滑动选择时重新设置当前地址
     onValuesChange(picker, values) {
       if (this.showPicker) {
         this.$store.commit('SET_ADDR', values[0]);
       }
     },
+
     // 改变选择框显示
     changeShow(attr, flag) {
       this[attr] = flag;
     },
+
     // 添加学校选项
     addSchool() {
       this.schoolList.forEach((item, index) => {
@@ -240,6 +252,7 @@ export default {
       });
     }
   },
+
   created() {
     // 获取所有被投放的学校
     if (!this.schoolList.length) {
@@ -258,7 +271,7 @@ export default {
       this.addSchool();
     }
 
-    // 自动获取当前位置
+    // 自动获取当前位置 
     if (!this.curAddr) {
       this.$store.dispatch('SET_ADDR');
     };
@@ -416,6 +429,7 @@ footer {
   display: flex;
   align-items: center;
   padding-bottom: 20px;
+  background-color: #fff;
   .btn-wrap {
     button {
       background-color: #0788ee;

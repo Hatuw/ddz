@@ -100,6 +100,10 @@ html,body {
   width: 100%;
 }
 
+body {
+  background-color: #eaeef1;
+}
+
 /**
  * base.css
  * 给项目提供原始类

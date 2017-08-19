@@ -9,7 +9,7 @@
         <h4>我的器材</h4>
         <div class="info">
           <div class="info-img">
-            <img src="../../../../static/img/basketball.png" alt="我的运动">
+            <img src="../../../static/img/basketball.png" alt="我的运动">
           </div>
           <div class="info-text">
             <p>篮球</p>
@@ -49,7 +49,7 @@
             </li>
           </ul>
           <div id="addBtn" class="fl" v-show=" showBtn ">
-            <img src="../../../../static/img/add.png" alt="添加图片">
+            <img src="../../../static/img/add.png" alt="添加图片">
           </div>
         </div>
       </div>

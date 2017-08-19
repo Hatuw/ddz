@@ -3,15 +3,15 @@
   <div id="MoveSlider" v-if=" silderShow ">
     <!-- 拼图包裹层 -->
     <div class="img-wrap">
-      <img src="../../../assets/puzzle_bg.png" alt="移动滑块背景图片" class="img-pic">
+      <img src="../../../../static/img/puzzle_bg.png" alt="移动滑块背景图片" class="img-pic">
       <div class="puzzle-wrap">
-        <img src="../../../assets/puzzle_block.png" alt="移动滑块" class="puzzle-block">
+        <img src="../../../../static/img/puzzle_block.png" alt="移动滑块" class="puzzle-block">
       </div>
     </div>
     <!-- 滑块包裹层 -->
     <div class="silder-wrap">
       <div class="silder-box">
-        <img src="../../../assets/slider_btn.png" alt="滑动按钮" class="silder-btn">
+        <img src="../../../../static/img/slider_btn.png" alt="滑动按钮" class="silder-btn">
       </div>
       <p class="silder-tip">
         按住左边滑块,拖动完成上方拼图

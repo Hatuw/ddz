@@ -122,7 +122,7 @@ export default {
     height: 70px;
     width: 70px;
     z-index: 100;
-    background-image: url('../../../../static/img/mascot_0.png');
+    background-image: url('../../../static/img/mascot_0.png');
     position: relative;
     .tip {
       position: absolute;
@@ -154,7 +154,7 @@ export default {
     height: 55px;
     width: 55px;
     position: relative;
-    background-image: url('../../../../static/img/mascot_1.png');
+    background-image: url('../../../static/img/mascot_1.png');
     .tip {
       position: absolute;
       bottom: -26px;
@@ -180,7 +180,7 @@ export default {
     height: 40px;
     width: 40px;
     position: relative;
-    background-image: url('../../../../static/img/mascot_1.png');
+    background-image: url('../../../static/img/mascot_1.png');
     .tip {
       position: absolute;
       bottom: -33px;

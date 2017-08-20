@@ -4,7 +4,7 @@
     <!-- 顶部地理位置 -->
     <header>
       <i class="fa fa-map-marker" aria-hidden="true"></i>
-      <span class="pos" v-if="curAddr ">{{ curAddr }}</span>
+      <span class="pos" v-if=" curAddr ">{{ curAddr }}</span>
       <span class="pos" v-else>正在定位...</span>
     </header>
     <!-- 轮播图包裹层 -->
@@ -187,7 +187,7 @@ export default {
         if (school) {
           getSportNum(item.sCode, school.place)
             .then((res) => {
-              let status = res.data.status;
+              let status = res.data.data[0].count;
               if (status) {
                 try {
                   let num = res.data.data[0].count;
@@ -429,7 +429,7 @@ footer {
   display: flex;
   align-items: center;
   padding-bottom: 20px;
-  background-color: #fff;
+  background-color: #eaeef1;
   .btn-wrap {
     button {
       background-color: #0788ee;

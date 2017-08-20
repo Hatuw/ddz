@@ -16,9 +16,6 @@ export default {
 
     }
   },
-  created() {
-  	document.querySelector('#app').style.backgroundColor = '#fff';
-  },
   components: {
     returnUrl
   }

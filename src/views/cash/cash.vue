@@ -43,6 +43,9 @@ export default {
   },
   components: {
   	returnUrl
+  },
+  created() {
+    document.querySelector('#app').style.backgroundColor = '#eaeef1';
   }
 }
 

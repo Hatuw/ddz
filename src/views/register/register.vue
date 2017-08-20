@@ -127,7 +127,7 @@ export default {
           // 如果返回的状态码是false的话，就提示错误文字
           if (status) {
             document.cookie = `token=${ res.data.token }`;
-            this.$router.push('/');
+            this.$router.push('/cash');
           } else {
             this.code_error = '验证码错误,请重新填写验证码';
           }

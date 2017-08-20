@@ -1,7 +1,7 @@
 <!-- 确认付款组件 -->
 <template>
   <div id="pay">
-    <return-url :title=" '费用支付' " :reUrl=" '/' "></return-url>
+    <return-url :title=" '费用支付' " :reUrl=" '/personal' "></return-url>
     <!-- 总价钱 -->
     <div class="count-m">
       <span>4.00</span>元

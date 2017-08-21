@@ -28,7 +28,7 @@ const introduce = r => require.ensure([], () => r(require('@/views/other/introdu
 const time = r => require.ensure([], () => r(require('@/views/other/time')), 'time');
 
 const router = new Router({
-  mode: 'history',
+  // mode: 'history',
   scrollBehavior: () => {
     y: 0
   },

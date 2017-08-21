@@ -63,12 +63,13 @@
     <!-- 弹框组件 -->
     <alertBox :title=" alertMsg.title " :subTitle=" alertMsg.subTitle " :alert=" alert " @close=" changeShow('alert',false) "></alertBox>
     <!-- 输入验证码组件 -->
-    <codeBox :show=" showCode "></codeBox>
+    <codeBox :show=" showCode " @createOrder=" creatrsOrder "></codeBox>
   </div>
 </template>
 <script>
 import 'swiper/dist/css/swiper.css';
-import { getPlace, getSportNum, createOrder } from 'api/index';
+import { getPlace, getSportNum, create_order, check_code } from 'api/index';
+import { send_code } from 'api/wechat';
 import { swiper, swiperSlide } from 'vue-awesome-swiper';
 import { picker } from 'mint-ui';
 import alertBox from '@/components/alertBox';
@@ -122,7 +123,12 @@ export default {
     codeBox
   },
   methods: {
-
+    // 成功创建订单后的函数
+    creatrsOrder() {
+      this.changeShow('showCode',false);
+      this.changeAlertText('创建订单成功','您可以享受运动啦');
+    },
+    
     // 改变弹框文字
     changeAlertText(title, subtitle) {
       this.alertMsg.title = title;
@@ -159,7 +165,7 @@ export default {
           this.changeAlertText('机器球类数量为0', '请有球的时候再来吧');
         } else {
           // 向服务器发送运动订单
-          createOrder('13068501435', this.sport.serial)
+          create_order('13068501435', this.sport.serial)
             .then((res) => {
               this.showCode = true;
             })
@@ -187,8 +193,7 @@ export default {
         if (school) {
           getSportNum(item.sCode, school.place)
             .then((res) => {
-              let status = res.data.data[0].count;
-              if (status) {
+              if (res.data.status) {
                 try {
                   let num = res.data.data[0].count;
                   item.en_name = item.en_name + "_o";
@@ -253,6 +258,22 @@ export default {
     }
   },
 
+  beforeRouteEnter(to, from, next) {
+    // 如果路由中有code即表明是第一次使用
+    let code = to.query.code;
+    if (code) {
+      send_code(code)
+      .then((res) => {
+        console.log(res.data);
+      })
+      .catch((err) => {
+        throw err;
+      })
+    } else {
+      next();
+    }
+  },
+
   mounted() {
     // 获取所有被投放的学校
     if (!this.schoolList.length) {
@@ -272,9 +293,9 @@ export default {
     }
 
     // 自动获取当前位置 
-    if (!this.curAddr) {
-      this.$store.dispatch('SET_ADDR');
-    };
+    // if (!this.curAddr) {
+    //   this.$store.dispatch('SET_ADDR');
+    // };
   }
 }
 

@@ -9,10 +9,9 @@
           <input type="number" class="inp" v-model.trim=" num.o " @input=" o_write " id="o" autocomplete="off">
           <input type="number" class="inp" v-model.trim=" num.t " @input=" t_write " @click=" check " id="t" autocomplete="off">
         </p>
-        <p style="text-align: center;margin-top: 5px;color: #878787">重新获取(60s)</p>
       </div>
       <div>
-        <button>确定</button>
+        <button @click.stop=" checkCode ">确定</button>
       </div>
     </form>
     <!-- 遮罩层 -->
@@ -20,6 +19,7 @@
   </div>
 </template>
 <script>
+import { check_code } from 'api/index';
 export default {
   name: 'codeBox',
   data() {
@@ -48,9 +48,20 @@ export default {
       }
     },
     check() {
-      if(!this.num.o) {
+      if (!this.num.o) {
         document.querySelector('#o').focus();
       }
+    },
+    checkCode() {
+      let code = '' + this.num.o + this.num.t;
+      check_code(code, '13068501435')
+      .then((res)=> {
+        console.log(res);
+        this.$emit('createOrder');
+      })
+      .catch((err) => {
+        console.log(err);
+      })
     }
   },
   props: ['show']

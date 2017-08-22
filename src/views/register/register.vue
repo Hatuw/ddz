@@ -1,8 +1,6 @@
 <!-- 注册组件 -->
 <template>
   <div id="Register">
-    <move-slider :oLeft=" 194 " :silderShow=" silderShow " @getCode=" _getCode "></move-slider>
-    <agreement-book :bookShow=" bookShow " @hide=" showBook(false) "></agreement-book>
     <!-- 顶部banner图 -->
     <header>
       <img src="../../../static/img/banner.png" alt="多动朕图标">
@@ -46,6 +44,10 @@
     </article>
     <!-- 遮罩层 -->
     <div class="mask" v-if=" silderShow "></div>
+    <!-- 移动滑块 -->
+    <move-slider :oLeft=" 194 " :silderShow=" silderShow " @getCode=" _getCode "></move-slider>
+    <!-- 协议书 -->
+    <agreement-book :bookShow=" bookShow " @hide=" showBook(false) "></agreement-book>
   </div>
 </template>
 <script>

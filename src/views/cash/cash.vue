@@ -1,7 +1,7 @@
 <!-- 缴纳组件 -->
 <template>
   <div id="cash">
-  	<return-url :title=" '缴纳押金' " :reUrl=" '/' "></return-url>
+    <!-- <return-url :title=" '缴纳押金' " :reUrl=" '/' "></return-url> -->
     <!-- 押金金额 -->
     <div class="tip-text">
       缴纳押金
@@ -33,6 +33,8 @@
 </template>
 <script>
 import returnUrl from '@/components/returnUrl';
+import { get_jssdk } from 'api/wechat';
+import wx from 'weixin-js-sdk';
 export default {
   name: 'cash',
   title: '押金',
@@ -42,7 +44,33 @@ export default {
     }
   },
   components: {
-  	returnUrl
+    returnUrl
+  },
+  mounted() {
+    let data = {
+      noncestr: 'duodongzhen',
+      timestamp: +new Date(),
+      url: window.location.href.split('#')[0],
+      jsApiList: ['chooseWXPay']
+    }
+
+    get_jssdk(data)
+      .then((res) => {
+        wx.config({
+          debug: true,
+          appId: res.data.appId,
+          timestamp: data.timestamp, // 必填，生成签名的时间戳
+          nonceStr: data.noncestr, // 必填，生成签名的随机串
+          signature: res.data.signature, // 必填，签名，见附录1
+          jsApiList: data.jsApiList // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+        });
+        wx.ready(() => {
+          
+        })
+      })
+      .catch((error) => {
+        throw new Error(error);
+      })
   },
   created() {
     document.querySelector('#app').style.backgroundColor = '#eaeef1';
@@ -75,10 +103,10 @@ $main_color: #0788ee;
   font-size: 16px;
   position: relative;
   span {
-  	position: absolute;
-  	top: 2px;
-  	color: #ccc;
-  	font-size: 12px; 
+    position: absolute;
+    top: 2px;
+    color: #ccc;
+    font-size: 12px;
   }
 }
 

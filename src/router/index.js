@@ -28,7 +28,7 @@ const introduce = r => require.ensure([], () => r(require('@/views/other/introdu
 const time = r => require.ensure([], () => r(require('@/views/other/time')), 'time');
 
 const router = new Router({
-  mode: 'history',
+  // mode: 'history',    // 后端支持即可开启
   base: '/dist/',
   scrollBehavior: () => {
     y: 0

@@ -6,8 +6,8 @@
       <div style="font-size: 16px; margin-top: 5px;">输入机器屏幕中显示的验证码即可开箱领取器材</div>
       <div id="inp-wrap">
         <p class="clearfix">
-          <input type="number" class="inp" v-model.trim=" num.o " @input=" o_write " id="o" autocomplete="off">
-          <input type="number" class="inp" v-model.trim=" num.t " @input=" t_write " @click=" check " id="t" autocomplete="off">
+          <input type="number" class="inp" v-model.trim=" num.o " @input=" write('#o',$event) " id="o" autocomplete="off">
+          <input type="number" class="inp" v-model.trim=" num.t " @input=" write('#t',$event) " @keyup.delete=" del " @click=" check " id="t" autocomplete="off">
         </p>
       </div>
       <div>
@@ -31,20 +31,27 @@ export default {
     }
   },
   methods: {
-    o_write(e) {
-      let val = e.target.value;
-      if (val.length >= 1) {
-        this.num.o = this.num.o.substr(0, 1);
-        document.querySelector('#t').focus();
+    del() {
+      if(!this.num.t) {
+        document.querySelector('#o').focus();
+        this.num.o = null;
       }
     },
-    t_write(e) {
-      let val = e.target.value;
-      if (val.length == 0) {
-        document.querySelector('#o').focus();
-      }
-      if (val.length > 1) {
-        this.num.t = this.num.t.substr(0, 1);
+    write(id, e) {
+      if (id == '#o') {
+        let val = e.target.value;
+        if (val.length >= 1) {
+          this.num.o = this.num.o.substr(0, 1);
+          document.querySelector('#t').focus();
+        }
+      } else {
+        let val = e.target.value;
+        if (val.length == 0) {
+          document.querySelector('#o').focus();
+        }
+        if (val.length > 1) {
+          this.num.t = this.num.t.substr(0, 1);
+        }
       }
     },
     check() {
@@ -53,15 +60,17 @@ export default {
       }
     },
     checkCode() {
+      if(!this.num.o || !this.num.t) {
+        return;
+      }
       let code = '' + this.num.o + this.num.t;
       check_code(code, '13068501435')
-      .then((res)=> {
-        console.log(res);
-        this.$emit('createOrder');
-      })
-      .catch((err) => {
-        console.log(err);
-      })
+        .then((res) => {
+          this.$emit('createOrder');
+        })
+        .catch((err) => {
+          throw new Error(err);
+        })
     }
   },
   props: ['show']

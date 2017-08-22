@@ -11,10 +11,10 @@ export function get_jssdk(val) {
   data.append('timestamp', val.timestamp);
   data.append('url', val.url);
   return fetch({
-    url: '/api/get_ticket/',
+    url: '/api/get_ticket',
     method: 'post',
     data
-  })
+  });
 };
 
 // 发送微信code
@@ -26,4 +26,4 @@ export function send_code(code) {
 		method: 'post',
 		data
 	})
-}
+};  

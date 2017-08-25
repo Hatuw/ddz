@@ -10,22 +10,22 @@ var urlencodedParser = bodyParser.urlencoded({ extended: false })
 
 // 获取微信公众号ticket
 router.post('/get_ticket', (req, res) => {
-  let noncestr = 'duodongzhen';
-  let timestamp = + new Date();
-  let url = req.body.url;
-  let appId = 'wx374486a038696729';
-  let appScrect = 'a0b12c42569f805a443c23e1f659ef6b';
+  var noncestr = 'duodongzhen';
+  var timestamp = + new Date();
+  var url = req.body.url;
+  var appId = 'wx374486a038696729';
+  var appScrect = 'a0b12c42569f805a443c23e1f659ef6b';
 
   // js-sdk配置信息获取
   request.get(`https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=${appId}&secret=${appScrect}`, (err, respone, body) => {
 
-    let accessToken = JSON.parse(body).access_token;
+    var accessToken = JSON.parse(body).access_token;
 
-    request.get(`https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token=${accessToken}&type=jsapi`, (err, respone, body) => {
+    request.get('https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token='+ accessToken +'&type=jsapi', function(err, respone, body) {
 
-      let str = `jsapi_ticket=${JSON.parse(body).ticket}&noncestr=${noncestr}&timestamp=${timestamp}&url=${url}`;
+      var str = 'jsapi_ticket='+ JSON.parse(body).ticket +'&noncestr='+ noncestr +'&timestamp='+ timestamp +'&url='+ url +'';
 
-      let signature = sha1(str);
+      var signature = sha1(str);
       
       res.json({
         signature,
@@ -44,7 +44,7 @@ router.post('/get_code', (req, res) => {
 });
 
 router.post('/check_code', (req, res) => {
-  let code = req.body.code;
+  var code = req.body.code;
   res.json({
     status: true,
     token: 'demoOpenId'
@@ -52,7 +52,7 @@ router.post('/check_code', (req, res) => {
 });
 
 router.get('/order', (req, res) => {
-  let type = req.query.type;
+  var type = req.query.type;
   if (type == 'place') {
     res.send({
       data: [{

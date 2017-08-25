@@ -29,7 +29,7 @@ const time = r => require.ensure([], () => r(require('@/views/other/time')), 'ti
 
 const router = new Router({
   // mode: 'history',    // 后端支持即可开启
-  base: '/dist/',
+  // base: '/dist/',
   scrollBehavior: () => {
     y: 0
   },

@@ -125,10 +125,10 @@ export default {
   methods: {
     // 成功创建订单后的函数
     creatrsOrder() {
-      this.changeShow('showCode',false);
-      this.changeAlertText('创建订单成功','您可以享受运动啦');
+      this.changeShow('showCode', false);
+      this.changeAlertText('创建订单成功', '您可以享受运动啦');
     },
-    
+
     // 改变弹框文字
     changeAlertText(title, subtitle) {
       this.alertMsg.title = title;
@@ -255,20 +255,26 @@ export default {
       this.schoolList.forEach((item, index) => {
         this.slots[0].values.push(item.name);
       });
+    },
+
+    // 获取微信用户信息
+    getWechatInfo(code) {
+      send_code(code)
+        .then((res) => {
+          this.$store.commit('SET_USER', res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        })
     }
   },
 
   beforeRouteEnter(to, from, next) {
-    // 如果路由中有code即表明是第一次使用
-    let code = to.query.code;
-    if (code) {
-      send_code(code)
-      .then((res) => {
-        console.log(res.data);
-      })
-      .catch((err) => {
-        throw err;
-      })
+    if (location.href.indexOf('code') > 0) {
+      let code = location.href.slice(location.href.indexOf('code') + 5, location.href.indexOf('#/'));
+      next((self) => {
+        self.getWechatInfo(code);
+      });
     } else {
       next();
     }
@@ -293,9 +299,9 @@ export default {
     }
 
     // 自动获取当前位置 
-    // if (!this.curAddr) {
-    //   this.$store.dispatch('SET_ADDR');
-    // };
+    if (!this.curAddr) {
+      this.$store.dispatch('SET_ADDR');
+    };
   }
 }
 

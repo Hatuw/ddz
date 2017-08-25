@@ -8,7 +8,7 @@
         <div class="avatar" style="background-image: url('../../../static/img/head.jpg');"></div>
       </div>
       <div class="info">
-        <h3 style="font-size: 22px">Choo</h3>
+        <h3 style="font-size: 22px">{{ user.nickname }}</h3>
         <p>
           <i class="fa fa-map-marker" aria-hidden="true"></i>
           <span class="pos" v-if=" curAddr " v-text=" curAddr "></span>
@@ -96,8 +96,13 @@ export default {
     goPay
   },
   computed: {
+    // 返回用户当前地址
     curAddr() {
       return this.$store.state.curAddr;
+    },
+    // 返回用户信息
+    user() {
+      return this.$store.state.user;
     }
   },
   created() {

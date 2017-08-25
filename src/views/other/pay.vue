@@ -46,13 +46,14 @@
       <textarea placeholder="我还想说点什么..." class="area"></textarea>
     </div>
     <!-- 支付按钮 -->
+    <button id="addBtn">addbtn</button>
     <div style="text-align: center">
-      <button class="pay-btn">确认支付</button>
+      <button class="pay-btn" @click=" payMoney ">确认支付</button>
     </div>
   </div>
 </template>
 <script>
-import returnUrl from '@/components/returnUrl'
+import returnUrl from '@/components/returnUrl';
 export default {
   name: 'pay',
   data() {
@@ -72,12 +73,17 @@ export default {
         index < num ? item.classList.add('on') : item.classList.remove('on')
       })
     },
+    // 机器满意度
     chooseM(num, e) {
       this.mcIndex = num - 1;
       let t = e.target;
       this.mcArray.forEach((item, index) => {
         index < num ? item.classList.add('on') : item.classList.remove('on')
-      })
+      });
+    },
+    // 付钱
+    payMoney() {
+
     }
   },
   components: {

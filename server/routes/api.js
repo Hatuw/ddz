@@ -17,7 +17,7 @@ router.post('/get_ticket', (req, res) => {
   var appScrect = 'a0b12c42569f805a443c23e1f659ef6b';
 
   // js-sdk配置信息获取
-  request.get(`https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=${appId}&secret=${appScrect}`, (err, respone, body) => {
+  request.get('https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid='+ appId +'&secret='+ appScrect +'', (err, respone, body) => {
 
     var accessToken = JSON.parse(body).access_token;
 

@@ -13,6 +13,20 @@ export function get_jssdk(val) {
   });
 };
 
+// 发起微信支付请求
+export function wechatPay(val) {
+	const data = new FormData();
+	data.append('option',val.option);
+	data.append('openid',val.openid);
+	data.append('openid',val.body);
+	data.append('openid',val.orderid);
+	return fetch({
+		url: '/api/wxpay',
+		method: 'post',
+		data
+	})
+}
+
 // 发送微信code
 export function send_code(code) {
 	const data = new FormData();

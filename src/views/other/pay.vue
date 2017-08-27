@@ -13,7 +13,7 @@
         <p class="title">费用详情</p>
         <p class="line" style="margin-left: 10px"></p>
       </div>
-      <p style="text-align: center;margin: 10px 0;">标准时长计费</p>
+      <p style="text-align: center;margin: 15px 0;">标准时长计费</p>
       <p class="clearfix" style="padding: 0 20px;">
         <span class="fl" style="color: #a6a6a6">216分钟*1元/小时</span>
         <span class="fr" style="color: #a6a6a6">4.00元</span>
@@ -28,16 +28,16 @@
       </div>
       <!-- 器材满意度 -->
       <div>
-        <p style="text-align:center;margin: 10px 0">器材满意度</p>
+        <p style="text-align:center;margin: 15px 0">器材满意度</p>
         <ul class="eq-list clearfix">
-          <li class="eq-item off" v-for=" index in 5 " @click.stop=" chooseE(index,$event) "></li>
+          <li class="eq-item off" v-for=" index in 5 " @click.stop=" chooseStar('eq',index,$event) "></li>
         </ul>
       </div>
       <!-- 机器满意度 -->
       <div>
-        <p style="text-align:center;margin: 10px 0">机器满意度</p>
+        <p style="text-align:center;margin: 15px 0">机器满意度</p>
         <ul class="mc-list clearfix">
-          <li class="mc-item off" v-for=" index in 5 " @click.stop=" chooseM(index,$event) "></li>
+          <li class="mc-item off" v-for=" index in 5 " @click.stop=" chooseStar('mc',index,$event) "></li>
         </ul>
       </div>
     </div>
@@ -46,13 +46,14 @@
       <textarea placeholder="我还想说点什么..." class="area"></textarea>
     </div>
     <!-- 支付按钮 -->
-    <button id="addBtn">addbtn</button>
     <div style="text-align: center">
-      <button class="pay-btn" @click=" payMoney ">确认支付</button>
+      <button id="pay-btn" @click=" payMoney ">确认支付</button>
     </div>
   </div>
 </template>
 <script>
+import wx from 'weixin-js-sdk';
+import { wechatPay } from 'api/wechat';
 import returnUrl from '@/components/returnUrl';
 export default {
   name: 'pay',
@@ -64,26 +65,42 @@ export default {
       mcArray: [] // 机器星星数组
     }
   },
+  computed: {
+    // 返回当前微信用户
+    user() {
+      return this.$store.state.user;
+    }
+  },
   methods: {
-    // 器材满意度
-    chooseE(num, e) {
-      this.eqIndex = num - 1;
-      let t = e.target;
-      this.eqArray.forEach((item, index) => {
-        index < num ? item.classList.add('on') : item.classList.remove('on')
+    // 订单满意度,第一个参数是打星的类型
+    chooseStar(t,num, e) {
+      this[t + 'Index'] = num - 1;
+      let tg = e.target;
+      this[t + 'Array'].forEach((item, index) => {
+        index < num ? item.classList.add('on') : item.classList.remove('on');
       })
     },
-    // 机器满意度
-    chooseM(num, e) {
-      this.mcIndex = num - 1;
-      let t = e.target;
-      this.mcArray.forEach((item, index) => {
-        index < num ? item.classList.add('on') : item.classList.remove('on')
-      });
-    },
-    // 付钱
-    payMoney() {
 
+    // 付钱
+    payMoney(body,orderid) {
+      wx.ready(() => {
+        // 微信支付配置参数
+        const opt = {
+          option: 'unifiedorder',
+          openid: this.user.openid,
+          body,
+          orderid
+        }
+        wechatPay(opt)
+          .then((res) => {
+            let resData = res.data;
+            // 微信支付,还可以有一个参数是回调函数
+            wx.chooseWXPay(resData);
+          })
+          .catch((err) => {
+            throw new Error(err);
+          });
+      });
     }
   },
   components: {
@@ -158,11 +175,11 @@ $gray: #a6a6a6;
   padding: 5px;
   outline: none;
   width: 100%;
-  height: 70px;
+  height: 100px;
   resize: none;
 }
 
-.pay-btn {
+#pay-btn {
   margin-top: 10px;
   width: 90%;
   border: none;

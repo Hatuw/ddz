@@ -31,7 +31,7 @@
         <li v-for=" (item,index) in sports " :key=" index ">
           <div class="sport-img-wrap" @click.stop=" chooseSport(item,$event) ">
             <img :src=" '../../../static/img/' + item.en_name + '.png'" :alt=" item.cn_name ">
-            <div class="num-tip none">09</div>
+            <div class="num-tip none"></div>
           </div>
           <p v-text=" item.cn_name  "></p>
         </li>
@@ -44,10 +44,11 @@
           <i class="fa fa-user-circle-o" aria-hidden="true"></i>
         </router-link>
       </div>
-      <div class="btn-wrap btn-wrap-grow-2">
+      <!-- 如果启动该功能,则把注释去掉 -->
+      <!--  <div class="btn-wrap btn-wrap-grow-2">
         <button style="color: #0788ee;background-color:#fff">预定器材</button>
-      </div>
-      <div class="btn-wrap btn-wrap-grow-2">
+      </div> -->
+      <div class="btn-wrap btn-wrap-grow-3">
         <button style="color: #fff" @click=" checkSchool ">立即运动</button>
       </div>
     </footer>
@@ -58,6 +59,7 @@
       <picker :slots="slots" @change="onValuesChange" :itemHeight="26"></picker>
       <button @click.stop=" changeShow('showPicker',false) ">确认</button>
     </div>
+    {{ sport }}
     <!-- 遮罩层 -->
     <div class="mask" v-show=" showPicker "></div>
     <!-- 弹框组件 -->
@@ -67,9 +69,9 @@
   </div>
 </template>
 <script>
-import wx from 'weixin-js-sdk';
-import { get_jssdk } from 'api/wechat';
 import 'swiper/dist/css/swiper.css';
+import wx from 'weixin-js-sdk';
+import { get_jssdk, wechatPay } from 'api/wechat';
 import { getPlace, getSportNum, create_order, check_code } from 'api/index';
 import { send_code } from 'api/wechat';
 import { swiper, swiperSlide } from 'vue-awesome-swiper';
@@ -189,26 +191,27 @@ export default {
       if (!this.curAddr) {
         this.showPicker = true;
       } else if (this.checkChoose(item)) {
-        this.imgClear();
         // 检查当前地区是否在学校范围
         let school = this.matchSchool();
         if (school) {
           getSportNum(item.sCode, school.place)
             .then((res) => {
+              this.imgClear();
+              this.numClear();
+              item.en_name = item.en_name + "_o";
+              let t = e.target.parentElement.querySelector('.num-tip');
+              t.classList.remove('none');
               if (res.data.status) {
-                try {
-                  let num = res.data.data[0].count;
-                  item.en_name = item.en_name + "_o";
-                  this.$store.commit('SET_SPORT', item);
-                  this.$store.commit('SET_SPORT', res.data.data[0]);
-                  this.numClear();
-                  // 显示当前运动球类的数量
-                  let t = e.target.parentElement.querySelector('.num-tip');
-                  t.innerText = num;
-                  t.classList.remove('none');
-                } catch (e) {
-                  throw e;
-                }
+                // 显示当前运动球类的数量
+                let num = res.data.data[0].count;
+                this.$store.commit('SET_SPORT', item);
+                this.$store.commit('SET_SPORT', res.data.data[0]);
+                t.innerText = num;
+              } else {
+                item.count = 0;
+                // this.$store.commit('SET_SPORT', item);
+                // this.$store.commit('SET_SPORT', 0,'count');
+                t.innerText = '0';
               }
             })
             .catch((err) => {
@@ -263,15 +266,16 @@ export default {
     getWechatInfo(code) {
       send_code(code)
         .then((res) => {
-          this.$store.commit('SET_USER', res.data);
+          this.$store.commit('SET_USER', JSON.parse(res.data));
         })
         .catch((err) => {
-          console.log(err);
+          throw new Error(err);
         })
     }
   },
 
   beforeRouteEnter(to, from, next) {
+    // 如果路由上有code,即表明是获取用户信息
     if (location.href.indexOf('code') > 0) {
       let code = location.href.slice(location.href.indexOf('code') + 5, location.href.indexOf('#/'));
       next((self) => {
@@ -283,43 +287,6 @@ export default {
   },
 
   mounted() {
-    // 调用jssdk
-    const data = {
-      url: window.location.href.split('#')[0],
-      jsApiList: ['checkJsApi', 'chooseWXPay']
-    }
-
-    get_jssdk(data)
-      .then((res) => {
-
-        console.log('---------------这是一道华丽丽的分割线----------------');
-        console.log(res.data);
-        console.log('---------------这是一道华丽丽的分割线----------------');
-
-        wx.config({
-          debug: true,
-          appId: res.data.appId,
-          timestamp: res.data.timestamp, // 必填，生成签名的时间戳
-          nonceStr: res.data.noncestr, // 必填，生成签名的随机串
-          signature: res.data.signature, // 必填，签名，见附录1
-          jsApiList: data.jsApiList // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
-        });
-
-        wx.ready((res) => {
-          wx.checkJsApi({
-            jsApiList: ['chooseWXPay'], // 需要检测的JS接口列表，所有JS接口列表见附录2,
-            success: function(res) {
-              console.log(res);
-            }
-          });
-        });
-        wx.error((error) => {
-          console.log(error);
-        })
-      })
-      .catch((error) => {
-        throw new Error(error);
-      })
     // 获取所有被投放的学校
     if (!this.schoolList.length) {
       getPlace()
@@ -338,9 +305,9 @@ export default {
     }
 
     // 自动获取当前位置 
-    if (!this.curAddr) {
-      this.$store.dispatch('SET_ADDR');
-    };
+    // if (!this.curAddr) {
+    //   this.$store.dispatch('SET_ADDR');
+    // };
   }
 }
 
@@ -362,6 +329,7 @@ $Blue: rgb(230, 240, 249);
   transform: translate(-50%, -50%);
   background-color: #fff;
   z-index: 100;
+  min-width: 220px;
   .picker-item {
     font-size: 16px;
   }
@@ -509,6 +477,9 @@ footer {
       border: 1px solid #0788ee;
       outline: none;
     }
+  }
+  .btn-wrap-grow-3 {
+    flex-grow: 3;
   }
   .btn-wrap-grow-2 {
     flex-grow: 2;

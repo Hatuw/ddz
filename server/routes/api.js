@@ -4,7 +4,7 @@ var request = require('request');
 var sha1 = require('sha1');
 var bodyParser = require('body-parser');
 
-var jsonParser = bodyParser.json()
+var jsonParser = bodyParser.json();
 
 var urlencodedParser = bodyParser.urlencoded({ extended: false })
 

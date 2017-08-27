@@ -31,7 +31,7 @@
           </router-link>
           <router-link :to=" '/allOrder' " class="order-item">
             <img src="../../../static/img/all.png" alt="评价">
-            <span>全部订单</span>
+            <span>历史订单</span>
           </router-link>
         </div>
       </div>

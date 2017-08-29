@@ -1,4 +1,16 @@
+/**
+ * 首页用到的api
+ */
+
 import fetch from 'utils/fetch';
+
+// 获取用户状态
+export function get_user(openid) {
+  return fetch({
+    url: `/api/user?openid=${openid}`,
+    method: 'get'
+  })
+}
 
 // 获取所有机器投放的学校
 export function getPlace() {

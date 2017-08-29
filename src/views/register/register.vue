@@ -89,7 +89,7 @@ export default {
           this.sended = true;
         })
         .catch((err) => {
-          throw err;
+          throw new Error(err);
         })
     },
 
@@ -123,6 +123,7 @@ export default {
 
       checkCode(this.codeVal, this.phoneVal)
         .then((res) => {
+          console.log(res.data);
           // 根据返回的状态码，来判断验证码是否正确
           let status = res.data.status; // 返回的状态码
           // 如果返回的状态码是true的话，就进行页面的跳转
@@ -152,8 +153,9 @@ export default {
     agreementBook,
     moveSlider
   },
-  created() {
-    document.querySelector('#app').style.backgroundColor = '#fff';
+
+  mounted() {
+    document.querySelector('body').style.backgroundColor = '#fff';
   }
 }
 
@@ -181,6 +183,7 @@ form {
 }
 
 header {
+  padding: 0 !important;
   img {
     width: 100%;
     height: auto;

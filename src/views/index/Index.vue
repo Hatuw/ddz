@@ -59,7 +59,6 @@
       <picker :slots="slots" @change="onValuesChange" :itemHeight="26"></picker>
       <button @click.stop=" changeShow('showPicker',false) ">确认</button>
     </div>
-    {{ sport }}
     <!-- 遮罩层 -->
     <div class="mask" v-show=" showPicker "></div>
     <!-- 弹框组件 -->
@@ -72,7 +71,7 @@
 import 'swiper/dist/css/swiper.css';
 import wx from 'weixin-js-sdk';
 import { get_jssdk, wechatPay } from 'api/wechat';
-import { getPlace, getSportNum, create_order, check_code } from 'api/index';
+import { getPlace, getSportNum, create_order, check_code, get_user } from 'api/index';
 import { send_code } from 'api/wechat';
 import { swiper, swiperSlide } from 'vue-awesome-swiper';
 import { picker } from 'mint-ui';
@@ -209,8 +208,7 @@ export default {
                 t.innerText = num;
               } else {
                 item.count = 0;
-                // this.$store.commit('SET_SPORT', item);
-                // this.$store.commit('SET_SPORT', 0,'count');
+                this.$store.commit('SET_SPORT', item);
                 t.innerText = '0';
               }
             })
@@ -266,11 +264,24 @@ export default {
     getWechatInfo(code) {
       send_code(code)
         .then((res) => {
-          this.$store.commit('SET_USER', JSON.parse(res.data));
+          let userinfo = JSON.parse(res.data);
+          this.$store.commit('SET_USER', userinfo);
+          if (userinfo.openid) {
+            get_user(userinfo.openid)
+              .then((g_res) => {
+                let data = g_res.data;
+                if (data.status == 0 || !data.status) {
+                  this.$router.push('/register');
+                }
+              })
+              .catch((g_err) => {
+                throw new Error(g_err)
+              })
+          }
         })
         .catch((err) => {
           throw new Error(err);
-        })
+        });
     }
   },
 
@@ -305,9 +316,14 @@ export default {
     }
 
     // 自动获取当前位置 
-    // if (!this.curAddr) {
-    //   this.$store.dispatch('SET_ADDR');
-    // };
+    if (!this.curAddr) {
+      this.$store.dispatch('SET_ADDR');
+    };
+  },
+
+  beforeDestroy() {
+    this.imgClear();
+    this.$store.commit('SET_SPORT', {});
   }
 }
 

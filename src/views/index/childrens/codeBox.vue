@@ -60,9 +60,7 @@ export default {
       }
     },
     checkCode() {
-      if(!this.num.o || !this.num.t) {
-        return;
-      }
+      if(!this.num.o || !this.num.t) return;
       let code = '' + this.num.o + this.num.t;
       check_code(code, '13068501435')
         .then((res) => {

@@ -14,7 +14,6 @@ export default {
       url: window.location.href.split('#')[0],
       jsApiList: ['checkJsApi', 'chooseWXPay']
     }
-
     get_jssdk(data)
       .then((res) => {
         wx.config({
@@ -45,5 +44,4 @@ export default {
 <style>
 @import './assets/css/base.css';
 @import './assets/css/font-awesome-4.7.0.min.css';
-
 </style>

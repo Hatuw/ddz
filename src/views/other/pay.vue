@@ -47,7 +47,7 @@
     </div>
     <!-- 支付按钮 -->
     <div style="text-align: center">
-      <button id="pay-btn" @click=" payMoney ">确认支付</button>
+      <button id="pay-btn" @click=" payMoney() ">确认支付</button>
     </div>
   </div>
 </template>
@@ -82,14 +82,12 @@ export default {
     },
 
     // 付钱
-    payMoney(body,orderid) {
+    payMoney() {
       wx.ready(() => {
         // 微信支付配置参数
         const opt = {
           option: 'unifiedorder',
-          openid: this.user.openid,
-          body,
-          orderid
+          openid: this.user.openid
         }
         wechatPay(opt)
           .then((res) => {
@@ -97,9 +95,6 @@ export default {
             // 微信支付,还可以有一个参数是回调函数
             wx.chooseWXPay(resData);
           })
-          .catch((err) => {
-            throw new Error(err);
-          });
       });
     }
   },

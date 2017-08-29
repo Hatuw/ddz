@@ -55,13 +55,13 @@ const actions = {
   }) {
     // 成功时触发commit
     let success = function(addr) {
-        commit('SET_ADDR', addr);
-      }
-      // 失败的回调函数
+      commit('SET_ADDR', addr);
+    }
+    // 失败的回调函数
     let error = function(err) {
-        throw err;
-      }
-      // 配置参数
+      throw new Error(err);
+    }
+    // 配置参数
     let options = {
       timeout: 100000
     };

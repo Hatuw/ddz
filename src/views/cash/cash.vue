@@ -1,7 +1,7 @@
 <!-- 缴纳组件 -->
 <template>
   <div id="cash">
-    <!-- <return-url :title=" '缴纳押金' " :reUrl=" '/' "></return-url> -->
+    <returnUrl :title=" '缴纳押金' " :reUrl=" '/' "></returnUrl>
     <!-- 押金金额 -->
     <div class="tip-text">
       缴纳押金
@@ -27,14 +27,14 @@
     </ul>
     <!-- 协议书 -->
     <div class="pay-btn">
-      <button>确认支付</button>
+      <button @click=" payMoney ">确认支付</button>
     </div>
   </div>
 </template>
 <script>
 import returnUrl from '@/components/returnUrl';
-import { get_jssdk } from 'api/wechat';
 import wx from 'weixin-js-sdk';
+import { wechatPay } from 'api/wechat';
 export default {
   name: 'cash',
   title: '押金',
@@ -43,35 +43,35 @@ export default {
       money: '39.00'
     }
   },
+
+  methods: {
+    // 支付押金
+    payMoney(body, orderid) {
+      wx.ready(() => {
+        // 微信支付配置参数
+        const opt = {
+          option: 'unifiedorder',
+          openid: this.user.openid,
+          body,
+          orderid
+        }
+        wechatPay(opt)
+          .then((res) => {
+            let resData = res.data;
+            // 微信支付,还可以有一个参数是回调函数
+            wx.chooseWXPay(resData);
+          })
+          .catch((err) => {
+            throw new Error(err);
+          });
+      });
+    }
+  },
+
   components: {
     returnUrl
   },
-  mounted() {
-    let data = {
-      noncestr: 'duodongzhen',
-      timestamp: +new Date(),
-      url: window.location.href.split('#')[0],
-      jsApiList: ['chooseWXPay']
-    }
 
-    get_jssdk(data)
-      .then((res) => {
-        wx.config({
-          debug: true,
-          appId: res.data.appId,
-          timestamp: data.timestamp, // 必填，生成签名的时间戳
-          nonceStr: data.noncestr, // 必填，生成签名的随机串
-          signature: res.data.signature, // 必填，签名，见附录1
-          jsApiList: data.jsApiList // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
-        });
-        wx.ready(() => {
-          
-        })
-      })
-      .catch((error) => {
-        throw new Error(error);
-      })
-  },
   created() {
     document.querySelector('#app').style.backgroundColor = '#eaeef1';
   }

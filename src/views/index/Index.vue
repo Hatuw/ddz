@@ -472,6 +472,13 @@ header {
   }
 }
 
+// 当浏览器处于横屏的时候
+@media screen and (orientation:landscape) {
+  footer{
+    position: static !important; 
+  }
+}
+
 footer {
   width: 100%;
   position: fixed;

@@ -5,7 +5,7 @@
     <!-- 头部个人信息 -->
     <header>
       <div class="img-wrap">
-        <div class="avatar" style="background-image: url('../../../static/img/head.jpg');"></div>
+        <div class="avatar" :style="{backgroundImage: 'url(' + user.headimgurl + ')'}"></div>
       </div>
       <div class="info">
         <h3 style="font-size: 22px">{{ user.nickname }}</h3>

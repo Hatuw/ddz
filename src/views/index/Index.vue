@@ -141,16 +141,11 @@ export default {
 
     // 返回当前学校地址的所投放学校列表中的匹配
     matchSchool() {
-      let curAddr = this.curAddr;
-      let school = null;
-      this.schoolList.forEach((item, index) => {
+      return this.schoolList.some((item, index) => {
         let city = item.name.split(',')[0];
         let sName = item.name.split(',')[1];
-        if (curAddr.includes(city) && curAddr.includes(sName)) {
-          school = item;
-        }
+        return this.curAddr.includes(city) && this.curAddr.includes(sName);
       });
-      return school;
     },
 
     // 检查当前位置是否属于学校范围
@@ -196,7 +191,7 @@ export default {
           getSportNum(item.sCode, school.place)
             .then((res) => {
               this.imgClear();
-              this.numClear();
+              this.numClear(document.querySelectorAll('.num-tip'));
               item.en_name = item.en_name + "_o";
               let t = e.target.parentElement.querySelector('.num-tip');
               t.classList.remove('none');
@@ -234,10 +229,9 @@ export default {
     },
 
     // 清除所有器材选择的数量
-    numClear() {
-      let dom = document.querySelectorAll('.num-tip');
-      for (let i = 0; i < dom.length; i++) {
-        dom[i].classList.add('none');
+    numClear(doms) {
+      for (let i = 0; i < doms.length; i++) {
+        doms[i].classList.add('none');
       }
     },
 
@@ -254,8 +248,8 @@ export default {
     },
 
     // 添加学校选项
-    addSchool() {
-      this.schoolList.forEach((item, index) => {
+    addSchool(list) {
+      list.forEach((item, index) => {
         this.slots[0].values.push(item.name);
       });
     },
@@ -282,48 +276,57 @@ export default {
         .catch((err) => {
           throw new Error(err);
         });
-    }
-  },
+    },
 
-  beforeRouteEnter(to, from, next) {
-    // 如果路由上有code,即表明是获取用户信息
-    if (location.href.indexOf('code') > 0) {
-      let code = location.href.slice(location.href.indexOf('code') + 5, location.href.indexOf('#/'));
-      next((self) => {
-        self.getWechatInfo(code);
-      });
-    } else {
-      next();
-    }
-  },
-
-  mounted() {
-    // 获取所有被投放的学校
-    if (!this.schoolList.length) {
+    // 获取被投放的学校数据
+    _getPlace() {
       getPlace()
         .then((res) => {
           this.$store.commit('SET_SCHOOLLIST', res.data.data);
         })
         .then(() => {
           // 添加学校选项
-          this.addSchool();
+          this.addSchool(this.schoolList);
         })
         .catch((err) => {
           throw new Error(err);
         });
-    } else {
-      this.addSchool();
-    }
+    },
 
-    // 自动获取当前位置 
-    if (!this.curAddr) {
-      this.$store.dispatch('SET_ADDR');
-    };
+    // 初始化数据
+    initData() {
+      // 获取所有被投放的学校
+      this.schoolList.length ? this.addSchool(this.schoolList) : this._getPlace();
+
+      // 自动获取当前位置 
+      if (!this.curAddr) this.$store.dispatch('SET_ADDR');
+    },
+
+    // 清除用户操作
+    clearChoose() {
+      this.imgClear();
+      this.$store.commit('SET_SPORT', {});
+    }
+  },
+
+  // beforeRouteEnter(to, from, next) {
+  //   // 如果路由上有code,即表明是获取用户信息
+  //   if (location.href.indexOf('code') > 0) {
+  //     const code = location.href.slice(location.href.indexOf('code') + 5, location.href.indexOf('#/'));
+  //     next((self) => {
+  //       self.getWechatInfo(code);
+  //     });
+  //   } else {
+  //     next();
+  //   }
+  // },
+
+  mounted() {
+    this.initData();
   },
 
   beforeDestroy() {
-    this.imgClear();
-    this.$store.commit('SET_SPORT', {});
+    this.clearChoose();
   }
 }
 
@@ -474,8 +477,8 @@ header {
 
 // 当浏览器处于横屏的时候
 @media screen and (orientation:landscape) {
-  footer{
-    position: static !important; 
+  footer {
+    position: static !important;
   }
 }
 

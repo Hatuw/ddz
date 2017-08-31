@@ -44,4 +44,5 @@ export default {
 <style>
 @import './assets/css/base.css';
 @import './assets/css/font-awesome-4.7.0.min.css';
+
 </style>

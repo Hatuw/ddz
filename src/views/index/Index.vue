@@ -40,7 +40,7 @@
     <!-- 底部功能按键 -->
     <footer>
       <div class="btn-wrap btn-wrap-grow-1">
-        <router-link to="personal">
+        <router-link to="personal" replace>
           <i class="fa fa-user-circle-o" aria-hidden="true"></i>
         </router-link>
       </div>
@@ -57,7 +57,7 @@
       <p class="clearfix title" style="text-align:center;margin-bottom: 5px;">
         <span>请选择你当前所在的学校</span><i class="fa fa-times fr" aria-hidden="true" @click.stop=" changeShow('showPicker',false) "></i></p>
       <picker :slots="slots" @change="onValuesChange" :itemHeight="26"></picker>
-      <button @click.stop=" changeShow('showPicker',false) ">确认</button>
+      <button @click.stop=" chooseAddr ">确认</button>
     </div>
     <!-- 遮罩层 -->
     <div class="mask" v-show=" showPicker "></div>
@@ -65,14 +65,14 @@
     <alertBox :title=" alertMsg.title " :subTitle=" alertMsg.subTitle " :alert=" alert " @close=" changeShow('alert',false) "></alertBox>
     <!-- 输入验证码组件 -->
     <codeBox :show=" showCode " @createOrder=" creatrsOrder "></codeBox>
+    {{ user }}
   </div>
 </template>
 <script>
 import 'swiper/dist/css/swiper.css';
 import wx from 'weixin-js-sdk';
 import { get_jssdk, wechatPay } from 'api/wechat';
-import { getPlace, getSportNum, create_order, check_code, get_user } from 'api/index';
-import { send_code } from 'api/wechat';
+import { getPlace, getSportNum, create_order, check_code } from 'api/index';
 import { swiper, swiperSlide } from 'vue-awesome-swiper';
 import { picker } from 'mint-ui';
 import alertBox from '@/components/alertBox';
@@ -95,6 +95,7 @@ export default {
         textAlign: 'center',
         defaultIndex: 0
       }],
+      addr: null,
       showPicker: false,
       alert: false,
       showCode: false,
@@ -116,8 +117,13 @@ export default {
     // 返回所有投放的学校列表
     schoolList() {
       return this.$store.state.schoolList;
+    },
+    // 返回当前用户信息
+    user() {
+      return this.$store.state.user;
     }
   },
+
   components: {
     swiper,
     swiperSlide,
@@ -125,6 +131,7 @@ export default {
     alertBox,
     codeBox
   },
+
   methods: {
     // 成功创建订单后的函数
     creatrsOrder() {
@@ -141,7 +148,7 @@ export default {
 
     // 返回当前学校地址的所投放学校列表中的匹配
     matchSchool() {
-      return this.schoolList.some((item, index) => {
+      return this.schoolList.find((item, index) => {
         let city = item.name.split(',')[0];
         let sName = item.name.split(',')[1];
         return this.curAddr.includes(city) && this.curAddr.includes(sName);
@@ -150,21 +157,27 @@ export default {
 
     // 检查当前位置是否属于学校范围
     checkSchool() {
-      // 判断用户当前位置是否正确获取和是否选择运动器材
+      // 如果当前用户是没缴纳押金，就跳转到缴纳押金页面
+      if (this.user.deposit <= 0) {
+        this.$router.replace('/cash');
+      } else
       if (!this.curAddr) {
         this.showPicker = true;
       } else if (!this.sport.en_name) {
         this.changeAlertText('您还未选择运动球类', '请选择运动球类');
       } else {
         let school = this.matchSchool();
-        if (!school) {
+        if (school === undefined) {
           this.changeAlertText('您所在的位置没有机器', '多动朕目前只在学校范围投放');
         } else if (!this.sport.count) {
           this.changeAlertText('机器球类数量为0', '请有球的时候再来吧');
         } else {
-          // 向服务器发送运动订单
-          create_order('13068501435', this.sport.serial)
+          console.log('-------------------------------');
+          console.log(this.user.user_id, this.sport.serial);
+          // 向服务器发送运动订单 
+          create_order(this.user.user_id, this.sport.serial)
             .then((res) => {
+              console.log(res);
               this.showCode = true;
             })
             .catch((err) => {
@@ -187,13 +200,13 @@ export default {
       } else if (this.checkChoose(item)) {
         // 检查当前地区是否在学校范围
         let school = this.matchSchool();
-        if (school) {
+        if (school !== undefined) {
           getSportNum(item.sCode, school.place)
             .then((res) => {
               this.imgClear();
               this.numClear(document.querySelectorAll('.num-tip'));
-              item.en_name = item.en_name + "_o";
               let t = e.target.parentElement.querySelector('.num-tip');
+              item.en_name = item.en_name + "_o";
               t.classList.remove('none');
               if (res.data.status) {
                 // 显示当前运动球类的数量
@@ -215,8 +228,8 @@ export default {
         }
       } else {
         item.en_name = item.en_name.replace(/_o/, '');
-        this.$store.commit('SET_SPORT', {});
         let t = e.target.parentElement.querySelector('.num-tip');
+        this.$store.commit('SET_SPORT', {});
         t.classList.add('none');
       }
     },
@@ -230,16 +243,22 @@ export default {
 
     // 清除所有器材选择的数量
     numClear(doms) {
-      for (let i = 0; i < doms.length; i++) {
-        doms[i].classList.add('none');
+      for (let dom of doms) {
+        dom.classList.add('none');
       }
     },
 
     // picker组件滑动选择时重新设置当前地址
     onValuesChange(picker, values) {
       if (this.showPicker) {
-        this.$store.commit('SET_ADDR', values[0]);
+        this.addr = values[0];
       }
+    },
+
+    // 手动确认当前地址
+    chooseAddr() {
+      this.changeShow('showPicker', false);
+      this.schoolList.length == 1 ? this.$store.commit('SET_ADDR', this.schoolList[0].name) : this.$store.commit('SET_ADDR', this.addr.name);
     },
 
     // 改变选择框显示
@@ -252,30 +271,6 @@ export default {
       list.forEach((item, index) => {
         this.slots[0].values.push(item.name);
       });
-    },
-
-    // 获取微信用户信息
-    getWechatInfo(code) {
-      send_code(code)
-        .then((res) => {
-          let userinfo = JSON.parse(res.data);
-          this.$store.commit('SET_USER', userinfo);
-          if (userinfo.openid) {
-            get_user(userinfo.openid)
-              .then((g_res) => {
-                let data = g_res.data;
-                if (data.status == 0 || !data.status) {
-                  this.$router.push('/register');
-                }
-              })
-              .catch((g_err) => {
-                throw new Error(g_err)
-              })
-          }
-        })
-        .catch((err) => {
-          throw new Error(err);
-        });
     },
 
     // 获取被投放的学校数据
@@ -299,7 +294,7 @@ export default {
       this.schoolList.length ? this.addSchool(this.schoolList) : this._getPlace();
 
       // 自动获取当前位置 
-      if (!this.curAddr) this.$store.dispatch('SET_ADDR');
+      // if (!this.curAddr) this.$store.dispatch('SET_ADDR');
     },
 
     // 清除用户操作
@@ -308,18 +303,6 @@ export default {
       this.$store.commit('SET_SPORT', {});
     }
   },
-
-  // beforeRouteEnter(to, from, next) {
-  //   // 如果路由上有code,即表明是获取用户信息
-  //   if (location.href.indexOf('code') > 0) {
-  //     const code = location.href.slice(location.href.indexOf('code') + 5, location.href.indexOf('#/'));
-  //     next((self) => {
-  //       self.getWechatInfo(code);
-  //     });
-  //   } else {
-  //     next();
-  //   }
-  // },
 
   mounted() {
     this.initData();

@@ -15,11 +15,8 @@ const state = {
   curAddr: '', // 当前用户的位置
   sport: {}, // 用户选择的运动类型
   schoolList: [], // 所有被投放的学校
-  user: { // 当前用户
-    openid: '',
-    nickname: '',
-    headimgurl: ''
-  }
+  user: {}, // 当前用户
+  wechatinfo: {} // 用户微信信息
 };
 
 const mutations = {
@@ -42,27 +39,32 @@ const mutations = {
   },
   // 设置当前用户信息
   SET_USER(state, userinfo) {
-    merge(state.user, userinfo.openid, 'openid');
-    merge(state.user, userinfo.nickname, 'nickname');
-    merge(state.user, userinfo.headimgurl, 'headimgurl');
+    merge(state.user, userinfo);
+  },
+  // 设置用户微信信息,用于注册
+  SET_WECHATINFO(state, info) {
+    merge(state.wechatinfo, info);
   }
 };
 
 const actions = {
-  SET_ADDR({
-    commit,
-    state
-  }) {
+  SET_USERINFO({ commit, state },info) {
+    return new Promise((resolve,reject) => {
+      commit('SET_WECHATINFO',info);
+      resolve();
+    })
+  },
+  SET_ADDR({ commit, state }) {
     // 成功时触发commit
-    let success = function(addr) {
+    const success = function(addr) {
       commit('SET_ADDR', addr);
     }
     // 失败的回调函数
-    let error = function(err) {
+    const error = function(err) {
       throw new Error(err);
     }
     // 配置参数
-    let options = {
+    const options = {
       timeout: 100000
     };
     // 调用腾讯前端定位组件,异步执行

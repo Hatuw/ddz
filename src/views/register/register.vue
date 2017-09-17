@@ -42,6 +42,7 @@
         </div>
       </form>
     </article>
+    {{ userinfo }}
     <!-- 遮罩层 -->
     <div class="mask" v-if=" silderShow "></div>
     <!-- 移动滑块 -->
@@ -53,7 +54,8 @@
 <script>
 import agreementBook from './childrens/agreementBook.vue';
 import moveSlider from './childrens/moveSlider.vue';
-import { getCode, checkCode } from 'api/register.js';
+import { getCode, checkCode, createUser } from 'api/register.js';
+import { getUser } from 'api/user.js';
 export default {
   name: 'Register',
   data() {
@@ -66,6 +68,11 @@ export default {
       endTime: 60, // 倒计时
       bookShow: false, // 是否显示用户协议
       silderShow: false // 是否显示移动滑动库
+    }
+  },
+  computed: {
+    userinfo() {
+      return this.$store.state.wechatinfo;
     }
   },
   methods: {
@@ -89,7 +96,7 @@ export default {
           this.sended = true;
         })
         .catch((err) => {
-          throw new Error(err);
+          throw err;
         })
     },
 
@@ -112,32 +119,31 @@ export default {
       // 先检查是否能执行请求
       if (!(/^(1[34578]\d{9})$/ig.test(this.phoneVal))) {
         this.phone_error = '请检查手机格式';
-        return false;
       } else if (!this.sended) {
         this.phone_error = '请获取验证码';
-        return;
       } else if (this.codeVal == '') {
         this.code_error = '请检查验证码是否输入';
-        return
+      } else {
+        checkCode(this.codeVal, this.phoneVal)
+          .then((res) => {
+            // 根据返回的状态码，来判断验证码是否正确
+            let status = res.data.status;
+            if (status) {
+              createUser(this.userinfo,this.phoneVal)
+              .then((res) => {
+                console.log(res);
+                // getUser()
+                // this.$router.push('/a');
+              })
+            } else {
+              this.code_error = '验证码错误,请重新填写验证码';
+            }
+          })
+          .catch((err) => {
+            throw err;
+          })
       }
 
-      checkCode(this.codeVal, this.phoneVal)
-        .then((res) => {
-          console.log(res.data);
-          // 根据返回的状态码，来判断验证码是否正确
-          let status = res.data.status; // 返回的状态码
-          // 如果返回的状态码是true的话，就进行页面的跳转
-          // 如果返回的状态码是false的话，就提示错误文字
-          if (status) {
-            document.cookie = `token=${ res.data.token }`;
-            this.$router.push('/cash');
-          } else {
-            this.code_error = '验证码错误,请重新填写验证码';
-          }
-        })
-        .catch((err) => {
-          throw err;
-        })
     },
     // 清除所有错误文字
     clearError() {

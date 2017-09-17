@@ -25,6 +25,7 @@
       <li><i class="fa fa-circle" aria-hidden="true"></i><span>妈妈再也不用担心我丢球了</span></li>
       <li><i class="fa fa-circle" aria-hidden="true"></i><span>运动随时进行，立租立借走起</span></li>
     </ul>
+    {{ user }}
     <!-- 协议书 -->
     <div class="pay-btn">
       <button @click=" payMoney ">确认支付</button>
@@ -44,16 +45,23 @@ export default {
     }
   },
 
+  computed: {
+    user() {
+      return this.$store.state.user;
+    }
+  },
+
   methods: {
     // 支付押金
-    payMoney(body, orderid) {
+    payMoney() {
+      let _self = this;
       wx.ready(() => {
         // 微信支付配置参数
         const opt = {
           option: 'unifiedorder',
           openid: this.user.openid,
-          body,
-          orderid
+          body: 'pay deposit',
+          orderid: _self.randomNum(10)
         }
         wechatPay(opt)
           .then((res) => {
@@ -65,13 +73,23 @@ export default {
             throw new Error(err);
           });
       });
+    },
+    randomNum(len) {
+      let number = '';
+      let random = function(len) {
+        if (len == 0) return number;
+        else {
+          number = number + Math.ceil(Math.random() * 9);
+          return random(len - 1);
+        }
+      }
+      return random(len);
     }
   },
 
   components: {
     returnUrl
   },
-
   created() {
     document.querySelector('#app').style.backgroundColor = '#eaeef1';
   }

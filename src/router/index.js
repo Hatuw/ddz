@@ -26,6 +26,7 @@ const opinion = r => require.ensure([], () => r(require('@/views/personal/childr
 const pay = r => require.ensure([], () => r(require('@/views/other/pay')), 'pay');
 const introduce = r => require.ensure([], () => r(require('@/views/other/introduce')), 'introduce');
 const time = r => require.ensure([], () => r(require('@/views/other/time')), 'time');
+const wechat_code = r => require.ensure([], () => r(require('@/views/other/wechat_code')), 'wechat_code');
 
 const router = new Router({
   // mode: 'history',    // 后端支持即可开启
@@ -156,6 +157,10 @@ const router = new Router({
     meta: {
       requireAuth: true
     }
+  }, {
+    path: '/wechat_code',
+    name: 'wechat_code',
+    component: wechat_code
   }]
 });
 

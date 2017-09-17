@@ -5,7 +5,7 @@
 import fetch from 'utils/fetch';
 
 // 发送验证码请求
-export function getCode(val) {
+const getCode = function(val) {
   const data = new FormData();
   data.append('phone', val);
   data.append('type', 'send');
@@ -17,7 +17,7 @@ export function getCode(val) {
 }
 
 // 检查手机验证码请求
-export function checkCode(vcode, phone) {
+const checkCode = function(vcode, phone) {
   const data = new FormData();
   data.append('vcode', vcode);
   data.append('type', 'verification');
@@ -28,3 +28,21 @@ export function checkCode(vcode, phone) {
     data
   })
 }
+
+// 创建用户
+const createUser = function(obj,phone) {
+  const data = new FormData();
+  data.append('type', 'register');
+  data.append('user', phone);
+  data.append('name', obj.nickname);
+  data.append('city', obj.city);
+  data.append('image', obj.headimgurl);
+  data.append('openid', obj.openid);
+  return fetch({
+    url: '/api/user',
+    method: 'post',
+    data
+  })
+}
+
+export { getCode, checkCode, createUser };

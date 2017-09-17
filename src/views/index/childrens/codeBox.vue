@@ -64,6 +64,8 @@ export default {
       let code = '' + this.num.o + this.num.t;
       check_code(code, '13068501435')
         .then((res) => {
+          this.num.o = '';
+          this.num.t = '';
           this.$emit('createOrder');
         })
         .catch((err) => {

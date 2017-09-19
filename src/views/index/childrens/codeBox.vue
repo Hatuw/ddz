@@ -19,7 +19,8 @@
   </div>
 </template>
 <script>
-import { check_code } from 'api/index';
+import { check_code, createOrder } from 'api/index';
+import { getUserOrder } from 'api/user';
 export default {
   name: 'codeBox',
   data() {
@@ -30,9 +31,17 @@ export default {
       }
     }
   },
+  computed: {
+    user() {
+      return this.$store.state.user;
+    },
+    sport() {
+      return this.$store.state.sport;
+    }
+  },
   methods: {
     del() {
-      if(!this.num.t) {
+      if (!this.num.t) {
         document.querySelector('#o').focus();
         this.num.o = null;
       }
@@ -60,16 +69,25 @@ export default {
       }
     },
     checkCode() {
-      if(!this.num.o || !this.num.t) return;
+      if (!this.num.o || !this.num.t) return;
       let code = '' + this.num.o + this.num.t;
-      check_code(code, '13068501435')
+      check_code(code, this.user.user_id)
         .then((res) => {
-          this.num.o = '';
-          this.num.t = '';
-          this.$emit('createOrder');
+          if (res.data.status == 1) {
+            this.num.o = '';
+            this.num.t = '';
+            createOrder(this.user.user_id, this.sport.serial)
+              .then((res) => {
+                console.log('-------------------------------创建订单');
+                this.$emit('createOrder');
+              })
+              .catch((err) => {
+                throw err;
+              })
+          }
         })
         .catch((err) => {
-          throw new Error(err);
+          throw err;
         })
     }
   },

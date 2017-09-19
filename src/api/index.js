@@ -5,7 +5,7 @@
 import fetch from 'utils/fetch';
 
 // 获取所有机器投放的学校
-export function getPlace() {
+const getPlace = function() {
   return fetch({
     url: '/api/order?type=place',
     method: 'get'
@@ -13,7 +13,7 @@ export function getPlace() {
 };
 
 // 获取当前学校的运动类型的剩余数量
-export function getSportNum(typeCode, placeCode) {
+const getSportNum = function(typeCode, placeCode) {
   return fetch({
     url: `/api/order?type=sport&place=${placeCode}&sType=${typeCode}`,
     method: 'get'
@@ -21,7 +21,7 @@ export function getSportNum(typeCode, placeCode) {
 }
 
 // 创建机器验证码
-export function create_order(phone, serial) {
+const createOrderCode = function(phone, serial) {
   const data = new FormData();
   data.append('type', 'vcode');
   data.append('user', phone);
@@ -34,7 +34,7 @@ export function create_order(phone, serial) {
 }
 
 // 验证订单验证码
-export function check_code(code, phone) {
+const check_code = function(code, phone) {
   const data = new FormData();
   data.append('type', 'vcode');
   data.append('user', phone);
@@ -45,3 +45,17 @@ export function check_code(code, phone) {
     data
   })
 }
+
+const createOrder = function(phone, serial) {
+  const data = new FormData();
+  data.append('type', 'post_now');
+  data.append('user', phone);
+  data.append('serial', serial);
+  return fetch({
+    url: '/api/order',
+    method: 'post',
+    data
+  })
+}
+
+export { createOrder, check_code, createOrderCode, getSportNum, getPlace };

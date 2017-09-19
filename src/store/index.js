@@ -4,10 +4,7 @@
 
 import Vue from 'vue';
 import Vuex from 'vuex';
-import getters from './getters';
-import {
-  merge
-} from '@/utils/merge.js';
+import { merge } from '@/utils/merge.js';
 
 Vue.use(Vuex);
 
@@ -48,9 +45,9 @@ const mutations = {
 };
 
 const actions = {
-  SET_USERINFO({ commit, state },info) {
-    return new Promise((resolve,reject) => {
-      commit('SET_WECHATINFO',info);
+  SET_USERINFO({ commit, state }, info) {
+    return new Promise((resolve, reject) => {
+      commit('SET_WECHATINFO', info);
       resolve();
     })
   },
@@ -73,6 +70,10 @@ const actions = {
       geolocation.getLocation(success, error, options);
     }, 0)
   }
+}
+
+const getters = {
+
 }
 
 export default new Vuex.Store({

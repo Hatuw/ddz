@@ -1,6 +1,7 @@
 <!-- 首页组件 -->
 <template>
   <div id="index">
+    <router-link :to=" '/time' ">time</router-link> 
     <!-- 顶部地理位置 -->
     <header>
       <i class="fa fa-map-marker" aria-hidden="true"></i>
@@ -64,15 +65,15 @@
     <!-- 弹框组件 -->
     <alertBox :title=" alertMsg.title " :subTitle=" alertMsg.subTitle " :alert=" alert " @close=" changeShow('alert',false) "></alertBox>
     <!-- 输入验证码组件 -->
-    <codeBox :show=" showCode " @createOrder=" creatrsOrder "></codeBox>
+    <codeBox :show=" showCode " @createOrder=" createOrder "></codeBox>
     {{ user }}
   </div>
 </template>
 <script>
 import 'swiper/dist/css/swiper.css';
 import wx from 'weixin-js-sdk';
-import { get_jssdk, wechatPay } from 'api/wechat';
-import { getPlace, getSportNum, create_order, check_code } from 'api/index';
+import { getPlace, getSportNum, createOrderCode } from 'api/index';
+import { getUserOrder } from 'api/user';
 import { swiper, swiperSlide } from 'vue-awesome-swiper';
 import { picker } from 'mint-ui';
 import alertBox from '@/components/alertBox';
@@ -134,9 +135,9 @@ export default {
 
   methods: {
     // 成功创建订单后的函数
-    creatrsOrder() {
+    createOrder() {
       this.changeShow('showCode', false);
-      this.changeAlertText('创建订单成功', '您可以享受运动啦');
+      this.$router.push('/time');
     },
 
     // 改变弹框文字
@@ -172,16 +173,12 @@ export default {
         } else if (!this.sport.count) {
           this.changeAlertText('机器球类数量为0', '请有球的时候再来吧');
         } else {
-          console.log('-------------------------------');
-          console.log(this.user.user_id, this.sport.serial);
-          // 向服务器发送运动订单 
-          create_order(this.user.user_id, this.sport.serial)
+          createOrderCode(this.user.user_id, this.sport.serial)
             .then((res) => {
-              console.log(res);
               this.showCode = true;
             })
             .catch((err) => {
-              throw new Error(err)
+              throw err;
             })
         }
       }
@@ -284,7 +281,7 @@ export default {
           this.addSchool(this.schoolList);
         })
         .catch((err) => {
-          throw new Error(err);
+          throw err;
         });
     },
 

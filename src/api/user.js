@@ -10,6 +10,14 @@ const getUser = function(openid) {
     url: `/api/user?openid=${openid}`,
     method: 'get'
   })
+};
+
+const getUserOrder = function(phone) {
+	console.log('-------------------------------getUserOrder');
+  return fetch({
+    url: `/api/order?type=order&user=${phone}`,
+    method: 'get'
+  })
 }
 
-export { getUser };
+export { getUser, getUserOrder };

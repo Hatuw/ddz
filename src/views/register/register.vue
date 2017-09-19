@@ -129,12 +129,18 @@ export default {
             // 根据返回的状态码，来判断验证码是否正确
             let status = res.data.status;
             if (status) {
-              createUser(this.userinfo,this.phoneVal)
-              .then((res) => {
-                console.log(res);
-                // getUser()
-                // this.$router.push('/a');
-              })
+              createUser(this.userinfo, this.phoneVal)
+                .then((res) => {
+                  if (res.data.status == 1) {
+                    getUser(this.userinfo.openid)
+                      .then((res) => {
+                        if (res.status == 1) {
+                          this.$store.commit('SET_USER', res.data.data);
+                          this.$router.replace('/');
+                        }
+                      })
+                  }
+                })
             } else {
               this.code_error = '验证码错误,请重新填写验证码';
             }

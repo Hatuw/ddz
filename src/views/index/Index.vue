@@ -1,7 +1,6 @@
 <!-- 首页组件 -->
 <template>
   <div id="index">
-    <router-link :to=" '/time' ">time</router-link> 
     <!-- 顶部地理位置 -->
     <header>
       <i class="fa fa-map-marker" aria-hidden="true"></i>
@@ -173,7 +172,8 @@ export default {
         } else if (!this.sport.count) {
           this.changeAlertText('机器球类数量为0', '请有球的时候再来吧');
         } else {
-          createOrderCode(this.user.user_id, this.sport.serial)
+          console.log(this.user.user_id, this.sport.device_id);
+          createOrderCode(this.user.user_id, this.sport.device_id)
             .then((res) => {
               this.showCode = true;
             })
@@ -218,7 +218,7 @@ export default {
               }
             })
             .catch((err) => {
-              throw new Error(err);
+              throw err;
             })
         } else {
           this.changeAlertText('您所在的位置没有机器', '多动朕目前只在学校范围投放');

@@ -134,11 +134,15 @@ export default {
                   if (res.data.status == 1) {
                     getUser(this.userinfo.openid)
                       .then((res) => {
-                        if (res.status == 1) {
+                        if (res.data.status == 1) {
                           this.$store.commit('SET_USER', res.data.data);
                           this.$router.replace('/');
+                        } else {
+                          throw new Error('获取用户信息失败');
                         }
                       })
+                  } else {
+                    throw new Error('创建用户失败');
                   }
                 })
             } else {

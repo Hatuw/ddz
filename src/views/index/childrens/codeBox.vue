@@ -76,9 +76,8 @@ export default {
           if (res.data.status == 1) {
             this.num.o = '';
             this.num.t = '';
-            createOrder(this.user.user_id, this.sport.serial)
+            createOrder(this.user.user_id, this.sport.device_id)
               .then((res) => {
-                console.log('-------------------------------创建订单');
                 this.$emit('createOrder');
               })
               .catch((err) => {

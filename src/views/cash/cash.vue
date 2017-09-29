@@ -36,6 +36,7 @@
 import returnUrl from '@/components/returnUrl';
 import wx from 'weixin-js-sdk';
 import { wechatPay } from 'api/wechat';
+import { getUser } from 'api/user';
 export default {
   name: 'cash',
   title: '押金',
@@ -54,23 +55,40 @@ export default {
   methods: {
     // 支付押金
     payMoney() {
-      let _self = this;
+      const _self = this;
       wx.ready(() => {
         // 微信支付配置参数
         const opt = {
           option: 'unifiedorder',
           openid: this.user.openid,
-          body: 'pay deposit',
+          body: 'pay_deposit',
           orderid: _self.randomNum(10)
         }
         wechatPay(opt)
           .then((res) => {
             let resData = res.data;
             // 微信支付,还可以有一个参数是回调函数
-            wx.chooseWXPay(resData);
+            // 支付成功后更新一下用户数据
+            wx.chooseWXPay({
+              timestamp: resData.timestamp,
+              nonceStr: resData.nonceStr,
+              package: resData.package,
+              signType: resData.signType,
+              paySign: resData.paySign,
+              success: function(res) {
+                getUser(_self.user.openid)
+                  .then((respone) => {
+                    _self.$store.commit('SET_USER', respone.data.data);
+                    _self.$router.replace('/');
+                  })
+                  .catch((error) => {
+                    throw error;
+                  })
+              }
+            });
           })
           .catch((err) => {
-            throw new Error(err);
+            throw err;
           });
       });
     },

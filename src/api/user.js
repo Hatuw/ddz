@@ -13,7 +13,6 @@ const getUser = function(openid) {
 };
 
 const getUserOrder = function(phone) {
-	console.log('-------------------------------getUserOrder');
   return fetch({
     url: `/api/order?type=order&user=${phone}`,
     method: 'get'

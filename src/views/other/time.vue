@@ -14,7 +14,7 @@
     <!-- 计费包裹 -->
     <div class="m-wrap">
       <p style="font-size: 24px">篮球</p>
-      <p style="font-size: 16px;margin-top: 10px;">共计<strong>{{ money }}</strong>元</p>
+      <p style="font-size: 16px;margin-top: 10px;">共计<strong>{{ money }}.00</strong>元</p>
     </div>
     <!-- 底部按钮 -->
     <div id="footer">
@@ -57,9 +57,8 @@ export default {
         m: 0, // 分
         s: 0 // 秒
       },
-      money: '00.00', // 费用
+      money: '00', // 费用
       showList: false,
-      runFlag: true,
       rotate: 0
     }
   },
@@ -67,6 +66,15 @@ export default {
     // 返回当前用户信息
     user() {
       return this.$store.state.user;
+    },
+    h() {
+      return this.clockTime.h;
+    },
+    m() {
+      return this.clockTime.m;
+    },
+    s() {
+      return this.clockTime.s;
     }
   },
   filters: {
@@ -74,43 +82,62 @@ export default {
       return val <= 9 ? '0' + val : val;
     }
   },
+  watch: {
+    s(n) {
+      if (n > 59) {
+        this.clockTime.m++;
+        this.clockTime.s = 0;
+      }
+    },
+    m(n) {
+      if (n > 59) {
+        this.clockTime.h++;
+        this.clockTime.m = 0;
+      }
+    },
+    h(n, o) {
+      n === o ? true : this.money = n + 1;
+    }
+  },
   methods: {
     changeShowList() {
       this.showList = !this.showList;
     },
     timeStart() {
-      let timer = null;
-      timer = window.setInterval(() => {
-        if (!this.runFlag) {
-          window.clearInterval(timer);
-        } else {
-          if (this.clockTime.s >= 60) {
-            this.rotate++;
-            this.clockTime.m++;
-            this.clockTime.s = 0;
-          }
-          if (this.clockTime.m >= 60) {
-            this.rotate++;
-            this.clockTime.h++;
-            this.clockTime.m = 0;
-          }
-          this.clockTime.s++;
-        }
+      window.setInterval(() => {
+        this.clockTime.s++;
       }, 1000);
+    },
+    // 计算相差时间
+    filterTime(ct) {
+      const nowTime = new Date();
+      const createTime = new Date(ct).getTime() > nowTime.getTime() ? new Date() : new Date(ct);
+      //时间差的毫秒数
+      const day = nowTime.getTime() - createTime.getTime();
+      //计算出小时数
+      const leave1 = day % (24 * 3600 * 1000);
+      const h = Math.floor(leave1 / (3600 * 1000));
+      //计算相差分钟数
+      const leave2 = leave1 % (3600 * 1000);
+      const m = Math.floor(leave2 / (60 * 1000));
+      //计算相差秒数
+      const leave3 = leave2 % (60 * 1000);
+      const s = Math.round(leave3 / 1000);
+      return { h, m, s };
     }
   },
   created() {
     getUserOrder(this.user.user_id)
       .then((res) => {
-        console.log('-------------------------------查询订单');
-        console.log(res);
+        const ct = res.data.data[0].create_time;
+        const time = this.filterTime(ct);
+        this.clockTime = time;
+        this.money = this.clockTime.h == 0 ? 1 : this.clockTime.h;
       })
   },
   mounted() {
     document.querySelector('#app').style.height = '100%';
-    if (this.runFlag) {
-      this.timeStart();
-    }
+    this.timeStart();
   }
 }
 
@@ -240,6 +267,35 @@ body,
     padding-top: 385px;
   }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 /**

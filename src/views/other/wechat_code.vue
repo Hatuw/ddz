@@ -3,13 +3,18 @@
 </template>
 <script>
 import { sendCode } from 'api/wechat';
-import { getUser } from 'api/user';
+import { getUser, getUserOrder } from 'api/user';
 export default {
   name: 'wechat_code',
   data() {
     return {
 
     };
+  },
+  computed: {
+    user() {
+      return this.$store.state.user;
+    }
   },
   methods: {
     getWechatInfo(code) {
@@ -24,7 +29,15 @@ export default {
                 this.$router.push('/register')
               } else {
                 this.$store.commit('SET_USER', data.data);
-                this.$router.replace('/');
+                getUserOrder(this.user.user_id)
+                  .then((res) => {
+                    const status = res.data.status;
+                    if (status === 1) this.$router.replace('/time');
+                    else this.$router.replace('/');
+                  })
+                  .catch((err) => {
+                    throw err;
+                  })
               }
             })
             .catch((error) => {

@@ -136,7 +136,7 @@ export default {
     // 成功创建订单后的函数
     createOrder() {
       this.changeShow('showCode', false);
-      this.$router.push('/time');
+      this.$router.replace('/time');
     },
 
     // 改变弹框文字
@@ -172,7 +172,6 @@ export default {
         } else if (!this.sport.count) {
           this.changeAlertText('机器球类数量为0', '请有球的时候再来吧');
         } else {
-          console.log(this.user.user_id, this.sport.device_id);
           createOrderCode(this.user.user_id, this.sport.device_id)
             .then((res) => {
               this.showCode = true;

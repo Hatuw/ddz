@@ -70,7 +70,7 @@ export default {
     },
     checkCode() {
       if (!this.num.o || !this.num.t) return;
-      let code = '' + this.num.o + this.num.t;
+      const code = '' + this.num.o + this.num.t;
       check_code(code, this.user.user_id)
         .then((res) => {
           if (res.data.status == 1) {

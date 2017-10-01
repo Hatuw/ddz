@@ -121,6 +121,10 @@ export default {
     // 返回当前用户信息
     user() {
       return this.$store.state.user;
+    },
+    // 返回用户当前是否有订单
+    hasOrder() {
+      return this.$store.state.hasOrder;
     }
   },
 
@@ -197,6 +201,8 @@ export default {
         // 检查当前地区是否在学校范围
         let school = this.matchSchool();
         if (school !== undefined) {
+          console.log('-------------------------------');
+          console.log(item.sCode);
           getSportNum(item.sCode, school.place)
             .then((res) => {
               this.imgClear();
@@ -298,6 +304,10 @@ export default {
       this.imgClear();
       this.$store.commit('SET_SPORT', {});
     }
+  },
+
+  created() {
+    if(this.hasOrder) this.$router.replace('/time'); 
   },
 
   mounted() {

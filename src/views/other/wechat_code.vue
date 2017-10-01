@@ -32,7 +32,10 @@ export default {
                 getUserOrder(this.user.user_id)
                   .then((res) => {
                     const status = res.data.status;
-                    if (status === 1) this.$router.replace('/time');
+                    if (status === 1) {
+                      this.$store.commit('SET_HASORDER',true);
+                      this.$router.replace('/time');
+                    }
                     else this.$router.replace('/');
                   })
                   .catch((err) => {

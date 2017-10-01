@@ -13,7 +13,8 @@ const state = {
   sport: {}, // 用户选择的运动类型
   schoolList: [], // 所有被投放的学校
   user: {}, // 当前用户
-  wechatinfo: {} // 用户微信信息
+  wechatinfo: {}, // 用户微信信息
+  hasOrder: false  // 当前用户是否有订单
 };
 
 const mutations = {
@@ -41,6 +42,10 @@ const mutations = {
   // 设置用户微信信息,用于注册
   SET_WECHATINFO(state, info) {
     merge(state.wechatinfo, info);
+  },
+  // 设置用户当前是否有订单
+  SET_HASORDER(state,flag) {
+    state.hasOrder = flag;
   }
 };
 

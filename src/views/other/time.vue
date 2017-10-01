@@ -63,6 +63,9 @@ export default {
     }
   },
   computed: {
+    sport() {
+      return this.$store.state.sport;
+    },
     // 返回当前用户信息
     user() {
       return this.$store.state.user;
@@ -96,7 +99,7 @@ export default {
       }
     },
     h(n, o) {
-      n === o ? true : this.money = n + 1;
+      n === o ? true : this.money = n;
     }
   },
   methods: {
@@ -127,6 +130,7 @@ export default {
     }
   },
   created() {
+    console.log(this.sport);
     getUserOrder(this.user.user_id)
       .then((res) => {
         const ct = res.data.data[0].create_time;
@@ -267,6 +271,9 @@ body,
     padding-top: 385px;
   }
 }
+
+
+
 
 
 

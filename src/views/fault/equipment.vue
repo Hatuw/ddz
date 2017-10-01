@@ -1,5 +1,4 @@
 <!-- 器材故障组件 -->
-<!-- 当点击租借器材的时候,先存储租借器材名字 -->
 <template>
   <div id="equipment">
     <returnUrl :title=" '机器故障' " :reUrl=" 'fault' "></returnUrl>

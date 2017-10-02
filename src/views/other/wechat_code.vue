@@ -31,6 +31,8 @@ export default {
                 this.$store.commit('SET_USER', data.data);
                 getUserOrder(this.user.user_id)
                   .then((res) => {
+                    console.log('-------------------------------getUserOrder');
+                    console.log(res);
                     const status = res.data.status;
                     if (status === 1) {
                       this.$store.commit('SET_HASORDER',true);

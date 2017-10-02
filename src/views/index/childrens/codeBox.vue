@@ -76,7 +76,7 @@ export default {
           if (res.data.status == 1) {
             this.num.o = '';
             this.num.t = '';
-            createOrder(this.user.user_id, this.sport.device_id)
+            createOrder(this.user.user_id, this.sport.device_id,this.sport.sCode)
               .then((res) => {
                 this.$emit('createOrder');
               })

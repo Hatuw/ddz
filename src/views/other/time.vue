@@ -130,9 +130,10 @@ export default {
     }
   },
   created() {
-    console.log(this.sport);
     getUserOrder(this.user.user_id)
       .then((res) => {
+        console.log('-------------------------------getUserOrder');
+        console.log(res);
         const ct = res.data.data[0].create_time;
         const time = this.filterTime(ct);
         this.clockTime = time;

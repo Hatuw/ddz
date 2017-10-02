@@ -4,8 +4,13 @@
 
 import fetch from 'utils/fetch';
 
-// 获取jssdk请求
+/**
+ * [getJssdk 获取jssdk请求]
+ * @param  {[type]} val [参数]
+ */
 const getJssdk = function(val) {
+  console.log('获取jssdk请求:getJssdk');
+  console.log(val);
   return fetch({
     url: '/wx/get_ticket',
     method: 'post',
@@ -13,7 +18,10 @@ const getJssdk = function(val) {
   });
 };
 
-// 发起微信支付请求
+/**
+ * [wechatPay 发起微信支付请求]
+ * @param  {[type]} val [参数]
+ */
 const wechatPay = function(val) {
   const data = new FormData();
   data.append('option', val.option);
@@ -27,7 +35,10 @@ const wechatPay = function(val) {
   })
 };
 
-// 发送微信code
+/**
+ * [sendCode 发送微信code]
+ * @param  {[type]} code [url上的code]
+ */
 const sendCode = function(code) {
   const data = new FormData();
   data.append('code', code);
@@ -38,4 +49,4 @@ const sendCode = function(code) {
   })
 };
 
-export { sendCode, wechatPay, getJssdk }
+export { sendCode, wechatPay, getJssdk };

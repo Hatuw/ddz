@@ -194,17 +194,19 @@ export default {
 
     // 发送当前器材剩余数量请求
     chooseSport(item, e) {
+      // 如果用户当前在租借状态
+      if (this.hasOrder) this.changeAlertText('您当前处于租借状态', '当前运动结束后可再租借');
       // 检查当前地址地址是否在学校范围内
-      if (!this.curAddr) {
+      else if (!this.curAddr) {
         this.showPicker = true;
       } else if (this.checkChoose(item)) {
         // 检查当前地区是否在学校范围
         let school = this.matchSchool();
         if (school !== undefined) {
-          console.log('-------------------------------');
-          console.log(item.sCode);
-          getSportNum(item.sCode, school.place)
+          getSportNum(school.place, item.sCode)
             .then((res) => {
+              console.log('-------------------------------getSportNum');
+              console.log(res);
               this.imgClear();
               this.numClear(document.querySelectorAll('.num-tip'));
               let t = e.target.parentElement.querySelector('.num-tip');
@@ -304,10 +306,6 @@ export default {
       this.imgClear();
       this.$store.commit('SET_SPORT', {});
     }
-  },
-
-  created() {
-    if(this.hasOrder) this.$router.replace('/time'); 
   },
 
   mounted() {

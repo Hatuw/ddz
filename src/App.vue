@@ -13,7 +13,7 @@ export default {
       // 调用jssdk
       const data = {
         url: window.location.href.split('#')[0],
-        jsApiList: ['checkJsApi', 'chooseWXPay']
+        jsApiList: ['checkJsApi', 'chooseWXPay','chooseImage']
       }
       // 获取js-sdk
       getJssdk(data)
@@ -27,11 +27,11 @@ export default {
             jsApiList: data.jsApiList // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
           });
           wx.error((error) => {
-            throw new Error(error);
+            throw error;
           });
         })
         .catch((error) => {
-          throw new Error(error);
+          throw error;
         });
 
       // 当页面被创建时，插入腾讯地图外链文件
@@ -50,4 +50,5 @@ export default {
 <style>
 @import './assets/css/base.css';
 @import './assets/css/font-awesome-4.7.0.min.css';
+
 </style>

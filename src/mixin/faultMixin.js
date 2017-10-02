@@ -3,6 +3,7 @@
  * 使用于equipment.vue,machine.vue文件
  */
 
+import wx from 'weixin-js-sdk';
 export default {
   data() {
     return {
@@ -38,5 +39,20 @@ export default {
   mounted() {
     let _self = this;
     document.querySelector('#app').style.backgroundColor = '#eaeef1';
+    document.querySelector('#addBtn').onclick = () => {
+      wx.ready(() => {
+          wx.chooseImage({
+            count: 1, // 默认9
+            sizeType: ['compressed'], // 可以指定是原图还是压缩图，默认二者都有
+            sourceType: ['camera'], // 可以指定来源是相册还是相机，默认二者都有
+            success: function(res) {
+              _self.pictures.push(res.localIds[0]);
+              if (_self.pictures.length >= 4) {
+                _self.showBtn = false;
+              }
+            }
+          });
+      })
+    }
   }
 }

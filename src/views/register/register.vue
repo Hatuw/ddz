@@ -127,26 +127,37 @@ export default {
         checkCode(this.codeVal, this.phoneVal)
           .then((res) => {
             // 根据返回的状态码，来判断验证码是否正确
-            let status = res.data.status;
-            if (status) {
-              createUser(this.userinfo, this.phoneVal)
-                .then((res) => {
-                  if (res.data.status == 1) {
-                    getUser(this.userinfo.openid)
-                      .then((res) => {
-                        if (res.data.status == 1) {
-                          this.$store.commit('SET_USER', res.data.data);
-                          this.$router.replace('/');
-                        } else {
-                          throw new Error('获取用户信息失败');
-                        }
-                      })
-                  } else {
-                    throw new Error('创建用户失败');
-                  }
-                })
-            } else {
-              this.code_error = '验证码错误,请重新填写验证码';
+            try {
+              let status = res.data.status;
+              if (status) {
+                createUser(this.userinfo, this.phoneVal)
+                  .then((res) => {
+                    try {
+                      if (res.data.status == 1) {
+                        getUser(this.userinfo.openid)
+                          .then((res) => {
+                            if (res.data.status == 1) {
+                              this.$store.commit('SET_USER', res.data.data);
+                              this.$router.replace('/');
+                            } else {
+                              throw new Error('获取用户信息失败');
+                            }
+                          })
+                      } else {
+                        throw new Error('创建用户失败');
+                      }
+                    } catch (e) {
+                      alert('创建用户失败,请您重新创建');
+                    }
+                  })
+                  .catch((err) => {
+                    throw err;
+                  })
+              } else {
+                this.code_error = '验证码错误,请重新填写验证码';
+              }
+            } catch (e) {
+              alert('发送验证码失败,请您重新发送');
             }
           })
           .catch((err) => {

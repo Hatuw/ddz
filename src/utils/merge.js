@@ -4,32 +4,24 @@
 
 // 判断是否清空对象
 let isEmpty = (obj) => {
-  for (let i in obj) {
-    return true;
-  }
-  return false;
+  return Object.keys(obj).length > 0 ? true : false;
 }
 
 // 合并算法: 对象
 export const merge = (obj, opt, attr) => {
   // 如果参数不是对象就无法合并
-  if (typeof obj !== 'object') {
-    return;
-  }
+  if (typeof obj !== 'object') throw new Error('参数必须是对象');
   // 如果需要合并的对象是字符串
-  if (typeof opt == 'string') {
-    obj[attr] = opt;
-    return;
-  }
+  else if (typeof opt === 'string') obj[attr] = opt;
   // 清空对象
-  if (!isEmpty(opt)) {
+  else if (!isEmpty(opt)) {
     for (let a in obj) {
       delete obj[a];
     }
   } else {
     // 数组深复制
     if (obj instanceof Array) {
-      for (var i = 0; i < opt.length; ++i) {
+      for (let i in opt) {
         obj[i] = opt[i];
       }
     }

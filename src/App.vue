@@ -13,7 +13,7 @@ export default {
       // 调用jssdk
       const data = {
         url: window.location.href.split('#')[0],
-        jsApiList: ['checkJsApi', 'chooseWXPay','chooseImage']
+        jsApiList: ['checkJsApi', 'chooseWXPay', 'chooseImage']
       }
       // 获取js-sdk
       getJssdk(data)
@@ -50,5 +50,4 @@ export default {
 <style>
 @import './assets/css/base.css';
 @import './assets/css/font-awesome-4.7.0.min.css';
-
 </style>

@@ -42,7 +42,6 @@
         </div>
       </form>
     </article>
-    {{ userinfo }}
     <!-- 遮罩层 -->
     <div class="mask" v-if=" silderShow "></div>
     <!-- 移动滑块 -->

@@ -65,7 +65,6 @@
     <alertBox :title=" alertMsg.title " :subTitle=" alertMsg.subTitle " :alert=" alert " @close=" changeShow('alert',false) "></alertBox>
     <!-- 输入验证码组件 -->
     <codeBox :show=" showCode " @createOrder=" createOrder "></codeBox>
-    {{ user }}
   </div>
 </template>
 <script>
@@ -178,6 +177,8 @@ export default {
         } else {
           createOrderCode(this.user.user_id, this.sport.device_id)
             .then((res) => {
+              console.log('-------------------------------createOrderCode');
+              console.log(res);
               this.showCode = true;
             })
             .catch((err) => {
@@ -309,6 +310,7 @@ export default {
   },
 
   mounted() {
+    document.querySelector('#app').style.backgroundColor = '#eaeef1';
     this.initData();
   },
 

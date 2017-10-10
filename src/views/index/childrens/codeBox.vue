@@ -73,21 +73,35 @@ export default {
       const code = '' + this.num.o + this.num.t;
       check_code(code, this.user.user_id)
         .then((res) => {
-          if (res.data.status == 1) {
-            this.num.o = '';
-            this.num.t = '';
-            createOrder(this.user.user_id, this.sport.device_id,this.sport.sCode)
-              .then((res) => {
-                this.$emit('createOrder');
-              })
-              .catch((err) => {
-                throw err;
-              })
+          try {
+            if (res.data.status == 1) {
+              this.clear();
+              createOrder(this.user.user_id, this.sport.device_id, this.sport.sCode)
+                .then((res) => {
+                  console.log('-------------------------------createOrder');
+                  console.log(res);
+                  try {
+                    const status = res.data.status;
+                    status === 1 ? this.$emit('createOrder') : alert('下单失败,请您重新下单')
+                  } catch (e) {
+                    alert('下单失败,请您重新下单');
+                  }
+                })
+                .catch((err) => {
+                  throw err;
+                })
+            }
+          } catch (e) {
+            throw e;
           }
         })
         .catch((err) => {
           throw err;
         })
+    },
+    clear() {
+      this.num.o = '';
+      this.num.t = '';
     }
   },
   props: ['show']

@@ -1,7 +1,8 @@
 <!-- 器材故障组件 -->
 <template>
   <div id="equipment">
-    <returnUrl :title=" '机器故障' " :reUrl=" 'fault' "></returnUrl>
+    <returnUrl :title=" '器材故障' " :reUrl=" 'fault' "></returnUrl>
+    <img :src=" url ">
     <form @submit.prevent>
       <!-- 机器位置id信息 -->
       <div class="form-group">
@@ -33,7 +34,7 @@
       <div class="form-group">
         <h4>其他原因</h4>
         <div class="other-reason">
-          <textarea placeholder="请输入故障内容">
+          <textarea placeholder="请输入故障内容" v-model.trim=" otherReason ">
           </textarea>
           <span>0/200</span>
         </div>
@@ -47,7 +48,7 @@
               <img :src=" pic " alt="故障图片">
             </li>
           </ul>
-          <div id="addBtn" class="fl" v-show=" showBtn ">
+          <div id="addBtn" class="fl" v-show=" showBtn " @click.stop="_chooseImage">
             <img src="../../../static/img/add.png" alt="添加图片">
           </div>
         </div>
@@ -55,7 +56,7 @@
       <!-- 提交按钮 -->
       <div class="form-group">
         <div class="sendBtn">
-          <button>提交</button>
+          <button @click.stop="sendSportRepair">提交</button>
         </div>
       </div>
     </form>
@@ -64,15 +65,34 @@
 <script>
 import faultMixin from '@/mixin/faultMixin.js';
 import returnUrl from '@/components/returnUrl';
+import { sendRepair } from 'api/fault';
 export default {
   name: 'equipment',
   mixins: [faultMixin],
+  title: '器材故障',
   components: {
     returnUrl
   },
   data() {
     return {
-      reasons: ['显示不了验证码', '没有语音提醒', 'nfc开不了门', '上不了锁']
+      reasons: ['text1', 'text2', 'text3', 'text4']
+    }
+  },
+  methods: {
+    // 发送体育器材故障
+    sendSportRepair() {
+      const fromObj = {
+        tp: 'sport',
+        phone: this.user.user_id,
+        oId: this.order.order_id,
+        issue: this.selReasons.toString(),
+        otherIssue: this.otherReason,
+        images: this.url
+      };
+      sendRepair(fromObj)
+        .then((res) => {
+          console.log(res);
+        })
     }
   }
 }

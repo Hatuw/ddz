@@ -21,23 +21,33 @@
       <div class="btn-wrap clearfix">
         <div class="btn-group-l" v-show=" showList ">
           <!-- 机器故障 -->
-          <div class="btn machine"><i class="fa fa-ambulance"></i>
-            <p>机器故障</p>
-          </div>
+          <router-link to="machine">
+            <div class="btn machine">
+              <i class="fa fa-ambulance"></i>
+              <p>机器故障</p>
+            </div>
+          </router-link>
           <!-- 器材故障 -->
-          <div class="btn equipment" style="margin-right: 0px;"><i class="fa fa-futbol-o"></i>
-            <p>器材故障</p>
-          </div>
+          <router-link to="equipment">
+            <div class="btn equipment" style="margin-right: 0px;">
+              <i class="fa fa-futbol-o"></i>
+              <p>器材故障</p>
+            </div>
+          </router-link>
         </div>
         <!-- 控制按钮 -->
-        <div class="ctr-btn" @click=" changeShowList " :class="{ r0: showList }"><i class="fa fa-times-circle" aria-hidden="true"></i></div>
+        <div class="ctr-btn" @click=" changeShowList " :class="{ r0: showList }">
+          <i class="fa fa-times-circle" aria-hidden="true"></i>
+        </div>
         <div class="btn-group-r" v-show=" showList ">
           <!-- 计费故障 -->
-          <div class="btn charging"><i class="fa fa-jpy"></i>
+          <div class="btn charging">
+            <i class="fa fa-jpy"></i>
             <p>计费故障</p>
           </div>
           <!-- 其他故障 -->
-          <div class="btn other" style="margin-right: 0px;"><i class="fa fa-thumbs-o-down"></i>
+          <div class="btn other" style="margin-right: 0px;">
+            <i class="fa fa-thumbs-o-down"></i>
             <p>其他故障</p>
           </div>
         </div>
@@ -272,6 +282,9 @@ body,
     padding-top: 385px;
   }
 }
+
+
+
 
 
 

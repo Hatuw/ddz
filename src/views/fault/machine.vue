@@ -31,7 +31,7 @@
       <div class="form-group">
         <h4>其他原因</h4>
         <div class="other-reason">
-          <textarea placeholder="请输入故障内容">
+          <textarea placeholder="请输入故障内容" v-model.trim=" otherReason ">
           </textarea>
           <span>0/200</span>
         </div>
@@ -53,7 +53,7 @@
       <!-- 提交按钮 -->
       <div class="form-group">
         <div class="sendBtn">
-          <button>提交</button>
+          <button @click.stop=" sendDeviceRepair ">提交</button>
         </div>
       </div>
     </form>
@@ -62,6 +62,7 @@
 <script>
 import faultMixin from '@/mixin/faultMixin.js';
 import returnUrl from '@/components/returnUrl';
+import { sendRepair } from 'api/fault';
 export default {
   name: 'machine',
   title: '机器故障',
@@ -72,6 +73,23 @@ export default {
   data() {
     return {
       reasons: ['显示不了验证码', '没有语音提醒', 'nfc开不了门', '上不了锁']
+    }
+  },
+  methods: {
+    // 发送机器报障
+    sendDeviceRepair() {
+      const fromObj = {
+        tp: 'device',
+        phone: this.user.user_id,
+        oId: this.order.order_id,
+        issue: this.selReasons.toString(),
+        otherIssue: this.otherReason,
+        images: this.url
+      };
+      sendRepair(fromObj)
+      .then((res) => {
+        console.log(res);
+      })
     }
   }
 }

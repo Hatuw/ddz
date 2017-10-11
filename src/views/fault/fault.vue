@@ -17,7 +17,9 @@
       </li>
       <li class="item">
         <router-link :to=" 'equipment' ">
-          <div class="img-wrap"><img src="../../../static/img/material.png" alt="器材故障"></div>
+          <div class="img-wrap">
+            <img src="../../../static/img/material.png" alt="器材故障">
+          </div>
           <div class="content-wrap">
             <div class="content">
               <p><strong style="font-size:16px">器材故障</strong></p>
@@ -29,7 +31,9 @@
       </li>
       <li class="item">
         <router-link :to=" 'otherFault' ">
-          <div class="img-wrap"><img src="../../../static/img/other.png" alt="其他故障"></div>
+          <div class="img-wrap">
+            <img src="../../../static/img/other.png" alt="其他故障">
+          </div>
           <div class="content-wrap">
             <div class="content">
               <p><strong style="font-size:16px">其他故障</strong></p>
@@ -41,7 +45,9 @@
       </li>
       <router-link :to=" '/myFault' ">
         <li class="item">
-          <div class="img-wrap"><img src="../../../static/img/repairs.png" alt="我的报修"></div>
+          <div class="img-wrap">
+            <img src="../../../static/img/repairs.png" alt="我的报修">
+          </div>
           <div class="content-wrap">
             <div class="content">
               <p><strong style="font-size:16px">我的报修</strong></p>

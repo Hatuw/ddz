@@ -36,6 +36,7 @@ export default {
                           const status = res.data.status;
                           if (status === 1) {
                             this.$store.commit('SET_HASORDER', true);
+                            this.$store.commit('SET_USERORDER',res.data.data[0]);
                             this.$router.replace('/time');
                           } else this.$router.replace('/');
                         } catch (e) {

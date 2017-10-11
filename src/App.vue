@@ -13,7 +13,7 @@ export default {
       // 调用jssdk
       const data = {
         url: window.location.href.split('#')[0],
-        jsApiList: ['checkJsApi', 'chooseWXPay', 'chooseImage']
+        jsApiList: ['checkJsApi', 'chooseWXPay', 'chooseImage','uploadImage']
       }
       // 获取js-sdk
       getJssdk(data)

@@ -9,12 +9,13 @@ import { merge } from '@/utils/merge.js';
 Vue.use(Vuex);
 
 const state = {
-  curAddr: '', // 当前用户的位置
-  sport: {}, // 用户选择的运动类型
-  schoolList: [], // 所有被投放的学校
-  user: {}, // 当前用户
-  wechatinfo: {}, // 用户微信信息
-  hasOrder: false  // 当前用户是否有订单
+  curAddr: '',      // 当前用户的位置
+  sport: {},        // 用户选择的运动类型
+  schoolList: [],   // 所有被投放的学校
+  user: {},         // 当前用户
+  wechatinfo: {},   // 用户微信信息
+  hasOrder: false,  // 当前用户是否有订单
+  userOrder: {}     // 用户当前订单
 };
 
 const mutations = {
@@ -44,8 +45,12 @@ const mutations = {
     merge(state.wechatinfo, info);
   },
   // 设置用户当前是否有订单
-  SET_HASORDER(state,flag) {
+  SET_HASORDER(state, flag) {
     state.hasOrder = flag;
+  },
+  // 设置用户当前订单
+  SET_USERORDER(state,order) {
+    merge(state.userOrder,order);
   }
 };
 

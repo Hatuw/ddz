@@ -282,6 +282,8 @@ export default {
     _getPlace() {
       getPlace()
         .then((res) => {
+          console.log('-------------------------------获取被投放的学校数据');
+          console.log(res);
           this.$store.commit('SET_SCHOOLLIST', res.data.data);
         })
         .then(() => {

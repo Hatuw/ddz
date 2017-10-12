@@ -87,9 +87,9 @@ export default {
         images: this.url
       };
       sendRepair(fromObj)
-      .then((res) => {
-        console.log(res);
-      })
+        .then((res) => {
+          console.log(res);
+        })
     }
   }
 }

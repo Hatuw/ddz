@@ -81,17 +81,21 @@ export default {
   methods: {
     // 发送体育器材故障
     sendSportRepair() {
-      const fromObj = {
-        tp: 'sport',
-        phone: this.user.user_id,
-        oId: this.order.order_id,
-        issue: this.selReasons.toString(),
-        otherIssue: this.otherReason,
-        images: this.url
-      };
-      sendRepair(fromObj)
-        .then((res) => {
-          console.log(res);
+      this._uploadImage()
+        .then(() => {
+          alert(this.urls.length);
+          const fromObj = {
+            tp: 'sport',
+            phone: this.user.user_id,
+            oId: this.order.order_id,
+            issue: this.selReasons.toString(),
+            otherIssue: this.otherReason,
+            images: this.urls
+          };
+          sendRepair(fromObj)
+            .then((res) => {
+              console.log(res);
+            })
         })
     }
   }

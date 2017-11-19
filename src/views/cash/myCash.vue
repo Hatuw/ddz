@@ -39,7 +39,7 @@ export default {
   title: '押金',
   data() {
     return {
-      money: '50.00',
+      money: '49.00',
       flag: true
     }
   },

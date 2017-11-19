@@ -31,6 +31,7 @@
 import returnUrl from '@/components/returnUrl';
 import alertBox from '@/components/alertBox';
 import confirmBox from '@/components/confirmBox';
+import { wechatPay } from 'api/wechat';
 export default {
   name: 'cash',
   title: '押金',
@@ -40,6 +41,11 @@ export default {
       confirm: false,
       money: '50.00',
       reasons: ['想运动，但经常租不到器材', '习惯在需要运动时，再充值押金', '放假或毕业离开学校', '机器操作流程复杂，等待时间太长', '运动器材的体验感不够好', '其他']
+    }
+  },
+  computed: {
+    user() {
+      return this.$store.state.user;
     }
   },
   methods: {
@@ -53,8 +59,9 @@ export default {
     },
     // 发起退换押金请求
     getCash() {
-      this.confirm = false;
-      this.alert = true;
+      // this.confirm = false;
+      // this.alert = true;
+      this._reCash();
     },
     // 选择退款原因
     chooseReason(rea, e) {
@@ -66,6 +73,45 @@ export default {
         i.classList.remove('fa-check-circle');
         i.classList.add('fa-circle-thin');
       }
+    },
+    // 退款
+    _reCash() {
+      alert('asdasd');
+      const _self = this;
+      wx.ready(() => {
+        // 微信支付配置参数
+        const opt = {
+          option: 'refund',
+          openid: this.user.openid,
+          body: 'deposit'
+        }
+        wechatPay(opt)
+          .then((res) => {
+            let resData = res.data;
+            alert(resData);
+            // 微信支付,还可以有一个参数是回调函数
+            // wx.chooseWXPay({
+            //   timestamp: resData.timestamp,
+            //   nonceStr: resData.nonceStr,
+            //   package: resData.package,
+            //   signType: resData.signType,
+            //   paySign: resData.paySign,
+            //   success: function(res) {
+            //     getUser(_self.user.openid)
+            //       .then((respone) => {
+            //         _self.$store.commit('SET_USER', respone.data.data);
+            //         _self.$router.replace('/');
+            //       })
+            //       .catch((error) => {
+            //         throw error;
+            //       })
+            //   }
+            // });
+          })
+          .catch((err) => {
+            alert(err);
+          });
+      });
     }
   },
   components: {

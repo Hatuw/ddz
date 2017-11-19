@@ -25,7 +25,6 @@
       <li><i class="fa fa-circle" aria-hidden="true"></i><span>妈妈再也不用担心我丢球了</span></li>
       <li><i class="fa fa-circle" aria-hidden="true"></i><span>运动随时进行，立租立借走起</span></li>
     </ul>
-    {{ user }}
     <!-- 协议书 -->
     <div class="pay-btn">
       <button @click=" payMoney ">确认支付</button>
@@ -42,7 +41,7 @@ export default {
   title: '押金',
   data() {
     return {
-      money: '39.00'
+      money: '49.00'
     }
   },
 

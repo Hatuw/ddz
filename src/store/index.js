@@ -50,7 +50,7 @@ const mutations = {
   },
   // 设置用户当前订单
   SET_USERORDER(state,order) {
-    merge(state.userOrder,order);
+    state.userOrder = order;
   }
 };
 

@@ -34,13 +34,14 @@ const getSportNum = function(placeCode, typeCode) {
  * @param  {[type]} phone  [用户电话号码]
  * @param  {[type]} serial [机器id]
  */
-const createOrderCode = function(phone, serial) {
+const createOrderCode = function(phone, serial,sType) {
   console.log('创建机器验证码:createOrderCode');
   console.log(phone, serial);
   const data = new FormData();
   data.append('type', 'vcode');
   data.append('user', phone);
   data.append('serial', serial);
+  data.append('sType',sType);
   return fetch({
     url: '/api/order',
     method: 'post',

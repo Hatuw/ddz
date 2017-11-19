@@ -142,12 +142,18 @@ export default {
   created() {
     getUserOrder(this.user.user_id)
       .then((res) => {
-        console.log('-------------------------------getUserOrder');
-        console.log(res);
-        const ct = res.data.data[0].create_time;
-        const time = this.filterTime(ct);
-        this.clockTime = time;
-        this.money = this.clockTime.h == 0 ? 1 : this.clockTime.h;
+        try {
+          console.log('-------------------------------getUserOrder');
+          console.log(res);
+          const ct = res.data.data[0].create_time;
+          const time = this.filterTime(ct);
+          this.clockTime = time;
+          this.money = this.clockTime.h == 0 ? 1 : this.clockTime.h;
+          this.$store.commit('SET_HASORDER', true);
+          this.$store.commit('SET_USERORDER', res.data.data[0]);
+        } catch (e) {
+          throw e;
+        }
       })
   },
   mounted() {
@@ -282,6 +288,11 @@ body,
     padding-top: 385px;
   }
 }
+
+
+
+
+
 
 
 

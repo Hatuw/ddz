@@ -44,6 +44,7 @@ export default {
   },
   watch: {
     silderShow(nVal, oVal) {
+      console.log('test')
       if (nVal) {
         this.$nextTick(() => {
           let bar = document.querySelector('.silder-box'); // 把手
@@ -85,7 +86,8 @@ export default {
         // 当拖动结束后判断是否拼图正确
         // 如果正确就发送获取验证码请求
         let finalL = parseInt(target.style.left);
-        if (finalL + 1 == _self.oLeft || _self.oLeft == finalL - 1 || _self.oLeft == finalL) {
+        // if (finalL + 1 == _self.oLeft || _self.oLeft == finalL - 1 || _self.oLeft == finalL) {
+        if (Math.abs(finalL - _self.oLeft) <= 5) {
           this.$emit('getCode');
           return;
         }

@@ -118,9 +118,10 @@ export default {
       // 先检查是否能执行请求
       if (!(/^(1[34578]\d{9})$/ig.test(this.phoneVal))) {
         this.phone_error = '请检查手机格式';
-      } else if (!this.sended) {
-        this.phone_error = '请获取验证码';
-      } else if (this.codeVal == '') {
+      } //else if (!this.sended) {
+        //this.phone_error = '请获取验证码';
+        //} 
+        else if (this.codeVal == '') {
         this.code_error = '请检查验证码是否输入';
       } else {
         checkCode(this.codeVal, this.phoneVal)

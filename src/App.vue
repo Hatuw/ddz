@@ -6,7 +6,7 @@
 <script>
 import wx from 'weixin-js-sdk';
 import { getJssdk } from 'api/wechat';
-import { getUserOrder } from 'api/user';
+import { getUserOrder, getUser } from 'api/user';
 import { wechatPay } from 'api/wechat';
 export default {
   name: 'app',
@@ -121,6 +121,20 @@ export default {
   },
   mounted() {
     this.initData();
+    let debugMod = true;
+    if (debugMod) {
+      let dbOpenid = 'oV3jVwy0p8aOnfyu7bKFY5zrXE3k';
+      getUser(dbOpenid)
+      .then((res) => {
+        if (res.data.status == 1) {
+          this.$store.commit('SET_USER', res.data.data);
+          console.log('Debug:获取用户信息');
+          console.log(res.data.data);
+        } else {
+          throw new Error('获取用户信息失败');
+        }
+      })
+    }
   }
 }
 

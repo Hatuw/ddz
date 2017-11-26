@@ -10,8 +10,9 @@
           <input type="number" class="inp" v-model.trim="num.t" @input=" write('#t',$event) " @keyup.delete=" del " @click=" check " id="t" autocomplete="off">
         </p>
       </div>
-      <div>
+      <div id="codeBoxBtn">
         <button @click.stop=" checkCode ">确定</button>
+        <button @click.stop=" cancelCodeBox() ">取消</button>
       </div>
     </form>
     <!-- 遮罩层 -->
@@ -63,13 +64,20 @@ export default {
         }
       }
     },
+    cancelCodeBox() {
+      this.show = false,
+      this.num.o = null,
+      this.num.t = null
+    },
     check() {
       if (!this.num.o) {
         document.querySelector('#o').focus();
       }
     },
     checkCode() {
+      this.show = false
       if (!this.num.o || !this.num.t) return;
+      console.log(this)
       const code = '' + this.num.o + this.num.t;
       check_code(code, this.user.user_id)
         .then((res) => {
@@ -155,6 +163,13 @@ $main_color: #0788ee;
     outline: none;
     text-align: center;
     font-size: 18px;
+  }
+}
+
+#codeBoxBtn {
+  display: flex;
+  button {
+    margin: 0px 5px;
   }
 }
 

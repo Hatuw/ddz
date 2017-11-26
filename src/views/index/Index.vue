@@ -175,6 +175,7 @@ export default {
         } else if (!this.sport.count) {
           this.changeAlertText('机器球类数量为0', '请有球的时候再来吧');
         } else {
+          console.log(this)
           createOrderCode(this.user.user_id, this.sport.device_id,this.sport.sCode)
             .then((res) => {
               console.log('-------------------------------createOrderCode');
